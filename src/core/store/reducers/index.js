@@ -1,12 +1,12 @@
 import {combineReducers} from 'redux';
-import finances from '../../../apps/finances/store/reducers';
-import user from './user.reducer';
+import finance from '../../../apps/finance/store/reducers';
+import auth from './auth.reducer';
 
 
 const createReducer = (asyncReducers) =>
     combineReducers({
-        user,
-        finances,
+        auth,
+        finance,
         ...asyncReducers
     });
 

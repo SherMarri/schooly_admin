@@ -1,4 +1,4 @@
-import { FinancesConfig } from "./finances/FinancesConfig";
+import { FinanceConfig } from "./finance/FinanceConfig";
 import LoginPage from "../core/components/LoginPage";
 import AuthRoles from "../core/AuthRoles";
 
@@ -13,5 +13,5 @@ export const appsConfig = [
             },
         ]
     },
-    FinancesConfig,
+    FinanceConfig,
 ];

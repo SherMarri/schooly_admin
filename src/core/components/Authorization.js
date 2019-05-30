@@ -59,7 +59,7 @@ class Authorization extends Component {
         User is guest
         Redirect to Login Page
         */
-        if ( user.role === 'guest' )
+        if ( user.role === 'Guest' )
         {
             history.push({
                 pathname: '/login',
@@ -90,10 +90,10 @@ class Authorization extends Component {
     }
 }
 
-function mapStateToProps({user})
+function mapStateToProps({auth})
 {
     return {
-        user: user
+        user: auth.user
     }
 }
 
