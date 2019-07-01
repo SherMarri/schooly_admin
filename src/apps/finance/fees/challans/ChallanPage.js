@@ -23,6 +23,7 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing(1),
+        float: 'right',
     },
 });
 
@@ -59,7 +60,7 @@ class ChallanPage extends React.Component {
             <Grid container spacing={24}>
                 <Grid item xs={12}>
                     <Button variant="contained" color="primary" onClick={this.handleOpenDialog} className={classes.button}>
-                        Show Dialog
+                        Generate Challans
                     </Button>
                 </Grid>
                 <ChallanDialog open={this.state.open} onClose={this.handleCloseDialog}/>

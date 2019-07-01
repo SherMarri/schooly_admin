@@ -13,7 +13,7 @@ const styles = theme => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        marginTop: theme.spacing(2)
+        margin: theme.spacing(2)
     },
 });
 
