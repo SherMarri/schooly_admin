@@ -27,8 +27,8 @@ const styles = theme => ({
         justifyContent: 'flex-end',
     },
     button: {
-        marginTop: theme.spacing.unit * 3,
-        marginLeft: theme.spacing.unit,
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(1),
     },
     value: {
         fontWeight: 'bold'

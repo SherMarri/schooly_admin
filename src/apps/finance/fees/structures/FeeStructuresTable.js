@@ -125,7 +125,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(1),
   },
   highlight:
     theme.palette.type === 'light'
@@ -147,7 +147,7 @@ const toolbarStyles = theme => ({
     flex: '0 0 auto',
   },
   fab: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: '40px',
     height: '40px',
   },
@@ -205,7 +205,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   // table: {
   //   minWidth: 1020,

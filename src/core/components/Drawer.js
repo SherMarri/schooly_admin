@@ -42,7 +42,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
     },
     nested: {
-        paddingLeft: theme.spacing.unit * 4,
+        paddingLeft: theme.spacing(2),
     },
     selectedOption: {
         textDecoration: 'none',
