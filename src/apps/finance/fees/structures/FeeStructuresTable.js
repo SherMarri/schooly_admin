@@ -12,7 +12,6 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -71,18 +70,18 @@ class EnhancedTableHead extends React.Component {
   };
 
   render() {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
+    const { order, orderBy } = this.props;
 
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
+          {/* <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
               onChange={onSelectAllClick}
             />
-          </TableCell>
+          </TableCell> */}
           {rows.map(
             row => (
               <TableCell
@@ -208,9 +207,10 @@ const styles = theme => ({
     marginTop: theme.spacing(2),
   },
   // table: {
-  //   minWidth: 1020,
+  //   padding: '8px',
   // },
   tableWrapper: {
+    padding: theme.spacing(2),
     overflowX: 'auto',
   },
 });
@@ -369,9 +369,9 @@ class FeeStructuresTable extends React.Component {
                       key={n.id}
                       selected={isSelected}
                     >
-                      <TableCell padding="checkbox">
+                      {/* <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)} />
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         {n.name}
                       </TableCell>

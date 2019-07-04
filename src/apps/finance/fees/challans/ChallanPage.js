@@ -5,9 +5,9 @@ import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Loading } from '../../../../core/components';
 import Button from '@material-ui/core/Button';
 import ChallanDialog from './ChallanDialog';
+import ChallanTable from './ChallanTable';
 
 
 
@@ -22,7 +22,7 @@ const styles = theme => ({
         marginTop: theme.spacing(2)
     },
     button: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(2),
         float: 'right',
     },
 });
@@ -31,7 +31,7 @@ const styles = theme => ({
 class ChallanPage extends React.Component {
 
     state = {
-        open: false
+        open_generate_challan: false
     }
 
     componentDidMount() {
@@ -40,20 +40,20 @@ class ChallanPage extends React.Component {
     handleOpenDialog = () => {
         this.setState({
             ...this.state,
-            open: true
+            open_generate_challan: true
         });
     }
 
     handleCloseDialog = () => {
         this.setState({
             ...this.state,
-            open: false
+            open_generate_challan: false
         });
     }
 
 
     render() {
-        if (this.props.expenses.loading) return <Loading/>;
+        // if (this.props.expenses.loading) return <Loading/>;
 
         const { classes } = this.props;
         return (
@@ -62,8 +62,14 @@ class ChallanPage extends React.Component {
                     <Button variant="contained" color="primary" onClick={this.handleOpenDialog} className={classes.button}>
                         Generate Challans
                     </Button>
+                    <Button variant="contained" color="primary" onClick={this.handleOpenDialog} className={classes.button}>
+                        Filter
+                    </Button>
                 </Grid>
-                <ChallanDialog open={this.state.open} onClose={this.handleCloseDialog}/>
+                <Grid item xs={12}>
+                    <ChallanTable/>
+                </Grid>
+                <ChallanDialog open={this.state.open_generate_challan} onClose={this.handleCloseDialog}/>
             </Grid>
         )
     }
@@ -75,7 +81,7 @@ ChallanPage.propTypes = {
 
 function mapStateToProps({finance, user}) {
 	return {
-        expenses: finance.expenses,
+        fees: finance.fees,
 		user: user
 	}
 }

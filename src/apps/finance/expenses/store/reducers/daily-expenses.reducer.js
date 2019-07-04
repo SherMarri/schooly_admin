@@ -30,6 +30,13 @@ const daily = function (state = initialState, action) {
                 expense_item_status: Actions.SUCCESSFUL
             }
         }
+        case Actions.DELETE_EXPENSE_ITEM: {
+            const items = state.items.filter(i => i.id !== action.payload);
+            return {
+                ...state,
+                items
+            };
+        }
         case Actions.UPDATE_EXPENSE_ITEM_STATUS: {
             return {
                 ...state,
