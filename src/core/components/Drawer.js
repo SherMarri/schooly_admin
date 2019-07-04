@@ -42,7 +42,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
     },
     nested: {
-        paddingLeft: theme.spacing.unit * 4,
+        paddingLeft: theme.spacing(2),
     },
     selectedOption: {
         textDecoration: 'none',
@@ -101,7 +101,7 @@ class AppDrawer extends React.Component {
                         <ListItemIcon>
                             {section.icon}
                         </ListItemIcon>
-                        <ListItemText inset primary={section.text} />
+                        <ListItemText primary={section.text} />
                         {!section.children ? null : selected ? <ExpandLess /> : <ExpandMore/>}
                 </ListItem>
                 {section.children &&
@@ -126,11 +126,11 @@ class AppDrawer extends React.Component {
             <>
                 <ListItem onClick={() => this.handleItemSelected(item)} key={item.code} button className={`${classes.nested} ${!item.children ? selected : null}`}>
                     {item.icon &&
-                        <ListItemIcon>
+                        <ListItemIcon className={classes.nested}>
                             {item.icon}
                        </ListItemIcon>
                     }            
-                    <ListItemText inset primary={item.text} />
+                    <ListItemText className={item.icon ? '' : classes.nested} primary={item.text} />
                     {!item.children ? null : selected ? <ExpandLess /> : <ExpandMore/>}
                 </ListItem>
                 {item.children && 

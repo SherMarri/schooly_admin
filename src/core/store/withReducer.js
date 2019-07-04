@@ -3,7 +3,7 @@ import {injectReducer} from 'app/store';
 import {ReactReduxContext} from "react-redux";
 
 const withReducer = (key, reducer) => WrappedComponent =>
-    class extends React.PureComponent {
+    (class extends React.PureComponent {
         constructor(props)
         {
             super(props);
@@ -20,6 +20,6 @@ const withReducer = (key, reducer) => WrappedComponent =>
                 </ReactReduxContext.Consumer>
             );
         };
-    };
+    });
 
 export default withReducer;

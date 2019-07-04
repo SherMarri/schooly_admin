@@ -93,7 +93,7 @@ class Authorization extends Component {
 function mapStateToProps({auth})
 {
     return {
-        user: auth.user
+        user: auth.user,
     }
 }
 

@@ -10,16 +10,16 @@ const styles = theme => ({
         justifyContent: 'flex-end',
     },
     button: {
-        marginTop: theme.spacing.unit * 3,
-        marginLeft: theme.spacing.unit,
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(1),
     },
     textField: {
-        marginRight: theme.spacing.unit,
-        marginLeft: theme.spacing.unit
+        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1)
     },
     descriptionField: {
-        marginRight: theme.spacing.unit,
-        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
         width: '100%'
     }
 });

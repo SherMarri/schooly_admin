@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {renderRoutes} from 'react-router-config';
 import AppContext from '../../AppContext';
-import { AppBar, Drawer } from '.';
+import { AppBar, Drawer, MessageSnackbar } from '.';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     root: {
@@ -16,7 +16,7 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing.unit * 3,
+        padding: theme.spacing(3),
     }
 });
 
@@ -48,6 +48,10 @@ class Layout  extends Component {
                                     {renderRoutes(routes)}
                             </main>
                             {this.props.children}
+                            <MessageSnackbar
+                                open={this.props.snackbar.open}
+                                message={this.props.snackbar.message}
+                            />
                         </div>
                     
                 )}
@@ -60,6 +64,14 @@ Layout.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(Layout));
+function mapStateToProps({ common })
+{
+    return {
+        snackbar: common.snackbar,
+    }
+}
+
+export default withRouter(withStyles(styles)(connect(mapStateToProps, null)(Layout)));
+
 
 

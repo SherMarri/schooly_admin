@@ -15,11 +15,9 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import AddIcon from '@material-ui/icons/Add';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
@@ -27,8 +25,9 @@ import Fab from '@material-ui/core/Fab';
 import AddIncomeDialog from './AddIncomeDialog';
 import { Utils } from '../../../../core';
 import Format from 'date-fns/format';
+import { ConfirmDeleteDialog } from '../../../../core/components';
 
-
+import * as Actions from '../store/actions/daily-income.actions';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -67,18 +66,11 @@ class EnhancedTableHead extends React.Component {
   };
 
   render() {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
+    const { order, orderBy } = this.props;
 
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
           {rows.map(
             row => (
               <TableCell
@@ -121,7 +113,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(1),
   },
   highlight:
     theme.palette.type === 'light'
@@ -143,7 +135,7 @@ const toolbarStyles = theme => ({
     flex: '0 0 auto',
   },
   fab: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: '40px',
     height: '40px',
   },
@@ -151,8 +143,8 @@ const toolbarStyles = theme => ({
 
 class EnhancedTableToolbar extends React.Component  {
 
-  handleAddExpense = () => {
-    this.props.onAddExpense();
+  handleAddIncome = () => {
+    this.props.onAddIncome();
   }
 
   render() {
@@ -170,7 +162,7 @@ class EnhancedTableToolbar extends React.Component  {
             </Typography>
           ) : (
             <Typography variant="h6" id="tableTitle">
-              Income - {Format(new Date(2019,8,19), 'MMM do, yyyy')}
+              Income - {Format(new Date(), 'MMMM do, yyyy')}
             </Typography>
           )}
         </div>
@@ -184,15 +176,10 @@ class EnhancedTableToolbar extends React.Component  {
             </Tooltip>
           ) : (
             <>
-            <Tooltip title="Add Expense">
-              <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleAddExpense}>
+            <Tooltip title="Add Income">
+              <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleAddIncome}>
                 <AddIcon/>
               </Fab>
-            </Tooltip>
-            <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list">
-                <FilterListIcon />
-              </IconButton>
             </Tooltip>
           </>
           )}
@@ -212,17 +199,18 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   // table: {
   //   minWidth: 1020,
   // },
   tableWrapper: {
     overflowX: 'auto',
+    padding: theme.spacing(2),
   },
 });
 
-class DailyExpensesTable extends React.Component {
+class DailyIncomeTable extends React.Component {
 
   state = {
     order: 'asc',
@@ -244,14 +232,6 @@ class DailyExpensesTable extends React.Component {
     }
 
     this.setState({ order, orderBy });
-  };
-
-  handleSelectAllClick = event => {
-    if (event.target.checked) {
-      this.setState(state => ({ selected: this.props.items.map(n => n.id) }));
-      return;
-    }
-    this.setState({ selected: [] });
   };
 
   handleClick = (event, id) => {
@@ -294,7 +274,7 @@ class DailyExpensesTable extends React.Component {
     });
   }
 
-  handleAddExpense = () => {
+  handleAddIncome = () => {
     this.setState({
         ...this.state,
         selected_item: null,
@@ -334,6 +314,32 @@ class DailyExpensesTable extends React.Component {
     });
   }
 
+  handleDeleteItem = (id) => {
+    const selected = this.props.items.find(i=>i.id===id);
+    this.setState({
+      ...this.state,
+      selected_item: selected,
+      delete: true,
+    });    
+  }
+
+  handleDismissDeleteDialog = () => {
+    this.setState({
+      ...this.state,
+      selected_item: null,
+      delete: false,
+    }); 
+  }
+
+  handleConfirmDelete = () => {
+    this.props.deleteItem(this.state.selected_item.id);
+    this.setState({
+      ...this.state,
+      selected_item: null,
+      delete: false,
+    }); 
+  }
+
   render() {
     const { classes } = this.props;
     let items = this.props.items ? this.mapItems() : []; 
@@ -342,7 +348,7 @@ class DailyExpensesTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} onAddExpense={this.handleAddExpense}/>
+        <EnhancedTableToolbar numSelected={selected.length} onAddIncome={this.handleAddIncome}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -361,16 +367,12 @@ class DailyExpensesTable extends React.Component {
                   return (
                     <TableRow
                       hover
-                      // onClick={event => this.handleClick(event, n.id)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.id}
                       selected={isSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)}/>
-                      </TableCell>
                       <TableCell component="th" scope="row" padding="none">
                         {n.title}
                       </TableCell>
@@ -383,7 +385,7 @@ class DailyExpensesTable extends React.Component {
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete">
-                          <IconButton aria-label="Delete">
+                          <IconButton onClick={()=>this.handleDeleteItem(n.id)} aria-label="Delete">
                             <DeleteIcon />
                           </IconButton>
                         </Tooltip>
@@ -415,14 +417,26 @@ class DailyExpensesTable extends React.Component {
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
         {this.state.open &&
-          <AddIncomeDialog open={this.state.open} item={this.state.selected_item} edit={this.state.edit} onClose={this.handleCloseDialog}/>
+          <AddIncomeDialog
+            open={this.state.open}
+            item={this.state.selected_item}
+            edit={this.state.edit}
+            onClose={this.handleCloseDialog}
+          />
+        }
+        {this.state.delete &&
+          <ConfirmDeleteDialog
+            open={this.state.open}
+            onClose={this.handleDismissDeleteDialog}
+            onConfirm={this.handleConfirmDelete}
+          />
         }
       </Paper>
     );
   }
 }
 
-DailyExpensesTable.propTypes = {
+DailyIncomeTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -435,7 +449,8 @@ function mapStateToProps({finance}) {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+      deleteItem: Actions.deleteItem
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(DailyExpensesTable)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(DailyIncomeTable)));

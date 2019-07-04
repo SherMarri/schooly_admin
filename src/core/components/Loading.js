@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
   progress: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
   },
   container: {
       textAlign: 'center'

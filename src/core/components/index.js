@@ -5,3 +5,5 @@ export { default as Layout } from './Layout';
 export { default as Drawer } from './Drawer';
 export { default as Loading } from './Loading';
 export { default as Chart } from './Chart';
+export { default as ConfirmDeleteDialog } from './ConfirmDeleteDialog';
+export { default as MessageSnackbar } from './MessageSnackbar';

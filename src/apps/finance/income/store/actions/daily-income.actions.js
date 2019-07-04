@@ -1,9 +1,12 @@
 import UrlService from '../../../../../core/UrlService';
+import { toggleSnackbar } from '../../../../../core/store/actions/common.actions';
 
 export const SET_DAILY_INCOME = '[DAILY INCOME] SET DAILY INCOME';
 export const FETCHING_DAILY_INCOME = '[DAILY INCOME] FETCHING DAILY INCOME';
 export const UPDATE_INCOME_ITEM_STATUS = '[DAILY INCOME] UPDATE EXPENSE ITEM STATUS';
-export const ADD_INCOME_ITEM = '[DAILY INCOME] ADD ITEM'
+export const ADD_INCOME_ITEM = '[DAILY INCOME] ADD ITEM';
+export const DELETE_INCOME_ITEM = '[DAILY INCOME] DELETE ITEM';
+
 export const IDLE = 0;
 export const PROCESSING = 1;
 export const SUCCESSFUL = 2;
@@ -50,6 +53,26 @@ export function addIncomeItem(data) {
             });
         });
 
+    }
+}
+
+export function deleteItem(id) {
+    return (dispatch) => {
+        UrlService.delete(`finance/income/items/${id}`)
+        .then( _ => {
+            dispatch({
+                type: DELETE_INCOME_ITEM,
+                payload: id
+            });
+            return dispatch(toggleSnackbar(
+                'Successfully deleted!'
+            ));
+        })
+        .catch(error => {
+            return dispatch(
+                toggleSnackbar('Failed to delete the selected item, please contact Schooly support!')
+            );
+        });
     }
 }
 
