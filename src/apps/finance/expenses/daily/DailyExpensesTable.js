@@ -25,9 +25,6 @@ import Fab from '@material-ui/core/Fab';
 import AddExpenseDialog from './AddExpenseDialog';
 import { Utils } from '../../../../core';
 import Format from 'date-fns/format';
-import { ConfirmDeleteDialog } from '../../../../core/components';
-import * as Actions from '../store/actions/daily-expenses.actions';
-
 
 
 function desc(a, b, orderBy) {
@@ -318,31 +315,6 @@ class DailyExpensesTable extends React.Component {
     });
   }
 
-  handleDeleteItem = (id) => {
-    const selected = this.props.items.find(i=>i.id===id);
-    this.setState({
-      ...this.state,
-      selected_item: selected,
-      delete: true,
-    });    
-  }
-
-  handleDismissDeleteDialog = () => {
-    this.setState({
-      ...this.state,
-      selected_item: null,
-      delete: false,
-    }); 
-  }
-
-  handleConfirmDelete = () => {
-    this.props.deleteItem(this.state.selected_item.id);
-    this.setState({
-      ...this.state,
-      selected_item: null,
-      delete: false,
-    }); 
-  }
 
   render() {
     const { classes } = this.props;
@@ -388,11 +360,6 @@ class DailyExpensesTable extends React.Component {
                             <RemoveRedEye />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Delete">
-                          <IconButton onClick={()=>this.handleDeleteItem(n.id)} aria-label="Delete">
-                            <DeleteIcon />
-                          </IconButton>
-                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   );
@@ -423,13 +390,6 @@ class DailyExpensesTable extends React.Component {
         {this.state.open &&
           <AddExpenseDialog open={this.state.open} item={this.state.selected_item} edit={this.state.edit} onClose={this.handleCloseDialog}/>
         }
-        {this.state.delete &&
-          <ConfirmDeleteDialog
-            open={this.state.open}
-            onClose={this.handleDismissDeleteDialog}
-            onConfirm={this.handleConfirmDelete}
-          />
-        }
       </Paper>
     );
   }
@@ -448,7 +408,6 @@ function mapStateToProps({finance}) {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-      deleteItem: Actions.deleteItem
     }, dispatch);
 }
 

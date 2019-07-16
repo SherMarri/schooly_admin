@@ -79,7 +79,7 @@ class AddIncomeDialog extends React.Component {
         const { item } = this.props;
         let date = new Date();
         if (item) {
-            date = Utils.getDateFromString(item.date);
+            date = Utils.getDateFromString(item.created_at);
         }
         const form = {
             category_id: item ? item.category.id : null,
@@ -250,6 +250,7 @@ class AddIncomeDialog extends React.Component {
                                     margin="normal"
                                     label="Date"
                                     fullWidth
+                                    disableFuture
                                     value={form.date}
                                     onChange={this.handleDateChange}
                                     disabled={item && !edit}

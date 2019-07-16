@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ChallanDialog from './ChallanDialog';
 import ChallanTable from './ChallanTable';
-
+import FilterChallanDialog from './FilterChallanDialog';
 
 
 const styles = theme => ({
@@ -44,10 +44,18 @@ class ChallanPage extends React.Component {
         });
     }
 
+    handleOpenFilterDialog = () => {
+        this.setState({
+            ...this.state,
+            open_filter_challan: true
+        });
+    }
+
     handleCloseDialog = () => {
         this.setState({
             ...this.state,
-            open_generate_challan: false
+            open_generate_challan: false,
+            open_filter_challan: false
         });
     }
 
@@ -62,7 +70,7 @@ class ChallanPage extends React.Component {
                     <Button variant="contained" color="primary" onClick={this.handleOpenDialog} className={classes.button}>
                         Generate Challans
                     </Button>
-                    <Button variant="contained" color="primary" onClick={this.handleOpenDialog} className={classes.button}>
+                    <Button variant="contained" color="primary" onClick={this.handleOpenFilterDialog} className={classes.button}>
                         Filter
                     </Button>
                 </Grid>
@@ -70,6 +78,7 @@ class ChallanPage extends React.Component {
                     <ChallanTable/>
                 </Grid>
                 <ChallanDialog open={this.state.open_generate_challan} onClose={this.handleCloseDialog}/>
+                <FilterChallanDialog open={this.state.open_filter_challan} onClose={this.handleCloseDialog}/>
             </Grid>
         )
     }
