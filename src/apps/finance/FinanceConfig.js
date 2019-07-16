@@ -1,14 +1,15 @@
-import { ExpensesPage, DailyExpensesPage } from './expenses';
+import { DailyExpensesPage, ExpenseReportsPage } from './expenses';
 import { FeeStructuresPage, FeeChallanPage } from './fees';
 import AuthRoles from '../../core/AuthRoles';
-import { IncomePage, DailyIncomePage } from './income';
+import { IncomePage, DailyIncomePage, IncomeReportsPage } from './income';
+
 
 export const FinanceConfig = {
     auth: AuthRoles.admin,
     routes  : [
         {
-            path: '/',
-            component: ExpensesPage,
+            path: '/expenses/reports',
+            component: ExpenseReportsPage,
             exact: true,
         },
         {
@@ -20,6 +21,11 @@ export const FinanceConfig = {
             path: '/income',
             component: IncomePage,
             exact: true
+        },
+        {
+            path: '/income/reports',
+            component: IncomeReportsPage,
+            exact: true,
         },
         {
             path: '/income/daily',

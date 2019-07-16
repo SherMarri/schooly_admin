@@ -12,6 +12,8 @@ import LocalATMIcon from '@material-ui/icons/LocalAtm';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import PayChallanDialog from './PayChallanDialog';
 import PrintChallanDialog from './PrintChallanDialog';
+import { Utils } from '../../../../core';
+import Format from 'date-fns/format';
 
 const styles = theme => ({
     unpaid_chip: {
@@ -30,12 +32,15 @@ class ChallanTable extends React.Component {
         };
     }
     componentDidMount() {
-        this.props.fetchChallans();
+        this.props.fetchChallans({
+            ...this.props.challans.filter_form
+        });
     }
 
     changePage = (page) => {
         this.props.fetchChallans({
-            page: page + 1
+            page: page + 1,
+            ...this.props.challans.filter_form
         });
     }
 
@@ -43,10 +48,11 @@ class ChallanTable extends React.Component {
         return data.map(d => {
             return {
                 name: d.student.fullname,
+                section: `${d.student.grade} - ${d.student.section}`,
                 total: d.total,
                 paid: d.paid,
                 discount: d.discount,
-                due_date: d.due_date,
+                due_date: Format(Utils.getDateFromString(d.due_date), 'MMMM do, yyyy'),
                 id: d,
             }
         });
@@ -115,6 +121,9 @@ class ChallanTable extends React.Component {
         const columns = [{
             name: 'name',
             label: "Student",
+        },{
+            name: 'section',
+            label: "Section",
         }, {
             name: 'total',
             label: "Total",

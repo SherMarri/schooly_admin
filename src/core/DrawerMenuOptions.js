@@ -42,11 +42,12 @@ const getMenuItems = () => [
                     {
                         text: 'Reports',
                         code: 'finance>expenses>reports',
+                        link: '/expenses/reports',
                     },
-                    {
-                        text: 'Categories',
-                        code: 'finance>expenses>categories'
-                    }
+                    // {
+                    //     text: 'Categories',
+                    //     code: 'finance>expenses>categories'
+                    // }
                 ]
             },
             {
@@ -62,11 +63,12 @@ const getMenuItems = () => [
                     {
                         text: 'Reports',
                         code: 'finance>income>reports',
+                        link: '/income/reports',
                     },
-                    {
-                        text: 'Categories',
-                        code: 'finance>income>categories'
-                    }
+                    // {
+                    //     text: 'Categories',
+                    //     code: 'finance>income>categories'
+                    // }
                 ]
             },
             {

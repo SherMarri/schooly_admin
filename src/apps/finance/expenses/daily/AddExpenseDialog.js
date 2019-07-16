@@ -77,15 +77,10 @@ class AddExpenseDialog extends React.Component {
     constructor(props) {
         super(props);
         const { item } = this.props;
-        let date = new Date();
-        if (item) {
-            date = Utils.getDateFromString(item.date);
-        }
         const form = {
             category_id: item ? item.category.id : null,
             title: item ? item.title : null,
             description: item ? item.description : null,
-            date: date,
             amount: item ? item.amount : null,
         }; 
         this.state = {
@@ -99,18 +94,6 @@ class AddExpenseDialog extends React.Component {
         this.props.fetchCategories();
     }
     
-    handleDateChange = date => {
-        let form = {
-            ...this.state.form,
-            date: date
-        }
-        const form_valid = this.validateForm(form);
-        this.setState({
-            ...this.state,
-            form: form,
-            form_valid: form_valid
-        });
-    };
 
     handleClickOpen = () => {
         this.setState({ open: true });
@@ -140,7 +123,6 @@ class AddExpenseDialog extends React.Component {
         if (!form.title || form.title.length === 0) return false;
         if (!form.amount || form.amount < 0) return false;
         if (!form.category_id || form.category_id === '') return false;
-        if (!form.date) return false;
         return true;
     }
 
@@ -148,7 +130,6 @@ class AddExpenseDialog extends React.Component {
         event.preventDefault();
         let {form, form_valid} = this.state;
         if (!form_valid) return false;
-        form.date = Utils.formatDate(form.date);
         this.props.addExpenseItem(form);
     }
 
@@ -240,17 +221,19 @@ class AddExpenseDialog extends React.Component {
                                     disabled={item && !edit}                                    
                                 />
                             </FormControl>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                {/* <Grid container className={classes.grid} justify="space-around"> */}
-                                <DatePicker
-                                    margin="normal"
-                                    label="Date"
-                                    fullWidth
-                                    value={form.date}
-                                    onChange={this.handleDateChange}
-                                    disabled={item && !edit}
-                                />
-                            </MuiPickersUtilsProvider>
+                            {item && !edit &&
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <DatePicker
+                                        margin="normal"
+                                        label="Date"
+                                        fullWidth
+                                        disableFuture
+                                        value={Utils.getDateFromString(item.created_at)}
+                                        onChange={this.handleDateChange}
+                                        disabled={true}
+                                    />
+                                </MuiPickersUtilsProvider>
+                            }
                             <FormControl margin="normal" required fullWidth>                    
                                 <TextField
                                     id="description"

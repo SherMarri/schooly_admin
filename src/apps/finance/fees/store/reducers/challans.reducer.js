@@ -1,7 +1,14 @@
 import * as Actions from '../actions/challans.actions';
 
 const initialState = {
-    item_status: Actions.IDLE
+    item_status: Actions.IDLE,
+    filter_form: {
+        from: null,
+        to: null,
+        target_type: 'group',
+        target_value: null,
+        status: null,
+    }
 };
 
 const challans = function (state = initialState, action) {
@@ -24,7 +31,6 @@ const challans = function (state = initialState, action) {
         }
         case Actions.UPDATE_ITEM_STATUS:
         {
-            debugger;
             return {
                 ...state,
                 item_status: action.payload
@@ -47,6 +53,13 @@ const challans = function (state = initialState, action) {
             return {
                 ...state,
                 grades: action.payload
+            };
+        }
+        case Actions.SET_FILTERS:
+        {
+            return {
+                ...state,
+                filter_form: action.payload
             };
         }
         default:

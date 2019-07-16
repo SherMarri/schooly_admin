@@ -1,11 +1,9 @@
 import UrlService from '../../../../../core/UrlService';
-import { toggleSnackbar } from '../../../../../core/store/actions/common.actions';
 
 export const SET_DAILY_EXPENSES = '[DAILY EXPENSES] SET DAILY EXPENSES';
 export const FETCHING_DAILY_EXPENSES = '[DAILY EXPENSES] FETCHING DAILY EXPENSES';
 export const UPDATE_EXPENSE_ITEM_STATUS = '[DAILY EXPENSES] UPDATE EXPENSE ITEM STATUS';
 export const ADD_EXPENSE_ITEM = '[DAILY EXPENSES] ADD ITEM'
-export const DELETE_EXPENSE_ITEM = '[DAILY EXPENSES] DELETE ITEM';
 export const IDLE = 0;
 export const PROCESSING = 1;
 export const SUCCESSFUL = 2;
@@ -52,26 +50,6 @@ export function addExpenseItem(data) {
             });
         });
 
-    }
-}
-
-export function deleteItem(id) {
-    return (dispatch) => {
-        UrlService.delete(`finance/expenses/items/${id}`)
-        .then( _ => {
-            dispatch({
-                type: DELETE_EXPENSE_ITEM,
-                payload: id
-            });
-            return dispatch(toggleSnackbar(
-                'Successfully deleted!'
-            ));
-        })
-        .catch(error => {
-            return dispatch(
-                toggleSnackbar('Failed to delete the selected item, please contact Schooly support!')
-            );
-        });
     }
 }
 
