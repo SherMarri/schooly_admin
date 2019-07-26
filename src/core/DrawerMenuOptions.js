@@ -7,7 +7,6 @@ import Dashboard from '@material-ui/icons/Dashboard';
 import AccountBalance from '@material-ui/icons/AccountBalance'
 import School from '@material-ui/icons/School';
 import People from '@material-ui/icons/People';
-import Add from '@material-ui/icons/Add';
 import PermContactCalendar from '@material-ui/icons/PermContactCalendar';
 import Settings from '@material-ui/icons/Settings';
 
@@ -101,14 +100,10 @@ const getMenuItems = () => [
         code: 'academics',
         children: [
             {
-                text: 'Registration',
-                code: 'academics>registration',
-                icon: <Add/>
-            },
-            {
                 text: 'Students',
                 code: 'academics>students',
-                icon: <People/>
+                icon: <People/>,
+                link: '/academics/students'
             }
         ]
     },
@@ -117,11 +112,6 @@ const getMenuItems = () => [
         icon: <People />,
         code: 'hr',
         children: [
-            {
-                text: 'Registration',
-                code: 'hr>registration',
-                icon: <Add/>
-            },
             {
                 text: 'Employees',
                 code: 'hr>employees',

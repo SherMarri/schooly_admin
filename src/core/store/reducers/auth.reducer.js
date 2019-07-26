@@ -1,5 +1,4 @@
 import * as Actions from '../actions/auth.actions';
-const initialState = getInitialState()
 
 function getInitialState() {
     const userStr = localStorage.getItem('user');
@@ -13,6 +12,8 @@ function getInitialState() {
         user: {role: 'Guest'}
     };
 }
+
+const initialState = getInitialState()
 
 const auth = function (state = initialState, action) {
     switch ( action.type )
@@ -43,6 +44,12 @@ const auth = function (state = initialState, action) {
                 errors: null,
                 user: action.payload.user
             }
+        }
+        case Actions.CLEAR_USER_DATA:
+        {
+            localStorage.removeItem('user');
+            localStorage.removeItem('jwt_token');
+            return initialState;
         }
         default:
         {

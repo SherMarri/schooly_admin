@@ -1,8 +1,10 @@
 import { UrlService } from "../..";
 import history from "../../history";
+import { toggleSnackbar, SNACKBAR_FAILURE } from "./common.actions";
 
 export const LOADING = '[USER] LOADING';
 export const SET_USER_DATA = '[USER] SET USER DATA';
+export const CLEAR_USER_DATA = '[USER] CLEAR USER DATA';
 export const SET_ERRORS = '[USER] SET ERRORS';
 
 export function login({username, password}) {
@@ -19,13 +21,37 @@ export function login({username, password}) {
                 payload: response.data
             });
             setTimeout(()=>{
-                history.push('/');
+                history.push('/academics/students');
             }, 100);
         }).catch(error => {
+            dispatch(toggleSnackbar({
+                message: 'Invalid credentials. Please try again with valid username and password.',
+                variant: SNACKBAR_FAILURE,
+            }))
             return dispatch({
                 type: SET_ERRORS,
                 payload: error.response.data
             });
+        });
+    }
+}
+
+export function logout() {
+    return dispatch => {
+        UrlService.post('users/logout').then(response => {
+            dispatch({
+                type: CLEAR_USER_DATA,
+            });
+            setTimeout(()=>{
+                history.push('/login');
+            }, 500);
+        }).catch(error => {
+            dispatch({
+                type: CLEAR_USER_DATA,
+            });
+            setTimeout(()=>{
+                history.push('/login');
+            }, 500);
         });
     }
 }

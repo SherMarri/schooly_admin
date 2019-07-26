@@ -2,18 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as Actions from '../store/actions/challans.actions';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Loading } from '../../../../core/components';
 import MUIDataTable from "mui-datatables";
 import { Typography, Chip, IconButton, Tooltip } from '@material-ui/core';
 import LocalATMIcon from '@material-ui/icons/LocalAtm';
 import ReceiptIcon from '@material-ui/icons/Receipt';
+import Format from 'date-fns/format';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import { Utils } from '../../../../core';
+import { Loading, DownloadDialog } from '../../../../core/components';
 import PayChallanDialog from './PayChallanDialog';
 import PrintChallanDialog from './PrintChallanDialog';
-import { Utils } from '../../../../core';
-import Format from 'date-fns/format';
+import * as Actions from '../store/actions/challans.actions';
 
 const styles = theme => ({
     unpaid_chip: {
@@ -113,8 +114,15 @@ class ChallanTable extends React.Component {
         this.props.setItemStatus(Actions.IDLE);
     }
 
+    handleDownload = () => {
+        this.props.fetchDownloadLink({
+            ...this.props.filter_form,
+            download: true,
+        });
+    }
+
     render() {
-        const { challans } = this.props;
+        const { challans, fetching_download_link, download_url } = this.props;
         if (challans.loading) return <Loading />;
         if (!challans.data) return <Typography>Data not available</Typography>
 
@@ -158,6 +166,7 @@ class ChallanTable extends React.Component {
             selectableRows: 'none',
             rowsPerPage: 20,
             rowsPerPageOptions: [20],
+            download: false,
             serverSide: true,
             count: count,
             page: page,
@@ -170,6 +179,7 @@ class ChallanTable extends React.Component {
                         return;
                 }
             },
+            customToolbar: () => { return (<Tooltip title="Download"><IconButton aria-label="download" onClick={this.handleDownload}> <CloudDownloadIcon/> </IconButton></Tooltip>)},
         };
         return (
             <div>
@@ -195,6 +205,13 @@ class ChallanTable extends React.Component {
                         onClose={this.handleClosePrintDialog}
                     />
                 }
+                {(fetching_download_link || download_url) &&
+                <DownloadDialog
+                    loading={fetching_download_link}
+                    link={download_url}
+                    onClose={this.props.clearDownloadLink}
+                />
+                }
             </div>
         );
     }
@@ -207,14 +224,18 @@ ChallanTable.propTypes = {
 function mapStateToProps({ finance, user }) {
     return {
         challans: finance.fees.challans,
-        user: user
+        user: user,
+        fetching_download_link: finance.fees.challans.fetching_download_link,
+        download_url: finance.fees.challans.download_url,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchChallans: Actions.fetchChallans,
-        setItemStatus: Actions.setItemStatus
+        setItemStatus: Actions.setItemStatus,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
