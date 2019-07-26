@@ -79,10 +79,10 @@ class StudentsToolbar extends React.Component {
                                 <AddIcon className={classes.leftIcon} />
                                 New
                             </Button>
-                            <Button variant="contained" color="secondary" className={classes.button}>
+                            {/* <Button variant="contained" color="secondary" className={classes.button}>
                                 <CloudUploadIcon className={classes.leftIcon} />                            
                                 Upload
-                            </Button>
+                            </Button> */}
                         </div>
                     </Grid>
                 </Grid>

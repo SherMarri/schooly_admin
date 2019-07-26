@@ -23,11 +23,11 @@ const getMenuItems = () => [
         icon: <AccountBalance />,
         code: 'finance',
         children: [
-            {
-                text: 'Statistics',
-                icon: <TrendingUp />,
-                code: 'finance>statistics'
-            },
+            // {
+            //     text: 'Statistics',
+            //     icon: <TrendingUp />,
+            //     code: 'finance>statistics'
+            // },
             {
                 text: 'Expenses',
                 icon: <Receipt />,
@@ -107,23 +107,23 @@ const getMenuItems = () => [
             }
         ]
     },
-    {
-        text: 'Staff',
-        icon: <People />,
-        code: 'hr',
-        children: [
-            {
-                text: 'Employees',
-                code: 'hr>employees',
-                icon: <PermContactCalendar/>
-            }
-        ]
-    },
-    {
-        text: 'Settings',
-        icon: <Settings />,
-        code: 'settings',
-    }
+    // {
+    //     text: 'Staff',
+    //     icon: <People />,
+    //     code: 'hr',
+    //     children: [
+    //         {
+    //             text: 'Employees',
+    //             code: 'hr>employees',
+    //             icon: <PermContactCalendar/>
+    //         }
+    //     ]
+    // },
+    // {
+    //     text: 'Settings',
+    //     icon: <Settings />,
+    //     code: 'settings',
+    // }
 ];
 
 export default getMenuItems;
