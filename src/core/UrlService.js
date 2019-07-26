@@ -3,13 +3,16 @@ import axios from 'axios';
 const BASE_URL = 'http://localhost:8000/api';
 const API_VERSION = 'v1';
 
-function getUrl(path) {
-    return `${BASE_URL}/${API_VERSION}/${path}/`;
-}
+
 
 class UrlService {
+    
+    static getUrl(path) {
+        return `${BASE_URL}/${API_VERSION}/${path}/`;        
+    }
+
     static get(path, params=null) {
-        const url = getUrl(path);
+        const url = this.getUrl(path);
         let headers;
         const token = window.localStorage.getItem('jwt_token');
         if (token) {
@@ -25,7 +28,7 @@ class UrlService {
     }
 
     static post(path, data=null) {
-        const url = getUrl(path);
+        const url = this.getUrl(path);
         let headers;
         const token = window.localStorage.getItem('jwt_token');
         if (token) {
@@ -40,7 +43,7 @@ class UrlService {
     }
 
     static put(path, data=null) {
-        const url = getUrl(path);
+        const url = this.getUrl(path);
         let headers;
         const token = window.localStorage.getItem('jwt_token');
         if (token) {
@@ -55,7 +58,7 @@ class UrlService {
     }
 
     static patch(path, data=null) {
-        const url = getUrl(path);
+        const url = this.getUrl(path);
         let headers;
         const token = window.localStorage.getItem('jwt_token');
         if (token) {
@@ -70,7 +73,7 @@ class UrlService {
     }
 
     static delete(path, params=null) {
-        const url = getUrl(path);
+        const url = this.getUrl(path);
         let headers;
         const token = window.localStorage.getItem('jwt_token');
         if (token) {

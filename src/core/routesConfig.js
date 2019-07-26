@@ -11,7 +11,7 @@ const routeConfigs = [
 const routes = [
     ...Utils.generateRoutesFromConfigs(routeConfigs),
     {
-        component: () => <Redirect to="/404"/>
+        component: () => <Redirect to="/"/>
     }
 ];
 

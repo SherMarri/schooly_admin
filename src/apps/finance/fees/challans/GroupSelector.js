@@ -8,7 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
-import * as Actions from '../store/actions';
+import * as Actions from '../../../../core/store/actions/common.actions';
 
 const styles = theme => ({
 });
@@ -131,9 +131,9 @@ GroupSelector.propTypes = {
 };
 
 
-function mapStateToProps({finance}) {
+function mapStateToProps({common}) {
 	return {
-        grades: finance.fees.challans.grades,
+        grades: common.grades,
 	}
 }
 

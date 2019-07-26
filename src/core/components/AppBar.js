@@ -6,6 +6,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import { Menu, MenuItem } from '@material-ui/core';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {withRouter} from 'react-router-dom';
+import * as Actions from '../store/actions'
+
 
 const drawerWidth = 240;
 
@@ -29,6 +35,53 @@ const styles = theme => ({
 
 class MainAppBar extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            anchorEl: null,
+        };
+    }
+
+    handleProfileMenuOpen = (event) => {
+        this.setState({
+            anchorEl: event.currentTarget,
+            menuId: 'primary-search-account-menu'
+        });
+    }
+
+    handleMenuClose = (event) => {
+        this.setState({
+            anchorEl: null,
+            menuId: null,
+        });
+    }
+
+    handleLogout = () => {
+        this.setState({
+            anchorEl: null,
+            menuId: null,
+        });
+        this.props.logout();
+    }
+
+    renderMenu = () => {
+        const { anchorEl, menuId } = this.state;
+        return (
+            <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                id={menuId}
+                keepMounted
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={anchorEl}
+                onClose={this.handleMenuClose}
+            >
+                {/* <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem> */}
+                <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+            </Menu>
+        )
+    }
+
     render() {
         const { classes } = this.props;
         const isMenuOpen = false;
@@ -49,6 +102,7 @@ class MainAppBar extends React.Component {
                         >
                             <AccountCircle />
                         </IconButton>
+                        {this.renderMenu()}
                     </div>
                 </Toolbar>
             </AppBar>
@@ -60,4 +114,11 @@ MainAppBar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MainAppBar);
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        logout: Actions.logout,
+    }, dispatch);
+}
+
+export default withRouter(withStyles(styles)(connect(null, mapDispatchToProps)(MainAppBar)));

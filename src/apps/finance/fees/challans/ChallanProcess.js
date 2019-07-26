@@ -165,7 +165,7 @@ class ChallanProcess extends React.Component {
       return (
       <Paper className={classes.error_message}>
         <Typography style={{color: 'white'}}>
-            We were unable to process your request. Please contact Schooly Support.
+            We were unable to process your request. Please contact Schooli Support.
         </Typography>
       </Paper>
       );

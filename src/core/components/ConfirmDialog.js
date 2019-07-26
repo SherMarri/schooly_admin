@@ -5,23 +5,23 @@ function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 
-export default class ConfirmDeleteDialog extends Component {
+export default class ConfirmDialog extends Component {
     render() {
         return (
         <Dialog
-          open={() => this.props.open()}
+          open={this.props.open}
           TransitionComponent={Transition}
           keepMounted
-          onClose={() => this.props.onClose()}
+          onClose={this.props.onClose}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
-            {"Confirm Delete"}
+            {this.props.title || "Confirm Action"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              {"You won't be able to undo this operation, are you sure you want to delete this fee structure?"}
+              {this.props.message}
             </DialogContentText>
           </DialogContent>
           <DialogActions>

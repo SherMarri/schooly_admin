@@ -16,7 +16,7 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(3),
+        padding: theme.spacing(1),
     }
 });
 
@@ -45,13 +45,16 @@ class Layout  extends Component {
                             }
                             <main className={classes.content}>
                                 <div className={classes.toolbar} />
-                                    {renderRoutes(routes)}
+                                {renderRoutes(routes)}
                             </main>
                             {this.props.children}
+                            {this.props.snackbar.open &&
                             <MessageSnackbar
                                 open={this.props.snackbar.open}
                                 message={this.props.snackbar.message}
+                                variant={this.props.snackbar.variant}
                             />
+                            }
                         </div>
                     
                 )}
@@ -64,10 +67,11 @@ Layout.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ common })
+function mapStateToProps({ common, auth })
 {
     return {
         snackbar: common.snackbar,
+        user: auth.user,
     }
 }
 

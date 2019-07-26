@@ -9,7 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Grid, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { Grid, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Input, InputLabel } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import GroupSelector from './GroupSelector';
@@ -17,6 +17,9 @@ import * as Actions from '../store/actions/challans.actions';
 const styles = theme => ({
     content: {
         maxWidth: '400px',
+    },
+    searchTermControl: {
+        width: '100%',
     }
 });
 
@@ -75,10 +78,10 @@ class FilterChallanDialog extends React.Component {
         });
     };
 
-    handleStatusChange = (event) => {
+    handleChange = (event) => {
         let form = {
             ...this.state.form,
-            status: event.target.value,
+            [event.target.name]: event.target.value,
         }
         this.setState({
             ...this.state,
@@ -124,13 +127,23 @@ class FilterChallanDialog extends React.Component {
                         </Grid>
                         <Grid item xs={12}>
                             <br/>
+                            <FormControl className={classes.searchTermControl} component="fieldset">
+                                <InputLabel htmlFor="search_term">Name or roll #</InputLabel>
+                                <Input id="search_term" name="search_term"
+                                    onChange={this.handleChange}
+                                    value={form.search_term || ''}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <br/>
                             <FormControl component="fieldset">
                                 <FormLabel component="legend">Status</FormLabel>
                                 <RadioGroup
                                     aria-label="Target"
                                     name="status"
                                     value={form.status}
-                                    onChange={this.handleStatusChange}
+                                    onChange={this.handleChange}
                                     row
                                 >
                                     <FormControlLabel value="all" control={<Radio />} label="All" />

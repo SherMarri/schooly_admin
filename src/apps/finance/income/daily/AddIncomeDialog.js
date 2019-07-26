@@ -288,7 +288,7 @@ class AddIncomeDialog extends React.Component {
                             }
                             {status === Actions.UNSUCCESSFUL &&
                                 <Typography style={{color: '#920e0ede'}}>
-                                    We were unable to process your request. Please contact Schooly Support.
+                                    We were unable to process your request. Please contact Schooli Support.
                                 </Typography>                                                           
                             }
                         </form>

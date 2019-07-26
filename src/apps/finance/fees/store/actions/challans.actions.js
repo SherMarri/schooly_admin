@@ -1,6 +1,6 @@
 import { UrlService, Utils } from "../../../../../core";
+import { SNACKBAR_FAILURE, toggleSnackbar } from "../../../../../core/store/actions/common.actions";
 
-export const SET_GRADES = '[FEES CHALLANS] SET GRADES';
 export const UPDATE_ITEM = '[FEES CHALLANS] UPDATE ITEM';
 export const UPDATE_ITEM_STATUS = '[FEES CHALLANS] UPDATE ITEM STATUS';
 export const FETCHING_CHALLANS = '[FEE CHALLANS] FETCHING CHALLANS';
@@ -11,6 +11,10 @@ export const IDLE = 0;
 export const PROCESSING = 1;
 export const SUCCESSFUL = 2;
 export const UNSUCCESSFUL = 3;
+
+export const FETCHING_DOWNLOAD_LINK = '[FEE CHALLANS] FETCHING DOWNLOAD LINK';
+export const SET_DOWNLOAD_LINK = '[FEE CHALLANS] SET DOWNLOAD LINK';
+export const CLEAR_DOWNLOAD_LINK = '[FEE CHALLANS] CLEAR DOWNLOAD LINK';
 
 export function applyFilters(filters) {
     return dispatch => {
@@ -111,20 +115,38 @@ export function fetchChallans(params) {
       };
 }
 
-export function fetchGrades() {
+export function clearDownloadLink() {
     return dispatch => {
-      UrlService.get('structure/grades')
-      .then(response=>{
-          return dispatch({
-              type: SET_GRADES,
-              payload: response.data
-          });
-      }).catch(response=>{
-        // TODO: HANDLE THIS EXCEPTION    
         return dispatch({
-            type: SET_GRADES,
-            payload: []
+            type: CLEAR_DOWNLOAD_LINK,
         });
-      });
-    };
+    }
+}
+
+export function fetchDownloadLink(params) {
+    return dispatch => {
+        let filters = params;
+        dispatch({
+            type: FETCHING_DOWNLOAD_LINK,
+            payload: true,
+        });
+        UrlService.get('finance/fees/challans', filters)
+        .then(response => {
+            const download_url = `${UrlService.getUrl('finance/fees/challans/download_csv')}?file_name=${response.data}`;
+            dispatch({
+                type: SET_DOWNLOAD_LINK,
+                payload: download_url
+            });
+        })
+        .catch(error => {
+            dispatch({
+                type: FETCHING_DOWNLOAD_LINK,
+                payload: false,
+            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
+        });
+    }
 }

@@ -1,16 +1,44 @@
-export const TOGGLE_SNACKBAR = '[COMMON] TOGGLE SNACKBAR';
+import UrlService from "../../UrlService";
 
-export function toggleSnackbar(message) {
+export const TOGGLE_SNACKBAR = '[COMMON] TOGGLE SNACKBAR';
+export const SET_GRADES = '[COMMON] SET GRADES';
+export const SNACKBAR_SUCCESS = 'success';
+export const SNACKBAR_FAILURE = 'error';
+export const SNACKBAR_INFO = 'info';
+
+export function toggleSnackbar({ message, variant }) {
     return dispatch => {
         dispatch({
             type: TOGGLE_SNACKBAR,
-            payload: message
+            payload: { message, variant }
         });
 
         setTimeout(()=>{
             return dispatch({
                 type: TOGGLE_SNACKBAR,
+                payload: {
+                    message: null,
+                    variant: null,
+                }
             });
         }, 3000);
     }
+}
+
+export function fetchGrades() {
+    return dispatch => {
+      UrlService.get('structure/grades')
+      .then(response=>{
+          return dispatch({
+              type: SET_GRADES,
+              payload: response.data
+          });
+      }).catch(response=>{
+        // TODO: HANDLE THIS EXCEPTION    
+        return dispatch({
+            type: SET_GRADES,
+            payload: []
+        });
+      });
+    };
 }

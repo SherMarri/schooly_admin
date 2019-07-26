@@ -158,7 +158,7 @@ class AddExpenseDialog extends React.Component {
                         </Typography>
                         <Button color="inherit" onClick={this.handleClose}>
                             Cancel
-              </Button>
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <main className={classes.main}>
@@ -266,7 +266,7 @@ class AddExpenseDialog extends React.Component {
                             }
                             {status === Actions.UNSUCCESSFUL &&
                                 <Typography style={{color: '#920e0ede'}}>
-                                    We were unable to process your request. Please contact Schooly Support.
+                                    We were unable to process your request. Please contact Schooli Support.
                                 </Typography>                                                           
                             }
                         </form>

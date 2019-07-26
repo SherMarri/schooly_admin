@@ -5,6 +5,7 @@ function getInitialState() {
         snackbar: {
             open: false,
             message: null,
+            variant: null,
         }
     };
 }
@@ -20,9 +21,17 @@ const common = function (state = initialState, action) {
                 ...state,
                 snackbar: {
                     open: !state.snackbar.open,
-                    message: action.payload
+                    message: action.payload.message,
+                    variant: action.payload.variant,
                 }
             }
+        }
+        case Actions.SET_GRADES:
+        {
+            return {
+                ...state,
+                grades: action.payload
+            };
         }
         default:
         {

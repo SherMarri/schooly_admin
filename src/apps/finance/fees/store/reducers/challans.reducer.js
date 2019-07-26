@@ -48,18 +48,31 @@ const challans = function (state = initialState, action) {
                 selected_item: item
             };
         }
-        case Actions.SET_GRADES:
-        {
-            return {
-                ...state,
-                grades: action.payload
-            };
-        }
         case Actions.SET_FILTERS:
         {
             return {
                 ...state,
                 filter_form: action.payload
+            };
+        }
+        case Actions.FETCHING_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: action.payload
+            };
+        }
+        case Actions.SET_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: action.payload 
+            };
+        }
+        case Actions.CLEAR_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: null, 
             };
         }
         default:
