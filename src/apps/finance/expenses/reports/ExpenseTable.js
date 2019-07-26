@@ -107,6 +107,7 @@ class ExpenseTable extends React.Component {
             sort: false,
             responsive: 'stacked',
             print: false,
+            download: false,
             search: false,
             viewColumns: false,
             selectableRows: 'none',

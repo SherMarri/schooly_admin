@@ -104,6 +104,7 @@ class IncomeTable extends React.Component {
         const options = {
             filter: false,
             sort: false,
+            download: false,
             responsive: 'stacked',
             print: false,
             search: false,
