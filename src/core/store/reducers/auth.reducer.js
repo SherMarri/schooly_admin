@@ -22,17 +22,8 @@ const auth = function (state = initialState, action) {
         {
             return {
                 ...state,
-                loading: true,
-                errors: null
-            }
-        }
-        case Actions.SET_ERRORS:
-        {
-            return {
-                ...state,
-                loading: false,
-                errors: action.payload
-            }
+                loading: action.payload,
+            };
         }
         case Actions.SET_USER_DATA:
         {
@@ -40,8 +31,6 @@ const auth = function (state = initialState, action) {
             localStorage.setItem('jwt_token', action.payload.token);
             return {
                 ...state,
-                loading: false,
-                errors: null,
                 user: action.payload.user
             }
         }

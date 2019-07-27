@@ -13,6 +13,9 @@ import * as _ from 'lodash';
 import { Chart } from '../../../../core/components';
 
 const styles = theme => ({
+    container: {
+        paddingBottom: theme.spacing(2),
+    },
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
@@ -92,7 +95,7 @@ class DetailsTab extends Component {
     render() {
         const { details, classes } = this.props;
         return (
-            <Grid container spacing={24}>
+            <Grid container className={classes.container} spacing={24}>
                 <Grid item xs={12}>
                     <FilterToolbar/>
                 </Grid>
@@ -108,7 +111,7 @@ class DetailsTab extends Component {
                             <Typography variant="h4">{`Rs.${Utils.numberWithCommas(details.sum)}`}</Typography>
                         </Paper>
                     }
-                    {details && details.category_wise_data &&
+                    {details && details.category_wise_data && details.category_wise_data.length > 0 && 
                     <>
                         {this.renderCategoryExpensesTable()}
                         <Paper className={classes.paper}><Chart options={pie_options(this.getCategoryWiseOptions())} /></Paper>                        

@@ -182,6 +182,21 @@ class SummaryTab extends React.Component {
         const { classes, summary } = this.props;
         if (!summary) return <Loading />
 
+        if (!summary.yearly_total || !summary.average_item) {
+            return (
+            <>
+            <Typography 
+                style={{textAlign:'center', paddingTop: 40}}
+                variant="h6">
+                    So empty...
+            </Typography>
+            <Typography style={{textAlign:'center', paddingBottom: 40}}>
+                Summary will appear here after you start recording your entries.
+            </Typography>
+            </>
+            );
+        }
+
         return (
             <Grid container spacing={24}>
                 {/* <Grid item xs={12}>

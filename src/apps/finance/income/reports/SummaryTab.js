@@ -151,7 +151,7 @@ class SummaryTab extends React.Component {
 
     renderQuickFacts = () => {
 
-        const { classes } = this.props;
+        const { classes, summary } = this.props;
 
         return (
             <Paper className={classes.paper}>
@@ -181,6 +181,21 @@ class SummaryTab extends React.Component {
     render() {
         const { classes, summary } = this.props;
         if (!summary) return <Loading />
+
+        if (!summary.yearly_total || !summary.average_item) {
+            return (
+            <>
+            <Typography 
+                style={{textAlign:'center', paddingTop: 40}}
+                variant="h6">
+                    So empty...
+            </Typography>
+            <Typography style={{textAlign:'center', paddingBottom: 40}}>
+            Summary will appear here after you start recording your entries.                You don't have any records in the system right now.
+            </Typography>
+            </>
+            );
+        }
 
         return (
             <Grid container spacing={24}>
