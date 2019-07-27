@@ -1,6 +1,6 @@
 import { UrlService } from "../..";
 import history from "../../history";
-import { toggleSnackbar, SNACKBAR_FAILURE, SNACKBAR_INFO } from "./common.actions";
+import { toggleSnackbar, SNACKBAR_FAILURE, SNACKBAR_INFO, SNACKBAR_SUCCESS } from "./common.actions";
 
 export const LOADING = '[USER] LOADING';
 export const SET_USER_DATA = '[USER] SET USER DATA';
@@ -50,6 +50,10 @@ export function logout() {
             dispatch({
                 type: CLEAR_USER_DATA,
             });
+            dispatch(toggleSnackbar({
+                message: 'Logged out safely.',
+                variant: SNACKBAR_SUCCESS,
+            }));
         }).catch(error => {
             dispatch({
                 type: CLEAR_USER_DATA,
