@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/api';
+// const BASE_URL = 'http://localhost:8000/api';
 const API_VERSION = 'v1';
-
+const BASE_URL = 'http://167.71.51.236/api';
 
 
 class UrlService {
