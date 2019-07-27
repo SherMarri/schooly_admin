@@ -85,10 +85,10 @@ const getMenuItems = () => [
                         code: 'finance>fees>challans',
                         link: '/fees/challans'
                     },
-                    {
-                        text: 'Reports',
-                        code: 'finance>fees>reports',
-                    },
+                    // {
+                    //     text: 'Reports',
+                    //     code: 'finance>fees>reports',
+                    // },
                 ]
             },
 

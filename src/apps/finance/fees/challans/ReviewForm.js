@@ -173,10 +173,10 @@ ReviewForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({finance}) {
+function mapStateToProps({finance, common }) {
 	return {
         structures: finance.fees.structures,
-        grades: finance.fees.challans.grades,
+        grades: common.grades,
 	}
 }
 

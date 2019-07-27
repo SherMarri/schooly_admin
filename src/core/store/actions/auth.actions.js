@@ -27,7 +27,7 @@ export function login({username, password}) {
                 }));
             }
             catch(err) {
-                
+
             }
             
             setTimeout(()=>{
@@ -52,16 +52,10 @@ export function logout() {
             dispatch({
                 type: CLEAR_USER_DATA,
             });
-            setTimeout(()=>{
-                history.push('/login');
-            }, 500);
         }).catch(error => {
             dispatch({
                 type: CLEAR_USER_DATA,
             });
-            setTimeout(()=>{
-                history.push('/login');
-            }, 500);
         });
     }
 }
