@@ -158,7 +158,7 @@ class PayChallanDialog extends React.Component {
                 </DialogActions>
                 </>
                 }
-                {challans.item_status === Actions.SUCCESSFUL && challans.selected_item &&
+                {challans.item_status === Actions.SUCCESSFUL && item &&
                 <>
                     <DialogContent>
                         <Typography variant={"subtitle1"}>

@@ -45,7 +45,6 @@ const challans = function (state = initialState, action) {
             return {
                 ...state,
                 data: new_list,
-                selected_item: item
             };
         }
         case Actions.SET_FILTERS:

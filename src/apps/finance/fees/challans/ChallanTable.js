@@ -38,6 +38,22 @@ class ChallanTable extends React.Component {
         });
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if (state.selected_item) {
+            const { data } = props.challans;
+            if (data.length > 0) {
+                const item = data.find(d => d.id === state.selected_item.id);
+                if (item) {
+                    return {
+                        ...state,
+                        selected_item: item
+                    };
+                }
+            }
+        }
+        return null;
+    }
+
     changePage = (page) => {
         this.props.fetchChallans({
             page: page + 1,
