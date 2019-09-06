@@ -146,7 +146,7 @@ class FilterStudentToolbar extends Component {
                     }
                     <Grid item className={classes.grid_item} xs={12} md={3}>
                         <FormControl margin="normal" fullWidth>
-                            <InputLabel htmlFor="search_term">Name or roll #</InputLabel>
+                            <InputLabel htmlFor="search_term">Name or gr #</InputLabel>
                             <Input id="search_term" name="search_term"
                                 onChange={this.handleChange}
                                 value={form.search_term || ''}

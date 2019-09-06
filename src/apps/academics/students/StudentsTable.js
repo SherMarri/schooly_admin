@@ -51,7 +51,7 @@ class StudentTable extends React.Component {
         const { data } = this.props.details;
         return data.map(d => {
             return {
-                roll_number: d.student_info.roll_number,
+                gr_number: d.student_info.gr_number,
                 fullname: d.fullname,
                 section: `${d.student_info.section.grade_name} - ${d.student_info.section.name}`,
                 guardian_name: d.student_info.guardian_name,
@@ -162,8 +162,8 @@ class StudentTable extends React.Component {
             );
         }
         const columns = [{
-                name: 'roll_number',
-                label: "Roll #",
+                name: 'gr_number',
+                label: "GR #",
                 options: {
                     filter: false,
                 }

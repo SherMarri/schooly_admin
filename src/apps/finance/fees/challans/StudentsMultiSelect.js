@@ -17,7 +17,7 @@ const promiseOptions = inputValue => {
         }).then( response => {
             const data = response.data.map(d=>{
                 return {
-                    'label': `${d.fullname} - ${d.roll_number}`,
+                    'label': `${d.fullname} - ${d.gr_number}`,
                     'value': d.user_id
                 }
             });
@@ -55,7 +55,7 @@ class StudentsMultiSelect extends Component {
                 loadOptions={promiseOptions}
                 className={classes.select}
                 onChange={this.handleInputChange}
-                placeholder="Type name or roll number..."
+                placeholder="Type name or gr number..."
                 value={this.state.selected_students}
             />
         );
