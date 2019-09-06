@@ -86,7 +86,7 @@ class AddEditStudentDialog extends React.Component {
             form = {
                 user: item.id,
                 fullname: item.fullname || '',
-                roll_number: item.student_info.roll_number || '',
+                gr_number: item.student_info.gr_number || '',
                 date_of_birth: item.student_info.date_of_birth || null,
                 date_enrolled: item.student_info.date_enrolled || null,
                 address: item.student_info.address || '',
@@ -103,7 +103,7 @@ class AddEditStudentDialog extends React.Component {
         else {
             form = {
                 fullname: '',
-                roll_number: '',
+                gr_number: '',
                 date_of_birth: null,
                 date_enrolled: null,
                 address: '',
@@ -246,10 +246,10 @@ class AddEditStudentDialog extends React.Component {
                                 </Grid>
                                 <Grid item xs={12} md={6} className={classes.gridItem}>
                                     <FormControl margin="normal" required fullWidth>
-                                        <InputLabel htmlFor="roll_number">Roll Number</InputLabel>
-                                        <Input id="roll_number" name="roll_number"
+                                        <InputLabel htmlFor="gr_number">Roll Number</InputLabel>
+                                        <Input id="gr_number" name="gr_number"
                                             onChange={this.handleChange}
-                                            value={form.roll_number || ''}
+                                            value={form.gr_number || ''}
                                             readOnly={item && !edit}
                                         />
                                     </FormControl>
