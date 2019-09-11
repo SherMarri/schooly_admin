@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = 'http://localhost:8000/api';
 const API_VERSION = 'v1';
-const BASE_URL = 'https://schooli.app/api';
+// const BASE_URL = 'https://schooli.app/api';
 
 
 class UrlService {

@@ -115,7 +115,7 @@ LoginPage.propTypes = {
 };
 
 
-function mapStateToProps({auth}) {
+function mapStateToProps({ auth }) {
 	return {
 		loading: auth.loading
 	}
