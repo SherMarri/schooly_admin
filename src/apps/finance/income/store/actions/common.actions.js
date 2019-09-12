@@ -1,4 +1,9 @@
 import { UrlService, Utils } from "../../../../../core";
+import {SNACKBAR_FAILURE, toggleSnackbar} from "../../../../../core/store/actions/common.actions";
+import {
+    FETCHING_STUDENTS_DOWNLOAD_LINK,
+    SET_STUDENTS_DOWNLOAD_LINK
+} from "../../../../academics/students/store/students.actions";
 
 export const FETCH_CATEGORIES = '[INCOME COMMON] FETCH CATEGORIES';
 
@@ -7,6 +12,10 @@ export const SET_FILTERS = '[INCOME COMMON] SET FILTERS';
 export const SET_DETAILS = '[INCOME COMMON] SET DETAILS';
 export const CLEAR_REPORTS_DATA = '[INCOME COMMON] CLEAR REPORTS DATA';
 export const SET_LOADING = '[INCOME COMMON] SET LOADING';
+export const FETCHING_INCOME_DOWNLOAD_LINK = '[INCOME COMMON] INCOME FETCHING DOWNLOAD LINK';
+export const SET_INCOME_DOWNLOAD_LINK = '[INCOME COMMON] INCOME SET DOWNLOAD LINK';
+export const CLEAR_DOWNLOAD_LINK = '[INCOME COMMON] CLEAR DOWNLOAD LINK';
+
 
 export function fetchCategories() {
     return (dispatch) => {
@@ -91,6 +100,51 @@ export function fetchDetails(params) {
         .catch(error => {
             // TODO
             dispatch(setLoading(false));
+        });
+    }
+}
+
+export function fetchDownloadLink(params) {
+    return dispatch => {
+        let filters = params;
+        if (params.start_date) {
+            filters.start_date = Utils.formatDate(params.start_date);
+        }
+        if (params.end_date) {
+            filters.end_date = Utils.formatDate(params.end_date);
+        }
+        if (params.download) {
+            filters.download = params.download;
+        }
+        dispatch({
+            type: FETCHING_INCOME_DOWNLOAD_LINK,
+            payload: true,
+        });
+        // console.log("Filters", filters);
+        UrlService.get('finance/income/details', filters)
+            .then(response => {
+                const download_url = `${UrlService.getUrl('finance/income/download_csv')}?file_name=${response.data}`;
+                dispatch({
+                    type: SET_INCOME_DOWNLOAD_LINK,
+                    payload: download_url
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: FETCHING_INCOME_DOWNLOAD_LINK,
+                    payload: false,
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to process your request, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+export function clearDownloadLink() {
+    return dispatch => {
+        return dispatch({
+            type: CLEAR_DOWNLOAD_LINK,
         });
     }
 }

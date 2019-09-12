@@ -11,6 +11,9 @@ import Format from 'date-fns/format';
 import { Typography, Tooltip, IconButton } from '@material-ui/core';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import AddExpenseDialog from '../daily/AddExpenseDialog';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import {DownloadDialog} from "../../../../core/components";
+
 
 const styles = theme => ({
     table_div: {
@@ -64,6 +67,14 @@ class ExpenseTable extends React.Component {
         });
     }
 
+    handleDownload = () => {
+        this.props.fetchDownloadLink({
+            ...this.props.filter_form,
+            download: true,
+        });
+    }
+
+
     renderActionColumn = (value, table_meta, update_value) => {
         return (
         <Tooltip title="View">
@@ -76,7 +87,7 @@ class ExpenseTable extends React.Component {
 
 
     render() {
-        const { details, classes } = this.props;
+        const { details, classes, fetching_download_link,  download_url, } = this.props;
         if (!details) return <Typography>Data not available</Typography>
 
         const columns = [{
@@ -125,6 +136,7 @@ class ExpenseTable extends React.Component {
                         return;
                 }
             },
+            customToolbar: () => { return (<Tooltip title="Download"><IconButton aria-label="download" onClick={this.handleDownload}> <CloudDownloadIcon/> </IconButton></Tooltip>)},
         };
         return (
             <div className={classes.table_div}>
@@ -143,6 +155,14 @@ class ExpenseTable extends React.Component {
                         onClose={this.handleCloseDialog}
                     />
                 }
+                {(fetching_download_link || download_url) &&
+                <DownloadDialog
+                    loading={fetching_download_link}
+                    link={download_url}
+                    onClose={this.props.clearDownloadLink}
+                />
+                }
+
             </div>
         );
     }
@@ -156,13 +176,17 @@ function mapStateToProps({ finance, user }) {
     return {
         details: finance.expenses.common.details,
         filter_form: finance.expenses.common.filter_form,
+        fetching_download_link: finance.expenses.common.fetching_download_link,
+        download_url: finance.expenses.common.download_url,
         user: user
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchDetails: Actions.fetchDetails
+        fetchDetails: Actions.fetchDetails,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
