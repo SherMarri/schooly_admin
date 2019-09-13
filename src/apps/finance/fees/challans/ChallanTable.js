@@ -83,10 +83,9 @@ class ChallanTable extends React.Component {
 
     renderActionColumn = (value, table_meta, update_value) => {
         const { classes } = this.props;
-
         return (
         <>
-            <Tooltip title="Pay">
+            <Tooltip title="Pay" style={{display: value.total !== value.paid + value.discount ? 'inline-block' : 'none'}}>
                 <IconButton onClick={()=>this.handlePayFeeClicked(value)} aria-label="Pay" className={classes.margin}>
                     <LocalATMIcon fontSize="small" />
                 </IconButton>
