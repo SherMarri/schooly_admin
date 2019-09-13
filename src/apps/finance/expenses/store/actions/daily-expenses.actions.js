@@ -1,4 +1,5 @@
 import UrlService from '../../../../../core/UrlService';
+import {SNACKBAR_FAILURE, SNACKBAR_SUCCESS, toggleSnackbar} from "../../../../../core/store/actions/common.actions";
 
 export const SET_DAILY_EXPENSES = '[DAILY EXPENSES] SET DAILY EXPENSES';
 export const FETCHING_DAILY_EXPENSES = '[DAILY EXPENSES] FETCHING DAILY EXPENSES';
@@ -23,7 +24,10 @@ export function fetchDailyExpenses() {
             });
         })
         .catch(error => {
-
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
 
     }
@@ -38,25 +42,21 @@ export function addExpenseItem(data) {
         
         UrlService.post('finance/expenses/items', data)
         .then(response => {
+            dispatch(toggleSnackbar({
+                message: `Item added successfully.`,
+                variant: SNACKBAR_SUCCESS
+            }));
             return dispatch({
                 type: ADD_EXPENSE_ITEM,
                 payload: response.data
             });
         })
         .catch(error => {
-            return dispatch({
-                type: UPDATE_EXPENSE_ITEM_STATUS,
-                payload: UNSUCCESSFUL
-            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
 
     }
-}
-
-
-export function setExpenseItemStatus(status) {
-    return dispatch => dispatch({
-        type: UPDATE_EXPENSE_ITEM_STATUS,
-        payload: status
-    });
 }

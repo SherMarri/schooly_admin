@@ -1,4 +1,5 @@
 import UrlService from '../../../../../core/UrlService';
+import {SNACKBAR_FAILURE, SNACKBAR_SUCCESS, toggleSnackbar} from "../../../../../core/store/actions/common.actions";
 
 export const SET_DAILY_INCOME = '[DAILY INCOME] SET DAILY INCOME';
 export const FETCHING_DAILY_INCOME = '[DAILY INCOME] FETCHING DAILY INCOME';
@@ -24,40 +25,33 @@ export function fetchDailyIncome() {
             });
         })
         .catch(error => {
-
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
-
     }
 }
 
 export function addIncomeItem(data) {
     return (dispatch) => {
-        dispatch({
-            type: UPDATE_INCOME_ITEM_STATUS,
-            payload: PROCESSING
-        });
-        
         UrlService.post('finance/income/items', data)
         .then(response => {
+            dispatch(toggleSnackbar({
+                message: `Item added successfully.`,
+                variant: SNACKBAR_SUCCESS
+            }));
             return dispatch({
                 type: ADD_INCOME_ITEM,
                 payload: response.data
             });
         })
         .catch(error => {
-            return dispatch({
-                type: UPDATE_INCOME_ITEM_STATUS,
-                payload: UNSUCCESSFUL
-            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
 
     }
-}
-
-
-export function setIncomeItemStatus(status) {
-    return dispatch => dispatch({
-        type: UPDATE_INCOME_ITEM_STATUS,
-        payload: status
-    });
 }

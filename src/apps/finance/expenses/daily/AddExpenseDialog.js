@@ -101,7 +101,6 @@ class AddExpenseDialog extends React.Component {
 
     handleClose = () => {
         this.setState({ open: false });
-        this.props.updateStatus(Actions.IDLE);
         this.props.onClose();
     };
 
@@ -131,6 +130,7 @@ class AddExpenseDialog extends React.Component {
         let {form, form_valid} = this.state;
         if (!form_valid) return false;
         this.props.addExpenseItem(form);
+        this.handleClose();
     }
 
     render() {
@@ -163,14 +163,6 @@ class AddExpenseDialog extends React.Component {
                 </AppBar>
                 <main className={classes.main}>
                     <CssBaseline />
-                    {status===Actions.SUCCESSFUL &&
-                        <Paper className={classes.success_message}>
-                            <Typography style={{color:'white'}}>
-                                Expense successfully added.
-                            </Typography>
-                        </Paper>
-                    }
-                    {status!==Actions.SUCCESSFUL &&
                     <Paper className={classes.paper}>
                         <Typography component="h1" variant="h5">
                         {item && !edit && 
@@ -249,7 +241,7 @@ class AddExpenseDialog extends React.Component {
                                     disabled={item && !edit}
                                 />
                             </FormControl>
-                            {status === Actions.IDLE && (!item || edit) &&
+                            {(!item || edit) &&
                                 <Button
                                     fullWidth
                                     variant="contained"
@@ -261,17 +253,8 @@ class AddExpenseDialog extends React.Component {
                                     Submit
                                 </Button>
                             }
-                            {status === Actions.PROCESSING &&
-                                <LinearProgress />                            
-                            }
-                            {status === Actions.UNSUCCESSFUL &&
-                                <Typography style={{color: '#920e0ede'}}>
-                                    We were unable to process your request. Please contact Schooli Support.
-                                </Typography>                                                           
-                            }
                         </form>
                     </Paper>
-                    }
                 </main>
             </Dialog>
         );
@@ -285,7 +268,6 @@ AddExpenseDialog.propTypes = {
 function mapStateToProps({finance}) {
 	return {
         categories: finance.expenses.common.categories,
-        status: finance.expenses.daily.expense_item_status
 	}
 }
 
@@ -294,7 +276,6 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         fetchCategories: Actions.fetchCategories,
         addExpenseItem: Actions.addExpenseItem,
-        updateStatus: Actions.setExpenseItemStatus
     }, dispatch);
 }
 
