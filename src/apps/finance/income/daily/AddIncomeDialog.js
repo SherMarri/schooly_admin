@@ -79,7 +79,7 @@ class AddIncomeDialog extends React.Component {
         const { item } = this.props;
         let date = new Date();
         if (item) {
-            date = Utils.getDateFromString(item.created_at);
+            date = Utils.getDateFromString(item.date);
         }
         const form = {
             category_id: item ? item.category.id : null,
@@ -153,7 +153,7 @@ class AddIncomeDialog extends React.Component {
     }
 
     render() {
-        const { classes, status, edit, item } = this.props;
+        const { classes, edit, item } = this.props;
         const { form, form_valid } = this.state;
         return (
             <Dialog
