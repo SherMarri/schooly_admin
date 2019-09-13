@@ -20,7 +20,7 @@ const styles = theme => ({
     unpaid_chip: {
         background: '#ab0000',
         color: 'white',
-    }
+    },
 });
 
 
@@ -66,9 +66,9 @@ class ChallanTable extends React.Component {
             return {
                 name: d.student.fullname,
                 section: `${d.student.grade} - ${d.student.section}`,
-                total: d.total,
-                paid: d.paid,
-                discount: d.discount,
+                total: Utils.numberWithCommas(d.total),
+                paid: Utils.numberWithCommas(d.paid),
+                discount: Utils.numberWithCommas(d.discount),
                 due_date: Format(Utils.getDateFromString(d.due_date), 'MMMM do, yyyy'),
                 id: d,
             }
@@ -77,7 +77,7 @@ class ChallanTable extends React.Component {
 
     renderPaidColumn = (value, table_meta, update_value) => {
         const { classes } = this.props;
-        if (value) return value;
+        if (parseInt(value)) return value;
         return <Chip label="Unpaid" className={classes.unpaid_chip}/>
     }
 
@@ -150,13 +150,13 @@ class ChallanTable extends React.Component {
             label: "Section",
         }, {
             name: 'total',
-            label: "Total",
+            label: "Total (Rs.)",
         }, {
             name: 'due_date',
             label: "Due Date",
         }, {
             name: 'paid',
-            label: 'Paid',
+            label: 'Paid (Rs.)',
             options: {
                 customBodyRender: (value, table_meta, update_value) =>
                     this.renderPaidColumn(value, table_meta, update_value)
@@ -221,12 +221,12 @@ class ChallanTable extends React.Component {
                         onClose={this.handleClosePrintDialog}
                     />
                 }
-                {(fetching_download_link || download_url) &&
-                <DownloadDialog
+                {(fetching_download_link || download_url ) &&
+                    <DownloadDialog
                     loading={fetching_download_link}
                     link={download_url}
                     onClose={this.props.clearDownloadLink}
-                />
+                    />
                 }
             </div>
         );
