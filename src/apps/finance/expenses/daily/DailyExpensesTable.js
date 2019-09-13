@@ -327,7 +327,10 @@ class DailyExpensesTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} onAddExpense={this.handleAddExpense}/>
+        <EnhancedTableToolbar 
+          onAddExpense={this.handleAddExpense}
+          onRefresh={this.handleRefresh}
+        />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
