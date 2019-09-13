@@ -107,18 +107,13 @@ export function fetchDownloadLink(params) {
         if (params.end_date) {
             filters.end_date = Utils.formatDate(params.end_date);
         }
-        if (params.download) {
-            filters.download = params.download;
-        }
         dispatch({
             type: FETCHING_EXPENSE_DOWNLOAD_LINK,
             payload: true,
         });
-        // console.log("Filters", filters);
         UrlService.get('finance/expenses/details', filters)
             .then(response => {
                 const download_url = `${UrlService.getUrl('finance/expense/download_csv')}?file_name=${response.data}`;
-                console.log(download_url);
                 dispatch({
                     type: SET_EXPENSE_DOWNLOAD_LINK,
                     payload: download_url

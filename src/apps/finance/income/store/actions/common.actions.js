@@ -1,9 +1,5 @@
 import { UrlService, Utils } from "../../../../../core";
 import {SNACKBAR_FAILURE, toggleSnackbar} from "../../../../../core/store/actions/common.actions";
-import {
-    FETCHING_STUDENTS_DOWNLOAD_LINK,
-    SET_STUDENTS_DOWNLOAD_LINK
-} from "../../../../academics/students/store/students.actions";
 
 export const FETCH_CATEGORIES = '[INCOME COMMON] FETCH CATEGORIES';
 
