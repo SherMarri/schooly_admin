@@ -134,7 +134,18 @@ class IncomeTable extends React.Component {
                         return;
                 }
             },
-            customToolbar: () => { return (<Tooltip title="Download"><IconButton aria-label="download" onClick={this.handleDownload}> <CloudDownloadIcon/> </IconButton></Tooltip>)},
+            customToolbar: () => {
+                if (data && data.length > 0) {
+                    return (
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download" onClick={this.handleDownload}>
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    )
+                }
+                else return null;
+            },
         };
         return (
             <div className={classes.table_div}>
