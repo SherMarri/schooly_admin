@@ -43,7 +43,7 @@ class ExpenseTable extends React.Component {
             return {
                 title: d.title,
                 category: d.category.name,
-                date: Format(Utils.getDateFromString(d.created_at), 'MMMM do, yyyy'),
+                date: Format(Utils.getDateFromString(d.date), 'MMMM do, yyyy'),
                 amount: `Rs.${Utils.numberWithCommas(d.amount)}`,
                 id: d,
             };

@@ -26,7 +26,6 @@ const daily = function (state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                items: [action.payload,...state.items],
             }
         }
         default:
