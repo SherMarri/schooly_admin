@@ -85,11 +85,13 @@ class ChallanTable extends React.Component {
         const { classes } = this.props;
         return (
         <>
-            <Tooltip title="Pay" style={{display: value.total !== value.paid + value.discount ? 'inline-block' : 'none'}}>
-                <IconButton onClick={()=>this.handlePayFeeClicked(value)} aria-label="Pay" className={classes.margin}>
-                    <LocalATMIcon fontSize="small" />
-                </IconButton>
-            </Tooltip>
+            {(value.paid + value.discount < value.total) &&
+                <Tooltip title="Pay">
+                    <IconButton onClick={()=>this.handlePayFeeClicked(value)} aria-label="Pay" className={classes.margin}>
+                        <LocalATMIcon fontSize="small" />
+                    </IconButton>
+                </Tooltip>
+            }
             <Tooltip title="View/Print">
                 <IconButton onClick={()=>this.handlePrintChallanClicked(value)} aria-label="Print" className={classes.margin}>
                     <ReceiptIcon fontSize="small" />
