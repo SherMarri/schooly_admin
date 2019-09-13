@@ -15,7 +15,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FeeChallanPrintable from './FeeChallanPrintable';
 import ReactToPrint from 'react-to-print';
-import Utils from "../../../../core/Utils";
 
 const styles = theme => ({
     descriptionTable: {
@@ -91,7 +90,7 @@ class PayChallanDialog extends React.Component {
                                 <Typography variant="subtitle2">{item.student.fullname}</Typography>
 
                                 <Typography variant="caption">Discount:</Typography><br />
-                                <Typography variant="subtitle2">Rs. {Utils.numberWithCommas(item.discount)}</Typography>
+                                <Typography variant="subtitle2">Rs. {item.discount}</Typography>
 
                             </Grid>
                             <Grid item xs={12} md={6}>
@@ -100,10 +99,10 @@ class PayChallanDialog extends React.Component {
                                 <Typography variant="subtitle2">{item.due_date}</Typography>
 
                                 <Typography variant="caption">Total:</Typography><br />
-                                <Typography variant="subtitle2">Rs. {Utils.numberWithCommas(item.total)}</Typography>
+                                <Typography variant="subtitle2">Rs. {item.total}</Typography>
 
                                 <Typography variant="caption">Paid:</Typography><br />
-                                <Typography variant="subtitle2">Rs. {item.paid ? Utils.numberWithCommas(item.paid) : 0}</Typography>
+                                <Typography variant="subtitle2">Rs. {item.paid ? item.paid : 0}</Typography>
 
                             </Grid>
                         </Grid>
@@ -111,7 +110,7 @@ class PayChallanDialog extends React.Component {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Description</TableCell>
-                                    <TableCell align="right">Amount (Rs.)</TableCell>
+                                    <TableCell align="right">Amount</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -120,7 +119,7 @@ class PayChallanDialog extends React.Component {
                                         <TableCell component="th" scope="row">
                                             {i.title}
                                         </TableCell>
-                                        <TableCell align="right">{Utils.numberWithCommas(i.value)}</TableCell>
+                                        <TableCell align="right">{i.value}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
