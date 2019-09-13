@@ -109,14 +109,10 @@ export function fetchDownloadLink(params) {
         if (params.end_date) {
             filters.end_date = Utils.formatDate(params.end_date);
         }
-        if (params.download) {
-            filters.download = params.download;
-        }
         dispatch({
             type: FETCHING_INCOME_DOWNLOAD_LINK,
             payload: true,
         });
-        // console.log("Filters", filters);
         UrlService.get('finance/income/details', filters)
             .then(response => {
                 const download_url = `${UrlService.getUrl('finance/income/download_csv')}?file_name=${response.data}`;
