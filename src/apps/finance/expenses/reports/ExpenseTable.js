@@ -136,7 +136,7 @@ class ExpenseTable extends React.Component {
                         return;
                 }
             },
-            customToolbar: () => { return (<Tooltip title="Download"><IconButton aria-label="download" onClick={this.handleDownload}> <CloudDownloadIcon/> </IconButton></Tooltip>)},
+            customToolbar: () => { return (<Tooltip title="Download" style={{display: data.length > 0 ? 'inline-flex': 'none'}}><IconButton aria-label="download" onClick={this.handleDownload}> <CloudDownloadIcon/> </IconButton></Tooltip>)},
         };
         return (
             <div className={classes.table_div}>

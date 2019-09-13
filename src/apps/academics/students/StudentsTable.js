@@ -213,7 +213,7 @@ class StudentTable extends React.Component {
             customToolbar: () => { 
                 return (
                 <>
-                    <Tooltip title="Download">
+                    <Tooltip title="Download" style={{display: this.props.details.data.length > 0 ? 'inline-flex': 'none'}}>
                         <IconButton aria-label="download" onClick={this.handleDownload}>
                             <CloudDownloadIcon/>
                         </IconButton>
