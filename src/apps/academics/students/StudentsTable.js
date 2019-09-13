@@ -163,7 +163,7 @@ class StudentTable extends React.Component {
         }
         const columns = [{
                 name: 'gr_number',
-                label: "GR. #",
+                label: "GR #",
                 options: {
                     filter: false,
                 }

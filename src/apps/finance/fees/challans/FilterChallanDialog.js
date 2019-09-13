@@ -128,7 +128,7 @@ class FilterChallanDialog extends React.Component {
                         <Grid item xs={12}>
                             <br/>
                             <FormControl className={classes.searchTermControl} component="fieldset">
-                                <InputLabel htmlFor="search_term">Name or roll #</InputLabel>
+                                <InputLabel htmlFor="search_term">Name or GR #</InputLabel>
                                 <Input id="search_term" name="search_term"
                                     onChange={this.handleChange}
                                     value={form.search_term || ''}

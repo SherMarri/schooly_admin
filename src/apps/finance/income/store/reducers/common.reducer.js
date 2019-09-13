@@ -55,6 +55,26 @@ const common = function (state = initialState, action) {
                 }
             }
         }
+        case Actions.FETCHING_INCOME_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: action.payload
+            };
+        }
+        case Actions.SET_INCOME_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: action.payload
+            };
+        }
+        case Actions.CLEAR_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: null,
+            };
+        }
         default:
         {
             return state

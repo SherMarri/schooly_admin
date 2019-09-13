@@ -246,7 +246,7 @@ class AddEditStudentDialog extends React.Component {
                                 </Grid>
                                 <Grid item xs={12} md={6} className={classes.gridItem}>
                                     <FormControl margin="normal" required fullWidth>
-                                        <InputLabel htmlFor="gr_number">Roll Number</InputLabel>
+                                        <InputLabel htmlFor="gr_number">GR Number</InputLabel>
                                         <Input id="gr_number" name="gr_number"
                                             onChange={this.handleChange}
                                             value={form.gr_number || ''}
