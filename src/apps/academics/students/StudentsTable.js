@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as Actions from './store/students.actions';
-import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import {withRouter} from 'react-router-dom';
+import {withStyles} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
-import { Typography, Tooltip, IconButton, Paper } from '@material-ui/core';
+import {Typography, Tooltip, IconButton, Paper} from '@material-ui/core';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import EditIcon from '@material-ui/icons/Edit';
 import AddEditStudentDialog from './AddEditStudentDialog';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import BlockIcon from '@material-ui/icons/Block';
-import { DownloadDialog, ConfirmDialog } from '../../../core/components';
+import {DownloadDialog, ConfirmDialog} from '../../../core/components';
 
 const styles = theme => ({
     table_div: {
@@ -48,7 +48,7 @@ class StudentTable extends React.Component {
     }
 
     getMappedData = () => {
-        const { data } = this.props.details;
+        const {data} = this.props.details;
         return data.map(d => {
             return {
                 gr_number: d.student_info.gr_number,
@@ -95,25 +95,28 @@ class StudentTable extends React.Component {
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
-        <>
-            <Tooltip title="View">
-                <IconButton className={classes.icon_button} onClick={()=>this.handleViewItem(value)} aria-label="View">
-                    <RemoveRedEye />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Edit">
-                <IconButton className={classes.icon_button} onClick={()=>this.handleEditItem(value)} aria-label="Edit">
-                    <EditIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Terminate">
-                <IconButton className={classes.icon_button} onClick={()=>this.handleDeactivateItem(value)} aria-label="Terminate">
-                    <BlockIcon />
-                </IconButton>
-            </Tooltip>
-        </>
+            <>
+                <Tooltip title="View">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleViewItem(value)}
+                                aria-label="View">
+                        <RemoveRedEye/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleEditItem(value)}
+                                aria-label="Edit">
+                        <EditIcon/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Terminate">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleDeactivateItem(value)}
+                                aria-label="Terminate">
+                        <BlockIcon/>
+                    </IconButton>
+                </Tooltip>
+            </>
         );
     }
 
@@ -132,26 +135,26 @@ class StudentTable extends React.Component {
 
     handleCloseDeactivateDialog = () => {
         this.setState({
-          open_deactivate_dialog: false,
-          selected_item: null,
-          dialog_message: null,
+            open_deactivate_dialog: false,
+            selected_item: null,
+            dialog_message: null,
         });
-      }
-    
-      handleConfirmDeactivate = () => {
-        const { selected_item } = this.state;
-        this.props.deactivateStudent({ id: selected_item.id });
+    }
+
+    handleConfirmDeactivate = () => {
+        const {selected_item} = this.state;
+        this.props.deactivateStudent({id: selected_item.id});
         this.setState({
             open_deactivate_dialog: false,
-          selected_item: null,
-          dialog_message: null,
+            selected_item: null,
+            dialog_message: null,
         });
-      }
+    }
 
 
     render() {
-        const { details, classes, fetching_download_link, download_url } = this.props;
-        const { open_deactivate_dialog, dialog_message } = this.state;
+        const {details, classes, fetching_download_link, download_url} = this.props;
+        const {open_deactivate_dialog, dialog_message} = this.state;
         if (!details) {
             return (
                 <div className={classes.table_div}>
@@ -162,38 +165,38 @@ class StudentTable extends React.Component {
             );
         }
         const columns = [{
-                name: 'gr_number',
-                label: "GR #",
-                options: {
-                    filter: false,
-                }
-            }, {
-                name: 'fullname',
-                label: "Name",
-                options: {
-                    filter: false,
-                }
-            }, {
-                name: 'section',
-                label: "Class",
-            }, {
-                name: 'guardian_name',
-                label: "Guardian",
-                options: {
-                    filter: false,
-                }
-            }, {
-                name: 'id',
-                label: 'Action',
-                options: {
-                    customBodyRender: (value, table_data, update_value) =>
-                        this.renderActionColumn(value, table_data, update_value),
-                    filter: false,
-                    download: false,
-                }
+            name: 'gr_number',
+            label: "GR #",
+            options: {
+                filter: false,
             }
+        }, {
+            name: 'fullname',
+            label: "Name",
+            options: {
+                filter: false,
+            }
+        }, {
+            name: 'section',
+            label: "Class",
+        }, {
+            name: 'guardian_name',
+            label: "Guardian",
+            options: {
+                filter: false,
+            }
+        }, {
+            name: 'id',
+            label: 'Action',
+            options: {
+                customBodyRender: (value, table_data, update_value) =>
+                    this.renderActionColumn(value, table_data, update_value),
+                filter: false,
+                download: false,
+            }
+        }
         ];
-        let { page, count } = details;
+        let {page, count} = details;
         page -= 1;
         const options = {
             sort: false,
@@ -210,20 +213,22 @@ class StudentTable extends React.Component {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
             },
-            customToolbar: () => { 
+            customToolbar: () => {
                 return (
-                <>
-                    <Tooltip title="Download" style={{display: this.props.details.data.length > 0 ? 'inline-flex': 'none'}}>
-                        <IconButton aria-label="download" onClick={this.handleDownload}>
-                            <CloudDownloadIcon/>
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Refresh">
-                        <IconButton aria-label="Refresh" onClick={this.handleRefresh}>
-                            <RefreshIcon/>
-                        </IconButton>
-                    </Tooltip>
-                </>
+                    <>
+                        {this.props.details.data.length > 0 &&
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download" onClick={this.handleDownload}>
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        }
+                        <Tooltip title="Refresh">
+                            <IconButton aria-label="Refresh" onClick={this.handleRefresh}>
+                                <RefreshIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
                 )
             },
             onTableChange: (action, tableState) => {
@@ -238,21 +243,21 @@ class StudentTable extends React.Component {
         };
         return (
             <div className={classes.table_div}>
-                <MUIDataTable 
+                <MUIDataTable
                     title={<Typography variant="h5">
-                            Students
-                            </Typography>
-                        }
+                        Students
+                    </Typography>
+                    }
                     data={this.getMappedData()}
                     columns={columns}
-                    options={options} />
+                    options={options}/>
                 {this.state.open &&
-                    <AddEditStudentDialog
-                        open={this.state.open}
-                        item={this.state.selected_item}
-                        onClose={this.handleCloseDialog}
-                        edit={this.state.edit}
-                    />
+                <AddEditStudentDialog
+                    open={this.state.open}
+                    item={this.state.selected_item}
+                    onClose={this.handleCloseDialog}
+                    edit={this.state.edit}
+                />
                 }
                 {(fetching_download_link || download_url) &&
                 <DownloadDialog
@@ -262,13 +267,13 @@ class StudentTable extends React.Component {
                 />
                 }
                 {open_deactivate_dialog &&
-                    <ConfirmDialog
-                        title="Terminate Student?"
-                        open={true}
-                        message={dialog_message}
-                        onClose={this.handleCloseDeactivateDialog}
-                        onConfirm={this.handleConfirmDeactivate}
-                    />
+                <ConfirmDialog
+                    title="Terminate Student?"
+                    open={true}
+                    message={dialog_message}
+                    onClose={this.handleCloseDeactivateDialog}
+                    onConfirm={this.handleConfirmDeactivate}
+                />
                 }
             </div>
         );
@@ -279,7 +284,7 @@ StudentTable.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ academics, user }) {
+function mapStateToProps({academics, user}) {
     return {
         details: academics.students.details,
         fetching_download_link: academics.students.fetching_download_link,
