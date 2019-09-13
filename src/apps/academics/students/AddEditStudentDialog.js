@@ -235,7 +235,7 @@ class AddEditStudentDialog extends React.Component {
                             <Grid container>
                                 <Grid item xs={12} md={6} className={classes.gridItem}>
                                     <FormControl margin="normal" required fullWidth>
-                                        <InputLabel htmlFor="fullname">Fullname</InputLabel>
+                                        <InputLabel htmlFor="fullname">Full Name</InputLabel>
                                         <Input id="fullname" name="fullname"
                                             onChange={this.handleChange}
                                             value={form.fullname || ''}
