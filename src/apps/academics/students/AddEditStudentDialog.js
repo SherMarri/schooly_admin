@@ -261,13 +261,12 @@ class AddEditStudentDialog extends React.Component {
                                             label="Birthday"
                                             fullWidth
                                             required
-                                            clearable
                                             disableFuture
                                             value={form.date_of_birth}
                                             onChange={(date) => this.handleDateChange('date_of_birth', date)}
                                             openTo="year"
                                             format="dd/MM/yyyy"
-                                            views={["year", "month", "date"]}
+                                            views={["year", "date"]}
                                             disabled={item && !edit}
                                         />
                                     </MuiPickersUtilsProvider>
