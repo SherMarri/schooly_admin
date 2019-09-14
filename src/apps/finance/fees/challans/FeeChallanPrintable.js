@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
-import Utils from "../../../../core/Utils";
 
 const styles = theme => ({
     container: {
@@ -51,29 +50,29 @@ class FeeChallanPrintable extends Component {
                     <table className={classes.table}>
                         <thead>
                             <th className={classes.th}>Description</th>
-                            <th className={classes.th}>Amount (Rs.)</th>
+                            <th className={classes.th}>Amount</th>
                         </thead>
                         <tbody>
                             {item.break_down.map(m=>(
                                 <tr key={m.id}>
                                     <td className={classes.td}>{m.title}</td>
-                                    <td className={classes.td}>{Utils.numberWithCommas(m.value)}</td>
+                                    <td className={classes.td}>{m.value}</td>
                                 </tr>
                             ))}
                             <tr>
                                 <td className={classes.td}><b>Total</b></td>
-                                <td className={classes.td}><b>{Utils.numberWithCommas(item.total)}</b></td>
+                                <td className={classes.td}><b>{item.total}</b></td>
                             </tr>
                             {item.discount > 0 &&
                                 <tr>
                                     <td className={classes.td}><b>Discount</b></td>
-                                    <td className={classes.td}><b>{Utils.numberWithCommas(item.discount)}</b></td>
+                                    <td className={classes.td}><b>{item.discount}</b></td>
                                 </tr>
                             }
                             {item.paid > 0 &&
                                 <tr>
                                     <td className={classes.td}><b>Paid</b></td>
-                                    <td className={classes.td}><b>{Utils.numberWithCommas(item.paid)}</b></td>
+                                    <td className={classes.td}><b>{item.paid}</b></td>
                                 </tr>
                             }
                         </tbody>
