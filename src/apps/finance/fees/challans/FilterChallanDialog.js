@@ -11,7 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Grid, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Input, InputLabel } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import GroupSelector from './GroupSelector';
 import * as Actions from '../store/actions/challans.actions';
 const styles = theme => ({
