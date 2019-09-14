@@ -26,14 +26,6 @@ const daily = function (state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                items: [action.payload,...state.items],
-                income_item_status: Actions.SUCCESSFUL
-            }
-        }
-        case Actions.UPDATE_INCOME_ITEM_STATUS: {
-            return {
-                ...state,
-                income_item_status: action.payload
             }
         }
         default:

@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import AddIcon from '@material-ui/icons/Add';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
@@ -25,6 +25,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIncomeDialog from './AddIncomeDialog';
 import { Utils } from '../../../../core';
 import Format from 'date-fns/format';
+import * as Actions from '../store/actions';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -91,7 +92,6 @@ class EnhancedTableHead extends React.Component {
                 </Tooltip>
               </TableCell>
             ),
-            this,
           )}
         </TableRow>
       </TableHead>
@@ -123,7 +123,7 @@ const toolbarStyles = theme => ({
           backgroundColor: theme.palette.secondary.dark,
         },
   spacer: {
-    flex: '1 1 40%',
+    flex: '1 1 20%',
   },
   actions: {
     color: theme.palette.text.secondary,
@@ -142,6 +142,10 @@ class EnhancedTableToolbar extends React.Component  {
 
   handleAddIncome = () => {
     this.props.onAddIncome();
+  }
+
+  handleRefresh = () => {
+    this.props.onRefresh();  
   }
 
   render() {
@@ -165,21 +169,16 @@ class EnhancedTableToolbar extends React.Component  {
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          {numSelected > 0 ? (
-            <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <>
-            <Tooltip title="Add Income">
-              <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleAddIncome}>
-                <AddIcon/>
-              </Fab>
-            </Tooltip>
-          </>
-          )}
+          <Tooltip title="Refresh">
+            <Fab color="primary" aria-label="Refresh" className={classes.fab} onClick={this.handleRefresh}>
+              <RefreshIcon/>
+            </Fab>
+          </Tooltip>
+          <Tooltip title="Add Income">
+            <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleAddIncome}>
+              <AddIcon/>
+            </Fab>
+          </Tooltip>
         </div>
       </Toolbar>
     );
@@ -280,6 +279,10 @@ class DailyIncomeTable extends React.Component {
     });
   }
 
+  handleRefresh = () => {
+    this.props.fetchDailyIncome();
+  }
+
   handleCloseDialog = () => {
       this.setState({
           ...this.state,
@@ -320,7 +323,11 @@ class DailyIncomeTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} onAddIncome={this.handleAddIncome}/>
+        <EnhancedTableToolbar
+          numSelected={selected.length} 
+          onAddIncome={this.handleAddIncome}
+          onRefresh={this.handleRefresh}
+        />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -402,13 +409,14 @@ DailyIncomeTable.propTypes = {
 
 function mapStateToProps({finance}) {
 	return {
-        items: finance.income.daily.items
+    items: finance.income.daily.items
 	}
 }
 
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+      fetchDailyIncome: Actions.fetchDailyIncome
     }, dispatch);
 }
 

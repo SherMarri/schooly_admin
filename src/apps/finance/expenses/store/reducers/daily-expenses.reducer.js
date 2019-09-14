@@ -13,28 +13,20 @@ const daily = function (state = initialState, action) {
             return {
                 ...state,
                 loading: true
-            }
+            };
         }
         case Actions.SET_DAILY_EXPENSES: {
             return {
                 ...state,
                 loading: false,
                 items: action.payload
-            }
+            };
         }
         case Actions.ADD_EXPENSE_ITEM: {
             return {
                 ...state,
                 loading: false,
-                items: [action.payload,...state.items],
-                expense_item_status: Actions.SUCCESSFUL
-            }
-        }
-        case Actions.UPDATE_EXPENSE_ITEM_STATUS: {
-            return {
-                ...state,
-                expense_item_status: action.payload
-            }
+            };
         }
         default:
         {

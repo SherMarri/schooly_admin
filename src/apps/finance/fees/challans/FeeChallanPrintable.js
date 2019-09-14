@@ -69,7 +69,7 @@ class FeeChallanPrintable extends Component {
                                     <td className={classes.td}><b>{item.discount}</b></td>
                                 </tr>
                             }
-                            {item.paid &&
+                            {item.paid > 0 &&
                                 <tr>
                                     <td className={classes.td}><b>Paid</b></td>
                                     <td className={classes.td}><b>{item.paid}</b></td>

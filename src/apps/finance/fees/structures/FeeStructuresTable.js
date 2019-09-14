@@ -105,7 +105,6 @@ class EnhancedTableHead extends React.Component {
                 </Tooltip>
               </TableCell>
             ),
-            this,
           )}
         </TableRow>
       </TableHead>

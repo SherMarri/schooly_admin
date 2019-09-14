@@ -18,7 +18,7 @@ import { TextField } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem'
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
@@ -79,7 +79,7 @@ class AddIncomeDialog extends React.Component {
         const { item } = this.props;
         let date = new Date();
         if (item) {
-            date = Utils.getDateFromString(item.created_at);
+            date = Utils.getDateFromString(item.date);
         }
         const form = {
             category_id: item ? item.category.id : null,
@@ -118,7 +118,6 @@ class AddIncomeDialog extends React.Component {
 
     handleClose = () => {
         this.setState({ open: false });
-        this.props.updateStatus(Actions.IDLE);
         this.props.onClose();
     };
 
@@ -150,10 +149,11 @@ class AddIncomeDialog extends React.Component {
         if (!form_valid) return false;
         form.date = Utils.formatDate(form.date);
         this.props.addIncomeItem(form);
+        this.handleClose();
     }
 
     render() {
-        const { classes, status, edit, item } = this.props;
+        const { classes, edit, item } = this.props;
         const { form, form_valid } = this.state;
         return (
             <Dialog
@@ -182,14 +182,6 @@ class AddIncomeDialog extends React.Component {
                 </AppBar>
                 <main className={classes.main}>
                     <CssBaseline />
-                    {status===Actions.SUCCESSFUL &&
-                        <Paper className={classes.success_message}>
-                            <Typography style={{color:'white'}}>
-                                Income successfully added.
-                            </Typography>
-                        </Paper>
-                    }
-                    {status!==Actions.SUCCESSFUL &&
                     <Paper className={classes.paper}>
                         <Typography component="h1" variant="h5">
                         {item && !edit && 
@@ -271,7 +263,7 @@ class AddIncomeDialog extends React.Component {
                                     disabled={item && !edit}
                                 />
                             </FormControl>
-                            {status === Actions.IDLE && (!item || edit) &&
+                            {(!item || edit) &&
                                 <Button
                                     fullWidth
                                     variant="contained"
@@ -283,17 +275,8 @@ class AddIncomeDialog extends React.Component {
                                     Submit
                                 </Button>
                             }
-                            {status === Actions.PROCESSING &&
-                                <LinearProgress />                            
-                            }
-                            {status === Actions.UNSUCCESSFUL &&
-                                <Typography style={{color: '#920e0ede'}}>
-                                    We were unable to process your request. Please contact Schooli Support.
-                                </Typography>                                                           
-                            }
                         </form>
                     </Paper>
-                    }
                 </main>
             </Dialog>
         );
@@ -307,7 +290,6 @@ AddIncomeDialog.propTypes = {
 function mapStateToProps({finance}) {
 	return {
         categories: finance.income.common.categories,
-        status: finance.income.daily.income_item_status
 	}
 }
 
@@ -316,7 +298,6 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         fetchCategories: Actions.fetchCategories,
         addIncomeItem: Actions.addIncomeItem,
-        updateStatus: Actions.setIncomeItemStatus
     }, dispatch);
 }
 

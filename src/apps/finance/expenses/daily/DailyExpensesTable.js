@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import AddIcon from '@material-ui/icons/Add';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
@@ -25,6 +25,7 @@ import Fab from '@material-ui/core/Fab';
 import AddExpenseDialog from './AddExpenseDialog';
 import { Utils } from '../../../../core';
 import Format from 'date-fns/format';
+import * as Actions from '../store/actions';
 
 
 function desc(a, b, orderBy) {
@@ -92,7 +93,6 @@ class EnhancedTableHead extends React.Component {
                 </Tooltip>
               </TableCell>
             ),
-            this,
           )}
         </TableRow>
       </TableHead>
@@ -124,7 +124,7 @@ const toolbarStyles = theme => ({
           backgroundColor: theme.palette.secondary.dark,
         },
   spacer: {
-    flex: '1 1 40%',
+    flex: '1 1 20%',
   },
   actions: {
     color: theme.palette.text.secondary,
@@ -143,6 +143,10 @@ class EnhancedTableToolbar extends React.Component  {
 
   handleAddExpense = () => {
     this.props.onAddExpense();
+  }
+
+  handleRefresh = () => {
+    this.props.onRefresh();  
   }
 
   render() {
@@ -166,21 +170,16 @@ class EnhancedTableToolbar extends React.Component  {
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          {numSelected > 0 ? (
-            <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <>
-            <Tooltip title="Add Expense">
-              <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleAddExpense}>
-                <AddIcon/>
-              </Fab>
-            </Tooltip>
-          </>
-          )}
+        <Tooltip title="Refresh">
+            <Fab color="primary" aria-label="Refresh" className={classes.fab} onClick={this.handleRefresh}>
+              <RefreshIcon/>
+            </Fab>
+          </Tooltip>
+          <Tooltip title="Add Expense">
+            <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleAddExpense}>
+              <AddIcon/>
+            </Fab>
+          </Tooltip>
         </div>
       </Toolbar>
     );
@@ -284,6 +283,10 @@ class DailyExpensesTable extends React.Component {
     });
   }
 
+  handleRefresh = () => {
+    this.props.fetchDailyExpenses();
+  }
+
   handleCloseDialog = () => {
       this.setState({
           ...this.state,
@@ -324,7 +327,10 @@ class DailyExpensesTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} onAddExpense={this.handleAddExpense}/>
+        <EnhancedTableToolbar 
+          onAddExpense={this.handleAddExpense}
+          onRefresh={this.handleRefresh}
+        />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -401,13 +407,14 @@ DailyExpensesTable.propTypes = {
 
 function mapStateToProps({finance}) {
 	return {
-        items: finance.expenses.daily.items
+    items: finance.expenses.daily.items
 	}
 }
 
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+      fetchDailyExpenses: Actions.fetchDailyExpenses
     }, dispatch);
 }
 

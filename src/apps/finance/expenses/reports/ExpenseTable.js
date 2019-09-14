@@ -43,7 +43,7 @@ class ExpenseTable extends React.Component {
             return {
                 title: d.title,
                 category: d.category.name,
-                date: Format(Utils.getDateFromString(d.created_at), 'MMMM do, yyyy'),
+                date: Format(Utils.getDateFromString(d.date), 'MMMM do, yyyy'),
                 amount: `Rs.${Utils.numberWithCommas(d.amount)}`,
                 id: d,
             };
@@ -136,7 +136,18 @@ class ExpenseTable extends React.Component {
                         return;
                 }
             },
-            customToolbar: () => { return (<Tooltip title="Download"><IconButton aria-label="download" onClick={this.handleDownload}> <CloudDownloadIcon/> </IconButton></Tooltip>)},
+            customToolbar: () => {
+                if (data && data.length > 0) {
+                    return (
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download" onClick={this.handleDownload}>
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    )
+                }
+                else return null;
+            },
         };
         return (
             <div className={classes.table_div}>

@@ -18,7 +18,7 @@ import { TextField } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem'
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
@@ -77,10 +77,15 @@ class AddExpenseDialog extends React.Component {
     constructor(props) {
         super(props);
         const { item } = this.props;
+        let date = new Date();
+        if (item) {
+            date = Utils.getDateFromString(item.date);
+        }
         const form = {
             category_id: item ? item.category.id : null,
             title: item ? item.title : null,
             description: item ? item.description : null,
+            date: date,
             amount: item ? item.amount : null,
         }; 
         this.state = {
@@ -94,6 +99,18 @@ class AddExpenseDialog extends React.Component {
         this.props.fetchCategories();
     }
     
+    handleDateChange = date => {
+        let form = {
+            ...this.state.form,
+            date: date
+        }
+        const form_valid = this.validateForm(form);
+        this.setState({
+            ...this.state,
+            form: form,
+            form_valid: form_valid
+        });
+    };
 
     handleClickOpen = () => {
         this.setState({ open: true });
@@ -101,7 +118,6 @@ class AddExpenseDialog extends React.Component {
 
     handleClose = () => {
         this.setState({ open: false });
-        this.props.updateStatus(Actions.IDLE);
         this.props.onClose();
     };
 
@@ -130,11 +146,13 @@ class AddExpenseDialog extends React.Component {
         event.preventDefault();
         let {form, form_valid} = this.state;
         if (!form_valid) return false;
+        form.date = Utils.formatDate(form.date);
         this.props.addExpenseItem(form);
+        this.handleClose();
     }
 
     render() {
-        const { classes, status, edit, item } = this.props;
+        const { classes, edit, item } = this.props;
         const { form, form_valid } = this.state;
         return (
             <Dialog
@@ -163,14 +181,6 @@ class AddExpenseDialog extends React.Component {
                 </AppBar>
                 <main className={classes.main}>
                     <CssBaseline />
-                    {status===Actions.SUCCESSFUL &&
-                        <Paper className={classes.success_message}>
-                            <Typography style={{color:'white'}}>
-                                Expense successfully added.
-                            </Typography>
-                        </Paper>
-                    }
-                    {status!==Actions.SUCCESSFUL &&
                     <Paper className={classes.paper}>
                         <Typography component="h1" variant="h5">
                         {item && !edit && 
@@ -221,19 +231,17 @@ class AddExpenseDialog extends React.Component {
                                     disabled={item && !edit}                                    
                                 />
                             </FormControl>
-                            {item && !edit &&
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker
-                                        margin="normal"
-                                        label="Date"
-                                        fullWidth
-                                        disableFuture
-                                        value={Utils.getDateFromString(item.created_at)}
-                                        onChange={this.handleDateChange}
-                                        disabled={true}
-                                    />
-                                </MuiPickersUtilsProvider>
-                            }
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DatePicker
+                                    margin="normal"
+                                    label="Date"
+                                    fullWidth
+                                    disableFuture
+                                    value={form.date}
+                                    onChange={this.handleDateChange}
+                                    disabled={item && !edit}                                    
+                                />
+                            </MuiPickersUtilsProvider>
                             <FormControl margin="normal" required fullWidth>                    
                                 <TextField
                                     id="description"
@@ -249,7 +257,7 @@ class AddExpenseDialog extends React.Component {
                                     disabled={item && !edit}
                                 />
                             </FormControl>
-                            {status === Actions.IDLE && (!item || edit) &&
+                            {(!item || edit) &&
                                 <Button
                                     fullWidth
                                     variant="contained"
@@ -261,17 +269,8 @@ class AddExpenseDialog extends React.Component {
                                     Submit
                                 </Button>
                             }
-                            {status === Actions.PROCESSING &&
-                                <LinearProgress />                            
-                            }
-                            {status === Actions.UNSUCCESSFUL &&
-                                <Typography style={{color: '#920e0ede'}}>
-                                    We were unable to process your request. Please contact Schooli Support.
-                                </Typography>                                                           
-                            }
                         </form>
                     </Paper>
-                    }
                 </main>
             </Dialog>
         );
@@ -285,7 +284,6 @@ AddExpenseDialog.propTypes = {
 function mapStateToProps({finance}) {
 	return {
         categories: finance.expenses.common.categories,
-        status: finance.expenses.daily.expense_item_status
 	}
 }
 
@@ -294,7 +292,6 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         fetchCategories: Actions.fetchCategories,
         addExpenseItem: Actions.addExpenseItem,
-        updateStatus: Actions.setExpenseItemStatus
     }, dispatch);
 }
 
