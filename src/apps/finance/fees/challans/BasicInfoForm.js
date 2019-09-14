@@ -6,7 +6,7 @@ import { TextField, Grid } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';

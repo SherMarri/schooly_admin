@@ -17,7 +17,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { Grid, Select, MenuItem } from '@material-ui/core';
 import * as Actions from './store/students.actions';
 import { fetchGrades } from '../../../core/store/actions/common.actions';
@@ -266,7 +266,7 @@ class AddEditStudentDialog extends React.Component {
                                             onChange={(date) => this.handleDateChange('date_of_birth', date)}
                                             openTo="year"
                                             format="dd/MM/yyyy"
-                                            views={["year", "date"]}
+                                            views={["year", "month", "date"]}
                                             disabled={item && !edit}
                                         />
                                     </MuiPickersUtilsProvider>
