@@ -9,7 +9,9 @@ import School from '@material-ui/icons/School';
 import People from '@material-ui/icons/People';
 import PermContactCalendar from '@material-ui/icons/PermContactCalendar';
 import Settings from '@material-ui/icons/Settings';
-
+import Library from '@material-ui/icons/LocalLibrary';
+import StudentsIcon from '../assets/students_icon.png';
+import RecordVoiceOver from '@material-ui/icons/RecordVoiceOver';
 
 const getMenuItems = () => [
     // DEPTH OF A SECTION SHOULD NOT EXCEED 2
@@ -17,6 +19,31 @@ const getMenuItems = () => [
         text: 'Dashboard',
         icon: <Dashboard />,
         code: 'dashboard'
+    },
+    {
+        text: 'Academics',
+        icon: <School />,
+        code: 'academics',
+        children: [
+            {
+                text: 'Students',
+                code: 'academics>students',
+                icon: <img src={StudentsIcon} alt="StudentsIcon" style={{opacity:0.6}}/>,
+                link: '/academics/students'
+            },
+            {
+                text: 'Classes',
+                code: 'academics>classes',
+                icon: <People/>,
+                link: '/academics/classes'
+            },
+            {
+                text: 'Subjects',
+                code: 'academics>subjects',
+                icon: <Library/>,
+                link: '/academics/subjects'
+            },
+        ]
     },
     {
         text: 'Finance',
@@ -95,18 +122,11 @@ const getMenuItems = () => [
         ]
     },
     {
-        text: 'Academics',
-        icon: <School />,
-        code: 'academics',
-        children: [
-            {
-                text: 'Students',
-                code: 'academics>students',
-                icon: <People/>,
-                link: '/academics/students'
-            }
-        ]
-    },
+        text: 'Announcements',
+        icon: <RecordVoiceOver/>,
+        code: 'announcements',
+        link: '/announcements',
+    }
     // {
     //     text: 'Staff',
     //     icon: <People />,
