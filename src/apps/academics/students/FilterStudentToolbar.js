@@ -45,6 +45,7 @@ class FilterStudentToolbar extends Component {
     componentDidMount() {
         const { grades } = this.props;
         if (!grades) this.props.fetchGrades();
+        this.handleSubmit();
     }
 
     handleSubmit = () => {
