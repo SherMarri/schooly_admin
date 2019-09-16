@@ -99,7 +99,7 @@ class IncomeTable extends React.Component {
             label: "Date",
         }, {
             name: 'amount',
-            label: "Amount",
+            label: "Amount (Rs.)",
         }, {
             name: 'id',
             label: 'Action',

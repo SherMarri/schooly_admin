@@ -54,7 +54,7 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
   { id: 'category', numeric: false, disablePadding: false, label: 'Category' },
-  { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
+  { id: 'amount', numeric: true, disablePadding: false, label: 'Amount (Rs.)' },
   { id: 'actions', numeric: true, disablePadding: false, label: 'Actions' },
 ];
 

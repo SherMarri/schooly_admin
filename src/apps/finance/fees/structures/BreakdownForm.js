@@ -133,7 +133,7 @@ class BreakdownForm extends React.Component {
                     <Grid item xs={5}>
                         <TextField
                             id="value"
-                            label="Amount *"
+                            label="Amount (Rs.) *"
                             className={classes.textField}
                             name="value"
                             margin="normal"
