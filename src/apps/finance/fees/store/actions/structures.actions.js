@@ -1,4 +1,6 @@
 import { UrlService } from "../../../../../core";
+import {SNACKBAR_FAILURE, SNACKBAR_SUCCESS, toggleSnackbar} from "../../../../../core/store/actions/common.actions";
+
 
 export const SET_STRUCTURES = '[FEES STRUCTURE] FETCH STRUCTURES';
 export const UPDATE_ITEM_STATUS = '[FEES STRUCTURE] UPDATE ITEM STATUS';
@@ -39,13 +41,20 @@ export function deleteStructure(id) {
     return (dispatch) => {
         UrlService.delete(`finance/fees/structures/${id}`)
         .then(response => {
+            dispatch(toggleSnackbar({
+                message: `Fee structure deleted successfully.`,
+                variant: SNACKBAR_SUCCESS
+            }));
             dispatch({
                 type: DELETE_ITEM,
                 payload: id
             });
         })
         .catch(error => {
-            // TODO
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
 
     }
@@ -60,16 +69,20 @@ export function addStructure(data) {
 
         UrlService.post('finance/fees/structures', data)
         .then(response => {
+            dispatch(toggleSnackbar({
+                message: `Fee structure added successfully.`,
+                variant: SNACKBAR_SUCCESS
+            }));
             dispatch({
                 type: ADD_ITEM,
                 payload: response.data
             });
         })
         .catch(error => {
-            dispatch({
-                type: UPDATE_ITEM_STATUS,
-                payload: UNSUCCESSFUL
-            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
 
     }
@@ -85,16 +98,20 @@ export function updateStructure(id, data) {
 
         UrlService.put(`finance/fees/structures/${id}`, data)
         .then(response => {
+            dispatch(toggleSnackbar({
+                message: `Fee structure updated successfully.`,
+                variant: SNACKBAR_SUCCESS
+            }));
             dispatch({
                 type: UPDATE_ITEM,
                 payload: response.data
             });
         })
         .catch(error => {
-            dispatch({
-                type: UPDATE_ITEM_STATUS,
-                payload: UNSUCCESSFUL
-            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
 
     }
