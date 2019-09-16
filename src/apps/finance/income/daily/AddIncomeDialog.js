@@ -229,7 +229,7 @@ class AddIncomeDialog extends React.Component {
                                 </Select>
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="amount">Amount</InputLabel>
+                                <InputLabel htmlFor="amount">Amount (Rs.)</InputLabel>
                                 <Input id="amount" name="amount" type="number"
                                     value={form.amount || ''}
                                     onChange={this.handleChange} 
@@ -248,21 +248,40 @@ class AddIncomeDialog extends React.Component {
                                     disabled={item && !edit}
                                 />
                             </MuiPickersUtilsProvider>
-                            <FormControl margin="normal" required fullWidth>                    
-                                <TextField
-                                    id="description"
-                                    label="Description"
-                                    multiline
-                                    rowsMax="4"
-                                    name="description"
-                                    value={form.description}
-                                    onChange={this.handleChange}
-                                    className={classes.textField}
-                                    margin="normal"
-                                    variant="outlined"
-                                    disabled={item && !edit}
-                                />
-                            </FormControl>
+                            {!item &&
+                                <FormControl margin="normal" required fullWidth>
+                                    <TextField
+                                        id="description"
+                                        label="Description"
+                                        multiline
+                                        rowsMax="4"
+                                        name="description"
+                                        value={form.description}
+                                        onChange={this.handleChange}
+                                        className={classes.textField}
+                                        margin="normal"
+                                        variant="outlined"
+                                        disabled={item && !edit}
+                                    />
+                                </FormControl>
+                            }
+                            {item && form.description && form.description !== '' &&
+                                <FormControl margin="normal" required fullWidth>
+                                    <TextField
+                                        id="description"
+                                        label="Description"
+                                        multiline
+                                        rowsMax="4"
+                                        name="description"
+                                        value={form.description}
+                                        onChange={this.handleChange}
+                                        className={classes.textField}
+                                        margin="normal"
+                                        variant="outlined"
+                                        disabled={item && !edit}
+                                    />
+                                </FormControl>
+                            }
                             {(!item || edit) &&
                                 <Button
                                     fullWidth
