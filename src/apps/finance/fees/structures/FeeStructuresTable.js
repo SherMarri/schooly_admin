@@ -60,7 +60,7 @@ function getSorting(order, orderBy) {
 
 const rows = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'total', numeric: true, disablePadding: false, label: 'Amount' },
+  { id: 'total', numeric: true, disablePadding: false, label: 'Amount (Rs.)' },
   { id: 'actions', numeric: true, disablePadding: false, label: 'Actions' },
 ];
 
