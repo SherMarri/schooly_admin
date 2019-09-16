@@ -60,7 +60,7 @@ class StructureDialog extends React.Component {
               </Button>
             </Toolbar>
           </AppBar>
-          <StructureProcess item={item} edit={edit}/>
+          <StructureProcess item={item} edit={edit} onComplete={this.handleClose}/>
         </Dialog>
     );
   }

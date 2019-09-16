@@ -151,13 +151,13 @@ class ChallanTable extends React.Component {
             label: "Section",
         }, {
             name: 'total',
-            label: "Total",
+            label: "Total (Rs.)",
         }, {
             name: 'due_date',
             label: "Due Date",
         }, {
             name: 'paid',
-            label: 'Paid',
+            label: 'Paid (Rs.)',
             options: {
                 customBodyRender: (value, table_meta, update_value) =>
                     this.renderPaidColumn(value, table_meta, update_value)

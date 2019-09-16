@@ -25,13 +25,6 @@ const structures = function (state = initialState, action) {
                 items: items
             }
         }
-        case Actions.UPDATE_ITEM_STATUS:
-        {
-            return {
-                ...state,
-                item_status: action.payload
-            }
-        }
         case Actions.ADD_ITEM:
         {
             const i = action.payload;

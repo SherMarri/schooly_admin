@@ -1,5 +1,5 @@
 import { UrlService, Utils } from "../../../../../core";
-import { SNACKBAR_FAILURE, toggleSnackbar } from "../../../../../core/store/actions/common.actions";
+import {SNACKBAR_FAILURE, SNACKBAR_SUCCESS, toggleSnackbar} from "../../../../../core/store/actions/common.actions";
 
 export const UPDATE_ITEM = '[FEES CHALLANS] UPDATE ITEM';
 export const UPDATE_ITEM_STATUS = '[FEES CHALLANS] UPDATE ITEM STATUS';
@@ -72,16 +72,20 @@ export function generateChallans(data) {
 
         UrlService.post('finance/fees/challans', data)
         .then(response => {
+            dispatch(toggleSnackbar({
+                message: `Challan generated successfully.`,
+                variant: SNACKBAR_SUCCESS
+            }));
             dispatch({
                 type: UPDATE_ITEM_STATUS,
                 payload: SUCCESSFUL
             });
         })
         .catch(error => {
-            dispatch({
-                type: UPDATE_ITEM_STATUS,
-                payload: UNSUCCESSFUL
-            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
         });
 
     };
