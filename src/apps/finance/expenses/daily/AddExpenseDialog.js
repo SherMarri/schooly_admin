@@ -242,7 +242,8 @@ class AddExpenseDialog extends React.Component {
                                     disabled={item && !edit}                                    
                                 />
                             </MuiPickersUtilsProvider>
-                            <FormControl margin="normal" required fullWidth>                    
+                            {!item &&
+                            <FormControl margin="normal" required fullWidth>
                                 <TextField
                                     id="description"
                                     label="Description"
@@ -257,6 +258,24 @@ class AddExpenseDialog extends React.Component {
                                     disabled={item && !edit}
                                 />
                             </FormControl>
+                            }
+                            {item && form.description && form.description !== '' &&
+                            <FormControl margin="normal" required fullWidth>
+                                <TextField
+                                    id="description"
+                                    label="Description"
+                                    multiline
+                                    rowsMax="4"
+                                    name="description"
+                                    value={form.description}
+                                    onChange={this.handleChange}
+                                    className={classes.textField}
+                                    margin="normal"
+                                    variant="outlined"
+                                    disabled={item && !edit}
+                                />
+                            </FormControl>
+                            }
                             {(!item || edit) &&
                                 <Button
                                     fullWidth

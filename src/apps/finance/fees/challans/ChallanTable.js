@@ -66,9 +66,9 @@ class ChallanTable extends React.Component {
             return {
                 name: d.student.fullname,
                 section: `${d.student.grade} - ${d.student.section}`,
-                total: d.total,
-                paid: d.paid,
-                discount: d.discount,
+                total: Utils.numberWithCommas(d.total),
+                paid: Utils.numberWithCommas(d.paid),
+                discount: Utils.numberWithCommas(d.discount),
                 due_date: Format(Utils.getDateFromString(d.due_date), 'MMMM do, yyyy'),
                 id: d,
             }
