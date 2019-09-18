@@ -81,7 +81,7 @@ class GroupSelector extends Component {
         return (
             <>
                 <FormControl fullWidth margin="normal">
-                    <InputLabel htmlFor="grade_id">Grade</InputLabel>
+                    <InputLabel htmlFor="grade_id">Grade *</InputLabel>
                     <Select
                         value={grade_id || ''}
                         onChange={this.handleGroupChange}
@@ -102,7 +102,7 @@ class GroupSelector extends Component {
                 </FormControl>
                 {sections && 
                     <FormControl fullWidth margin="normal">
-                        <InputLabel htmlFor="section_id">Section</InputLabel>
+                        <InputLabel htmlFor="section_id">Section *</InputLabel>
                         <Select
                             value={section_id || ''}
                             onChange={this.handleSectionChange}
