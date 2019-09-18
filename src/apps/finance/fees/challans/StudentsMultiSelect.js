@@ -55,7 +55,7 @@ class StudentsMultiSelect extends Component {
                 loadOptions={promiseOptions}
                 className={classes.select}
                 onChange={this.handleInputChange}
-                placeholder="Type name or gr number..."
+                placeholder="Type name or gr number"
                 value={this.state.selected_students}
             />
         );
