@@ -42,6 +42,7 @@ class FilterToolbar extends Component {
         this.state = {
             form,
         };
+        this.handleSubmit();
     }
 
     componentDidMount() {
@@ -101,7 +102,7 @@ class FilterToolbar extends Component {
                                 fullWidth
                                 clearable
                                 disableFuture
-                                maxDate={form.to ? form.to : null}
+                                maxDate={form.end_date ? form.end_date : null}
                                 value={form.start_date}
                                 onChange={(date)=>this.handleDateChange('start_date', date)}
                             />
@@ -114,7 +115,7 @@ class FilterToolbar extends Component {
                                 label="To"
                                 fullWidth
                                 clearable
-                                minDate={form.from ? form.from : null}
+                                minDate={form.start_date ? form.start_date : null}
                                 disableFuture
                                 value={form.end_date}
                                 onChange={(date)=>this.handleDateChange('end_date', date)}
