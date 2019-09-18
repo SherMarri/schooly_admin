@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import * as Actions from '../store/actions/common.actions';
 import DateFnsUtils from '@date-io/date-fns';
+import { startOfMonth } from 'date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -33,8 +34,13 @@ class FilterToolbar extends Component {
     
     constructor(props) {
         super(props);
+        let form = props.form;
+        if (!form.start_date && !form.end_date) {
+            form.start_date = startOfMonth(new Date());
+            form.end_date = new Date();
+        }
         this.state = {
-            form: this.props.form
+            form,
         };
     }
 
