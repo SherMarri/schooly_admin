@@ -42,6 +42,7 @@ class FilterToolbar extends Component {
         this.state = {
             form,
         };
+        this.handleSubmit();
     }
 
     componentDidMount() {
