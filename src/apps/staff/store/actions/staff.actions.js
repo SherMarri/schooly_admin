@@ -73,7 +73,6 @@ export function fetchDetails(params) {
         }
         UrlService.get('users/staff', filters)
         .then(response => {
-            console.log("Response", response);
             dispatch({
                 type: SET_DETAILS,
                 payload: response.data
@@ -104,7 +103,7 @@ export function clearDownloadLink() {
 
 export function deactivateStaff(params) {
     return dispatch => {
-        UrlService.delete(`staff`, params)
+        UrlService.delete(`users/staff`, params)
         .then(response => {
             dispatch(toggleSnackbar({
                 message: 'Staff terminated successfully.',
