@@ -107,6 +107,13 @@ const getMenuItems = () => [
             }
         ]
     },
+    {
+        text: 'Staff',
+        icon: <People />,
+        code: 'staff',
+        link: '/staff',
+
+    },
     // {
     //     text: 'Staff',
     //     icon: <People />,
