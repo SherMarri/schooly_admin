@@ -8,10 +8,10 @@ import {withStyles} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
 import {Typography, Tooltip, IconButton, Paper} from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-// import AddEditSubjectDialog from './AddEditSubjectDialog';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {ConfirmDialog} from '../../../core/components';
+import {ConfirmDialog, Loading} from '../../../core/components';
+import AddEditSubjectDialog from "./AddEditSubjectDialog";
 
 
 const styles = theme => ({
@@ -62,6 +62,16 @@ class SubjectsTable extends React.Component {
         });
     }
 
+    getMappedData = () => {
+        const { items } = this.props;
+        return items.map((item) => {
+            return {
+                ...item,
+                value: item,
+            };
+        });
+    }
+
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
         return (
@@ -95,9 +105,8 @@ class SubjectsTable extends React.Component {
     }
 
     handleConfirmDelete = () => {
-        debugger;
         const {selected_item} = this.state;
-        this.props.deleteSubject(selected_item);
+        this.props.deleteSubject(selected_item.id);
         this.setState({
             open_delete_dialog: false,
             selected_item: null,
@@ -107,17 +116,18 @@ class SubjectsTable extends React.Component {
 
 
     render() {
-        const {items, classes } = this.props;
+        const {items, loading, classes } = this.props;
         const {open_delete_dialog, dialog_message} = this.state;
-        if (!items) {
+        if (loading) {
             return (
                 <div className={classes.table_div}>
                     <Paper className={classes.paper_div}>
-                        <Typography variant="h5">Data not available.</Typography>
+                        <Loading/>
                     </Paper>
                 </div>
             );
         }
+        if (!items) return null;
         const columns = [{
             name: 'name',
             label: "Name",
@@ -125,7 +135,7 @@ class SubjectsTable extends React.Component {
                 filter: false,
             }
         }, {
-            name: 'id',
+            name: 'value',
             label: 'Action',
             options: {
                 customBodyRender: (value, table_data, update_value) =>
@@ -163,17 +173,17 @@ class SubjectsTable extends React.Component {
                         Subjects
                     </Typography>
                     }
-                    data={items}
+                    data={this.getMappedData()}
                     columns={columns}
                     options={options}/>
-                {/* {this.state.open &&
+                 {this.state.open &&
                 <AddEditSubjectDialog
                     open={this.state.open}
                     item={this.state.selected_item}
                     onClose={this.handleCloseDialog}
                     edit={this.state.edit}
                 />
-                } */}
+                }
                 {open_delete_dialog &&
                 <ConfirmDialog
                     title="Delete Subject?"
@@ -195,6 +205,7 @@ SubjectsTable.propTypes = {
 function mapStateToProps({academics, user}) {
     return {
         items: academics.subjects.items,
+        loading: academics.subjects.loading,
         user: user
     };
 }

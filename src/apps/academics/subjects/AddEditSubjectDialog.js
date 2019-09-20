@@ -1,0 +1,169 @@
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Paper from '@material-ui/core/Paper';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
+import { Grid, Select, MenuItem } from '@material-ui/core';
+import * as Actions from './store/subjects.actions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { Utils } from '../../../core';
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+
+const styles = theme => ({
+    dialog_content: {
+      width: '400px',
+    },
+});
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+class AddEditSubjectDialog extends React.Component {
+
+    constructor(props) {
+        super(props);
+        const { item } = this.props;
+        let form = {};
+        if (item) {
+            form = {
+                id: item.id,
+                name: item.name,
+            };
+        }
+        else {
+            form = {
+                name: '',
+            };
+        }
+        this.state = { form };
+    }
+
+    handleClose = () => {
+        this.props.onClose();
+    }
+
+    handleChange = (event) => {
+        let form = {
+            ...this.state.form,
+            [event.target.name]: event.target.value
+        }
+        this.setState({
+            ...this.state,
+            form: form,
+        });
+    }
+
+    isFormValid = () => {
+        const keys = Object.keys(this.state.form);
+        for (const k of keys) {
+            if (this.state.form[k] === '' || this.state.form[k] === null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        if (!this.isFormValid()) return;
+        let { form } = this.state;
+        if (this.props.item && this.props.edit) {
+            this.props.updateSubject(form.id, form);
+        }
+        else {
+            this.props.addSubject(form);
+        }
+        this.handleClose();
+    }
+
+
+    render() {
+        const { open, classes, item, edit } = this.props;
+        const { form } = this.state;
+        return (
+            <Dialog
+                open={open}
+                onClose={this.handleClose}
+                TransitionComponent={Transition}
+                aria-labelledby="form-dialog-title"
+            >
+                {!item &&
+                <DialogTitle id="form-dialog-title">Add Subject</DialogTitle>
+                }
+                {item && !edit &&
+                <DialogTitle id="form-dialog-title">Subject Details</DialogTitle>
+                }
+                {item && edit &&
+                <DialogTitle id="form-dialog-title">Update Subject</DialogTitle>
+                }
+                <DialogContent className={classes.dialog_content}>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="name">Name</InputLabel>
+                        <Input id="name" name="name"
+                               onChange={this.handleChange}
+                               value={form.name || ''}
+                               readOnly={item && !edit}
+                        />
+                    </FormControl>
+                </DialogContent>
+                <DialogActions>
+                        <Button
+                            variant="contained"
+                            color="default"
+                            className={classes.cancelButton}
+                            onClick={this.handleClose}
+                        >
+                            Cancel
+                        </Button>
+                    {((item && edit) || (!item)) &&
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.submitButton}
+                        type="submit"
+                        disabled={!this.isFormValid()}
+                        onClick={this.handleSubmit}
+                    >
+                        {item && edit ? 'Update' : 'Submit'}
+                    </Button>
+                    }
+                </DialogActions>
+            </Dialog>
+        );
+    }
+}
+
+AddEditSubjectDialog.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+function mapStateToProps({ common, academics }) {
+    return {
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        addSubject: Actions.createSubject,
+        updateSubject: Actions.updateSubject,
+    }, dispatch);
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddEditSubjectDialog));

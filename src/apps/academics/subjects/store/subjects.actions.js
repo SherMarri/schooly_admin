@@ -1,5 +1,6 @@
 import { UrlService, Utils } from "../../../../core";
 import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
+import {fetchDetails} from "../../../staff/store/actions/staff.actions";
 
 export const ACTION_INIT = '[ACADEMICS] SUBJECTS ACTION INIT';
 export const ACTION_SUCCESS = '[ACADEMICS] SUBJECTS ACTION SUCCESS';
@@ -12,6 +13,7 @@ export function createSubject(data) {
     return (dispatch) => {
         UrlService.post('academics/subjects', data)
         .then(response => {
+            dispatch(fetchSubjects());
             dispatch(toggleSnackbar({
                 message: `Subject created successfully.`,
                 variant: SNACKBAR_SUCCESS
@@ -28,8 +30,9 @@ export function createSubject(data) {
 
 export function updateSubject(subject_id, data) {
     return (dispatch) => {
-        UrlService.put(`academics/subjects/${subject_id}`, data)
+        UrlService.patch(`academics/subjects/${subject_id}`, data)
         .then(response => {
+            dispatch(fetchSubjects());
             dispatch(toggleSnackbar({
                 message: `Subject updated successfully.`,
                 variant: SNACKBAR_SUCCESS
@@ -75,6 +78,7 @@ export function deleteSubject(subject_id) {
     return dispatch => {
         UrlService.delete(`academics/subjects/${subject_id}`) 
         .then(response => {
+            dispatch(fetchSubjects());
             dispatch(toggleSnackbar({
                 message: 'Subject deleted successfully.',
                 variant: SNACKBAR_SUCCESS

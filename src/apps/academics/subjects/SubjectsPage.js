@@ -14,6 +14,7 @@ import {
  } from '@material-ui/core';
 
 import SubjectsTable from './SubjectsTable';
+import AddEditSubjectDialog from "./AddEditSubjectDialog";
 
 const styles = theme => ({
     toolbar: {
@@ -44,6 +45,25 @@ const styles = theme => ({
 
 
 class SubjectsPage extends React.Component {
+    state = {
+        open_add_subject_dialog: false
+    }
+
+    handleSubjectDialogOpen = () => {
+        this.setState({
+            ...this.state,
+            open_add_subject_dialog: true
+        });
+    }
+
+
+    handleCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            open_add_subject_dialog: false,
+        });
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -58,7 +78,7 @@ class SubjectsPage extends React.Component {
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <div className={classes.actionsDiv}>
-                                    <Button onClick={this.handleStudentDialogOpen} variant="contained" color="secondary" className={classes.button}>
+                                    <Button onClick={this.handleSubjectDialogOpen} variant="contained" color="secondary" className={classes.button}>
                                         <AddIcon className={classes.leftIcon} />
                                         New
                                     </Button>
@@ -66,6 +86,7 @@ class SubjectsPage extends React.Component {
                             </Grid>
                         </Grid>
                     </Paper>
+                    <AddEditSubjectDialog open={this.state.open_add_subject_dialog} onClose={this.handleCloseDialog}/>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <SubjectsTable />
