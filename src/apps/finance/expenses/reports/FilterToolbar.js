@@ -38,6 +38,7 @@ class FilterToolbar extends Component {
         if (!form.start_date && !form.end_date) {
             form.start_date = startOfMonth(new Date());
             form.end_date = new Date();
+            form.category_id = -1;
         }
         this.state = {
             form,
