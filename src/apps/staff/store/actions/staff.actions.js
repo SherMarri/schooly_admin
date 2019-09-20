@@ -13,7 +13,7 @@ export const FETCHING_STAFF_DOWNLOAD_LINK = '[STAFF] STAFF FETCHING DOWNLOAD LIN
 export const SET_STAFF_DOWNLOAD_LINK = '[STAFF] STAFF SET DOWNLOAD LINK';
 export const CLEAR_STAFF_DOWNLOAD_LINK = '[STAFF] STAFF CLEAR DOWNLOAD LINK';
 
-export function addUpdateStaff(data, update=false) {
+export function addUpdateStaff(data, filter_form, update=false) {
     return (dispatch) => {
         dispatch({
             type: ACTION_INIT
@@ -23,6 +23,7 @@ export function addUpdateStaff(data, update=false) {
             dispatch({
                 type: ACTION_SUCCESS,
             });
+            dispatch(fetchDetails(filter_form));
             dispatch(toggleSnackbar({
                 message: `Staff ${update ? 'updated' : 'registered'} successfully.`,
                 variant: SNACKBAR_SUCCESS
@@ -101,10 +102,11 @@ export function clearDownloadLink() {
     }
 }
 
-export function deactivateStaff(params) {
+export function deactivateStaff(params, filter_form) {
     return dispatch => {
         UrlService.delete(`users/staff`, params)
         .then(response => {
+            dispatch(fetchDetails(filter_form));
             dispatch(toggleSnackbar({
                 message: 'Staff terminated successfully.',
                 variant: SNACKBAR_SUCCESS
