@@ -60,7 +60,7 @@ class Utils {
     }
 
     /**
-     * Converts Javascript date object to DD-MM-YYYY string to make it API friendly.
+     * Format date in dd//mm/yyyy.
      * @param {*} date
      */
     static formatDateLocal(date) {
