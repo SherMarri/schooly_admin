@@ -1,11 +1,9 @@
 import { UrlService, Utils } from "../../../../core";
 import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
-import {fetchDetails} from "../../../staff/store/actions/staff.actions";
 
 export const ACTION_INIT = '[ACADEMICS] SUBJECTS ACTION INIT';
 export const ACTION_SUCCESS = '[ACADEMICS] SUBJECTS ACTION SUCCESS';
 export const ACTION_FAILURE = '[ACADEMICS] SUBJECTS ACTION FAILURE';
-export const CLEAR_TABLE_DATA = '[ACADEMICS] SUBJECTS CLEAR TABLE DATA';
 
 export const SET_SUBJECTS = '[ACADEMICS] SUBJECTS SET DETAILS';
 
