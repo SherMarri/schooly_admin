@@ -126,7 +126,27 @@ const getMenuItems = () => [
         icon: <RecordVoiceOver/>,
         code: 'announcements',
         link: '/announcements',
-    }
+    },
+    {
+        text: 'Academics',
+        icon: <School />,
+        code: 'academics',
+        children: [
+            {
+                text: 'Students',
+                code: 'academics>students',
+                icon: <People/>,
+                link: '/academics/students'
+            }
+        ]
+    },
+    {
+        text: 'Staff',
+        icon: <People />,
+        code: 'staff',
+        link: '/staff',
+
+    },
     // {
     //     text: 'Staff',
     //     icon: <People />,

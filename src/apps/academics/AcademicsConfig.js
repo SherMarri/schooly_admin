@@ -1,5 +1,6 @@
 import { StudentsPage } from './students';
 import AuthRoles from '../../core/AuthRoles';
+import { SubjectsPage } from './subjects';
 
 
 export const AcademicsConfig = {
@@ -8,6 +9,11 @@ export const AcademicsConfig = {
         {
             path: '/academics/students',
             component: StudentsPage,
+            exact: true,
+        },
+        {
+            path: '/academics/subjects',
+            component: SubjectsPage,
             exact: true,
         },
         {

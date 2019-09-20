@@ -100,7 +100,7 @@ class FilterStudentToolbar extends Component {
         return (
             <Paper className={classes.paper}>
                 <Grid container spacing={12}>
-                    <Grid item className={classes.grid_item} xs={12} md={3}>
+                    <Grid item className={classes.grid_item} xs={12} md={3} style={{marginLeft: '15px'}}>
                         <FormControl fullWidth margin="normal">
                             <InputLabel htmlFor="grade_id">Grade</InputLabel>
                             <Select
