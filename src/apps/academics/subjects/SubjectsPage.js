@@ -86,7 +86,9 @@ class SubjectsPage extends React.Component {
                             </Grid>
                         </Grid>
                     </Paper>
-                    <AddEditSubjectDialog open={this.state.open_add_subject_dialog} onClose={this.handleCloseDialog}/>
+                    {this.state.open_add_subject_dialog &&
+                        <AddEditSubjectDialog open={this.state.open_add_subject_dialog} onClose={this.handleCloseDialog}/>
+                    }
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <SubjectsTable />
