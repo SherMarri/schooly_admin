@@ -151,7 +151,7 @@ class AddEditStaffDialog extends React.Component {
         if (this.props.item && this.props.edit) {
             form.update = true;
         }
-        this.props.addUpdateStaff(form, form.update);
+        this.props.addUpdateStaff(form, this.props.filter_form, form.update);
         this.handleClose();
     }
 
@@ -338,10 +338,9 @@ AddEditStaffDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({}) {
+function mapStateToProps({ hr }) {
     return {
-        // staff: academics.students,
-        // grades: common.grades,
+        filter_form: hr.staff.filter_form,
     }
 }
 

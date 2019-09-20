@@ -14,10 +14,11 @@ import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import BlockIcon from '@material-ui/icons/Block';
 import {DownloadDialog, ConfirmDialog} from '../../core/components';
+import Utils from "../../core/Utils";
 
 const styles = theme => ({
     table_div: {
-        marginTop: theme.spacing(6),
+        marginTop: theme.spacing(3),
     },
     paper_div: {
         padding: theme.spacing(4),
@@ -54,7 +55,7 @@ class StaffTable extends React.Component {
                 fullname: d.fullname,
                 contact: d.contact,
                 address: d.staff_info.address,
-                date_hired: d.staff_info.date_hired,
+                date_hired: Utils.formatDateLocal(d.staff_info.date_hired),
                 id: d,
             };
         });
@@ -143,7 +144,7 @@ class StaffTable extends React.Component {
 
     handleConfirmDeactivate = () => {
         const {selected_item} = this.state;
-        this.props.deactivateStaff({id: selected_item.id});
+        this.props.deactivateStaff({id: selected_item.id}, this.props.filter_form);
         this.setState({
             open_deactivate_dialog: false,
             selected_item: null,
@@ -153,15 +154,11 @@ class StaffTable extends React.Component {
 
 
     render() {
-        const {details, classes, fetching_download_link, download_url} = this.props;
+        const {details, classes, fetching_download_link, download_url, loading} = this.props;
         const {open_deactivate_dialog, dialog_message} = this.state;
-        if (!details) {
+        if (!details || loading) {
             return (
-                <div className={classes.table_div}>
-                    <Paper className={classes.paper_div}>
-                        <Typography variant="h5">Data not available.</Typography>
-                    </Paper>
-                </div>
+                <></>
             );
         }
         const columns = [{
@@ -284,7 +281,8 @@ function mapStateToProps({hr, user}) {
         fetching_download_link: hr.staff.fetching_download_link,
         download_url: hr.staff.download_url,
         filter_form: hr.staff.filter_form,
-        user: user
+        user: user,
+        loading: hr.staff.loading
     };
 }
 
