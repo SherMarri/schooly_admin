@@ -128,19 +128,6 @@ const getMenuItems = () => [
 //         link: '/announcements',
 //     },
     {
-        text: 'Academics',
-        icon: <School />,
-        code: 'academics',
-        children: [
-            {
-                text: 'Students',
-                code: 'academics>students',
-                icon: <People/>,
-                link: '/academics/students'
-            }
-        ]
-    },
-    {
         text: 'Staff',
         icon: <People />,
         code: 'staff',
