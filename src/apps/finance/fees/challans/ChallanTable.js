@@ -9,6 +9,7 @@ import { Typography, Chip, IconButton, Tooltip } from '@material-ui/core';
 import LocalATMIcon from '@material-ui/icons/LocalAtm';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import Format from 'date-fns/format';
+import { endOfDay, differenceInDays } from 'date-fns'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { Utils } from '../../../../core';
 import { Loading, DownloadDialog } from '../../../../core/components';
@@ -17,10 +18,19 @@ import PrintChallanDialog from './PrintChallanDialog';
 import * as Actions from '../store/actions/challans.actions';
 
 const styles = theme => ({
-    unpaid_chip: {
+    danger_chip: {
         background: '#ab0000',
         color: 'white',
-    }
+    },
+    success_chip: {
+        background: '#1c6504',
+        color: 'white',
+    },
+    warning_chip: {
+        background: '#ff6700',
+        color: 'white',
+    },
+
 });
 
 
@@ -61,6 +71,14 @@ class ChallanTable extends React.Component {
         });
     }
 
+    isFeePaid = (item) => {
+        return item.paid + item.discount >= item.total;
+    }
+
+    hasDueDatePassed = (item) => {
+
+    }
+
     getMappedData = (data) => {
         return data.map(d => {
             return {
@@ -69,16 +87,32 @@ class ChallanTable extends React.Component {
                 total: Utils.numberWithCommas(d.total),
                 paid: Utils.numberWithCommas(d.paid),
                 discount: Utils.numberWithCommas(d.discount),
-                due_date: Format(Utils.getDateFromString(d.due_date), 'MMMM do, yyyy'),
+                due_date: Format(Utils.getDateFromString(d.due_date), 'dd/MM/yyyy'),
                 id: d,
+                status: d, 
             }
         });
     }
 
-    renderPaidColumn = (value, table_meta, update_value) => {
+    hasDueDatePassed = (date) => {
+        const due_date = endOfDay(date);
+        return differenceInDays(new Date(), due_date) > 0;
+    }
+
+    renderStatusColumn = (item, table_meta, update_value) => {
         const { classes } = this.props;
-        if (value) return value;
-        return <Chip label="Unpaid" className={classes.unpaid_chip}/>
+        if (this.isFeePaid(item)) {
+            return <Chip label="Paid" className={classes.success_chip}/>;
+        }
+        else if (this.hasDueDatePassed(Utils.getDateFromString(item.due_date))) {
+            return  <Chip label="Overdue" className={classes.danger_chip}/>;
+        }
+        else if (item.paid > 0) {
+            return  <Chip label="Partial" className={classes.warning_chip}/>;            
+        }
+        else { // Not Paid
+
+        }
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
@@ -150,25 +184,29 @@ class ChallanTable extends React.Component {
             name: 'section',
             label: "Section",
         }, {
-            name: 'total',
-            label: "Total (Rs.)",
-        }, {
             name: 'due_date',
             label: "Due Date",
         }, {
+            name: 'total',
+            label: "Total (Rs.)",
+        }, {
             name: 'paid',
             label: 'Paid (Rs.)',
+        }, {
+            name: 'discount',
+            label: "Discount (Rs.)",
+        }, {
+            name: 'status',
+            label: 'Status',
             options: {
-                customBodyRender: (value, table_meta, update_value) =>
-                    this.renderPaidColumn(value, table_meta, update_value)
-            }
+                customBodyRender: this.renderStatusColumn,
+            },
         }, {
             name: 'id',
             label: 'Action',
             options: {
-                customBodyRender: (value, table_data, update_value) =>
-                    this.renderActionColumn(value, table_data, update_value)
-            }
+                customBodyRender: this.renderActionColumn,
+            },
         }
         ]
         let { data, page, count } = challans;
