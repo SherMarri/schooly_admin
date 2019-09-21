@@ -1,15 +1,20 @@
 import * as Actions from '../actions/auth.actions';
 
+const guestUser = {
+    role: 'Guest',
+}
 function getInitialState() {
     const userStr = localStorage.getItem('user');
     if (userStr) {
         const user = JSON.parse(userStr);
         return {
-            user:user
+            user:user,
         };
     }
     else return {
-        user: {role: 'Guest'}
+        user: {
+            ...guestUser
+        },
     };
 }
 
@@ -38,7 +43,11 @@ const auth = function (state = initialState, action) {
         {
             localStorage.removeItem('user');
             localStorage.removeItem('jwt_token');
-            return initialState;
+            return {
+                user: {
+                    ...guestUser,
+                },
+            };
         }
         default:
         {
