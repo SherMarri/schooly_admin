@@ -119,6 +119,25 @@ export function fetchChallans(params) {
       };
 }
 
+export function deleteChallan(id, filter_form) {
+    return dispatch => {
+        UrlService.delete(`finance/fees/challans/${id}`) 
+        .then(response => {
+            dispatch(toggleSnackbar({
+                message: 'Challan deleted successfully.',
+                variant: SNACKBAR_SUCCESS
+            }));
+            dispatch(fetchChallans(filter_form));
+        })
+        .catch(error => {
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
+        });
+    };
+}
+
 export function clearDownloadLink() {
     return dispatch => {
         return dispatch({
