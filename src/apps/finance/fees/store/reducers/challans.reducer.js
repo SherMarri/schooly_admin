@@ -29,7 +29,6 @@ const challans = function (state = initialState, action) {
                 ...action.payload
             };   
         }
-/*
         case Actions.UPDATE_ITEM_STATUS:
         {
             return {
@@ -37,7 +36,6 @@ const challans = function (state = initialState, action) {
                 item_status: action.payload
             };
         }
-*/
         case Actions.UPDATE_ITEM:
         {
             const item = action.payload;
