@@ -75,10 +75,6 @@ class ChallanTable extends React.Component {
         return item.paid + item.discount >= item.total;
     }
 
-    hasDueDatePassed = (item) => {
-
-    }
-
     getMappedData = (data) => {
         return data.map(d => {
             return {
@@ -110,8 +106,8 @@ class ChallanTable extends React.Component {
         else if (item.paid > 0) {
             return  <Chip label="Partial" className={classes.warning_chip}/>;            
         }
-        else { // Not Paid
-
+        else {
+            return  <Chip label="Pending" className={classes.warning_chip}/>;
         }
     }
 
