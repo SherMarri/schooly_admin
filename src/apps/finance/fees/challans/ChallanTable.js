@@ -80,7 +80,7 @@ class ChallanTable extends React.Component {
         return data.map(d => {
             return {
                 id: d.id,
-                name: d.student.fullname,
+                gr_number: d.student.gr_number,
                 // section: `${d.student.grade} - ${d.student.section}`,
                 total: Utils.numberWithCommas(d.total),
                 paid: Utils.numberWithCommas(d.paid),
@@ -211,8 +211,8 @@ class ChallanTable extends React.Component {
             name: 'id',
             label: 'Challan #',
         }, {
-            name: 'name',
-            label: "Student",
+            name: 'gr_number',
+            label: "GR #",
         },/*{
             name: 'section',
             label: "Section",
