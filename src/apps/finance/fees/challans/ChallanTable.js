@@ -79,13 +79,14 @@ class ChallanTable extends React.Component {
     getMappedData = (data) => {
         return data.map(d => {
             return {
+                id: d.id,
                 name: d.student.fullname,
                 // section: `${d.student.grade} - ${d.student.section}`,
                 total: Utils.numberWithCommas(d.total),
                 paid: Utils.numberWithCommas(d.paid),
                 discount: Utils.numberWithCommas(d.discount),
                 due_date: Format(Utils.getDateFromString(d.due_date), 'dd/MM/yyyy'),
-                id: d,
+                action: d,
                 status: d, 
             }
         });
@@ -207,6 +208,9 @@ class ChallanTable extends React.Component {
         if (!challans.data) return <Typography>Data not available</Typography>
         const { open_delete_challan_dialog } = this.state;
         const columns = [{
+            name: 'id',
+            label: 'Challan #',
+        }, {
             name: 'name',
             label: "Student",
         },/*{
@@ -231,7 +235,7 @@ class ChallanTable extends React.Component {
                 customBodyRender: this.renderStatusColumn,
             },
         }, {
-            name: 'id',
+            name: 'action',
             label: 'Action',
             options: {
                 customBodyRender: this.renderActionColumn,
