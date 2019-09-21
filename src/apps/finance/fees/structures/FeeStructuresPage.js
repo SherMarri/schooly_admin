@@ -35,7 +35,7 @@ class FeeStructuresPage extends React.Component {
 
         return (
             <Grid container spacing={24}>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6}>
                     <FeeStructuresTable/>
                 </Grid>
             </Grid>
