@@ -11,6 +11,7 @@ import ReceiptIcon from '@material-ui/icons/Receipt';
 import Format from 'date-fns/format';
 import { endOfDay, differenceInDays } from 'date-fns'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { Utils } from '../../../../core';
 import { Loading, DownloadDialog, ConfirmDialog } from '../../../../core/components';
 import PayChallanDialog from './PayChallanDialog';
@@ -202,6 +203,12 @@ class ChallanTable extends React.Component {
         });
     }
 
+    handleRefresh = () => {
+        this.props.fetchChallans({
+            ...this.props.challans.filter_form
+        });
+    }
+
     render() {
         const { challans, fetching_download_link, download_url } = this.props;
         if (challans.loading) return <Loading />;
@@ -270,11 +277,18 @@ class ChallanTable extends React.Component {
             customToolbar: () => {
                 if (data && data.length > 0) {
                     return (
+                    <>
                         <Tooltip title="Download">
                             <IconButton aria-label="download" onClick={this.handleDownload}>
                                 <CloudDownloadIcon/>
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title="Refresh">
+                            <IconButton aria-label="Refresh" onClick={this.handleRefresh}>
+                                <RefreshIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
                     )
                 }
                 else return null;

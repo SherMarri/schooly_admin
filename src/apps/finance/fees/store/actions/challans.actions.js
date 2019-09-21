@@ -63,23 +63,15 @@ export function payFeeChallan(challan_id, data) {
 }
 
 
-export function generateChallans(data) {
+export function generateChallans(data, filter_form) {
     return (dispatch) => {
-        dispatch({
-            type: UPDATE_ITEM_STATUS,
-            payload: PROCESSING
-        });
-
         UrlService.post('finance/fees/challans', data)
         .then(response => {
             dispatch(toggleSnackbar({
-                message: `Challan generated successfully.`,
+                message: `Challans generated successfully.`,
                 variant: SNACKBAR_SUCCESS
             }));
-            dispatch({
-                type: UPDATE_ITEM_STATUS,
-                payload: SUCCESSFUL
-            });
+            dispatch(fetchChallans(filter_form));
         })
         .catch(error => {
             dispatch(toggleSnackbar({
