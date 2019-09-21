@@ -99,8 +99,8 @@ class ChallanProcess extends React.Component {
   }
 
   handleSave = () => {
-    const form = this.formatForm();    
-    this.props.generateChallans(form);
+    const form = this.formatForm(); 
+    this.props.generateChallans(form, this.props.challans.filter_form);
     this.props.onComplete();
   }
   

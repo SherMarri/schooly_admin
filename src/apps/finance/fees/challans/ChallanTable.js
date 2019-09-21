@@ -11,11 +11,13 @@ import ReceiptIcon from '@material-ui/icons/Receipt';
 import Format from 'date-fns/format';
 import { endOfDay, differenceInDays } from 'date-fns'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { Utils } from '../../../../core';
-import { Loading, DownloadDialog } from '../../../../core/components';
+import { Loading, DownloadDialog, ConfirmDialog } from '../../../../core/components';
 import PayChallanDialog from './PayChallanDialog';
 import PrintChallanDialog from './PrintChallanDialog';
 import * as Actions from '../store/actions/challans.actions';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const styles = theme => ({
     danger_chip: {
@@ -78,13 +80,14 @@ class ChallanTable extends React.Component {
     getMappedData = (data) => {
         return data.map(d => {
             return {
-                name: d.student.fullname,
-                section: `${d.student.grade} - ${d.student.section}`,
+                id: d.id,
+                gr_number: d.student.gr_number,
+                // section: `${d.student.grade} - ${d.student.section}`,
                 total: Utils.numberWithCommas(d.total),
                 paid: Utils.numberWithCommas(d.paid),
                 discount: Utils.numberWithCommas(d.discount),
                 due_date: Format(Utils.getDateFromString(d.due_date), 'dd/MM/yyyy'),
-                id: d,
+                action: d,
                 status: d, 
             }
         });
@@ -127,6 +130,13 @@ class ChallanTable extends React.Component {
                     <ReceiptIcon fontSize="small" />
                 </IconButton>
             </Tooltip>
+            {(value.paid + value.discount === 0) &&
+                <Tooltip title="Delete">
+                    <IconButton onClick={()=>this.handleDeleteClicked(value)} aria-label="Delete" className={classes.margin}>
+                        <DeleteIcon fontSize="small" />
+                    </IconButton>
+                </Tooltip>
+            }
         </>
         )
     }
@@ -142,6 +152,31 @@ class ChallanTable extends React.Component {
         this.setState({
             open_print_challan_dialog: true,
             selected_item: item,
+        });
+    }
+
+    handleDeleteClicked = (item) => {
+        this.setState({
+            open_delete_challan_dialog: true,
+            selected_item: item,
+        });
+    }
+
+    handleCloseDeleteDialog = () => {
+        this.setState({
+            open_delete_challan_dialog: false,
+            selected_item: null,
+        });
+    }
+
+    handleConfirmDelete = () => {
+        const filters = {
+            ...this.props.challans.filter_form
+        };
+        this.props.deleteChallan(this.state.selected_item.id, filters);
+        this.setState({
+            open_delete_challan_dialog: false,
+            selected_item: null,
         });
     }
 
@@ -168,18 +203,27 @@ class ChallanTable extends React.Component {
         });
     }
 
+    handleRefresh = () => {
+        this.props.fetchChallans({
+            ...this.props.challans.filter_form
+        });
+    }
+
     render() {
         const { challans, fetching_download_link, download_url } = this.props;
         if (challans.loading) return <Loading />;
         if (!challans.data) return <Typography>Data not available</Typography>
-
+        const { open_delete_challan_dialog } = this.state;
         const columns = [{
-            name: 'name',
-            label: "Student",
-        },{
+            name: 'id',
+            label: 'Challan #',
+        }, {
+            name: 'gr_number',
+            label: "GR #",
+        },/*{
             name: 'section',
             label: "Section",
-        }, {
+        },*/ {
             name: 'due_date',
             label: "Due Date",
         }, {
@@ -198,7 +242,7 @@ class ChallanTable extends React.Component {
                 customBodyRender: this.renderStatusColumn,
             },
         }, {
-            name: 'id',
+            name: 'action',
             label: 'Action',
             options: {
                 customBodyRender: this.renderActionColumn,
@@ -233,11 +277,18 @@ class ChallanTable extends React.Component {
             customToolbar: () => {
                 if (data && data.length > 0) {
                     return (
+                    <>
                         <Tooltip title="Download">
                             <IconButton aria-label="download" onClick={this.handleDownload}>
                                 <CloudDownloadIcon/>
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title="Refresh">
+                            <IconButton aria-label="Refresh" onClick={this.handleRefresh}>
+                                <RefreshIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
                     )
                 }
                 else return null;
@@ -274,6 +325,15 @@ class ChallanTable extends React.Component {
                     onClose={this.props.clearDownloadLink}
                 />
                 }
+                {open_delete_challan_dialog &&
+                <ConfirmDialog
+                    title="Delete Challan?"
+                    open={true}
+                    message="Are you sure you want to delete this challan?"
+                    onClose={this.handleCloseDeleteDialog}
+                    onConfirm={this.handleConfirmDelete}
+                />
+                }
             </div>
         );
     }
@@ -298,6 +358,7 @@ function mapDispatchToProps(dispatch) {
         setItemStatus: Actions.setItemStatus,
         fetchDownloadLink: Actions.fetchDownloadLink,
         clearDownloadLink: Actions.clearDownloadLink,
+        deleteChallan: Actions.deleteChallan,
     }, dispatch);
 }
 
