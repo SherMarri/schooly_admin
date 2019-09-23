@@ -57,6 +57,12 @@ const daily_expenses_options = (data_points) => {
         title: {
             text: title
         },
+        axisY:{
+            title: "Amount (Rs.)",
+        },
+        axisX:{
+            title: "Day of Month",
+        },
         data: [{
             type: "column", //change type to bar, line, area, pie, etc
             //indexLabel: "{y}", //Shows y value on all Data Points
