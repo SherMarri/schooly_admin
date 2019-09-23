@@ -37,6 +37,7 @@ export function addIncomeItem(data) {
     return (dispatch) => {
         UrlService.post('finance/income/items', data)
         .then(response => {
+            dispatch(fetchDailyIncome());
             dispatch(toggleSnackbar({
                 message: `Item added successfully.`,
                 variant: SNACKBAR_SUCCESS
