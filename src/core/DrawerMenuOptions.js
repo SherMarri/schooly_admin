@@ -70,6 +70,11 @@ const getMenuItems = () => [
                         code: 'finance>expenses>reports',
                         link: '/expenses/reports',
                     },
+                    {
+                        text: 'Categories',
+                        code: 'finance>expenses>categories',
+                        link: '/expenses/categories',
+                    },
                     // {
                     //     text: 'Categories',
                     //     code: 'finance>expenses>categories'
@@ -90,6 +95,11 @@ const getMenuItems = () => [
                         text: 'Reports',
                         code: 'finance>income>reports',
                         link: '/income/reports',
+                    },
+                    {
+                        text: 'Categories',
+                        code: 'finance>income>categories',
+                        link: '/income/categories',
                     },
                     // {
                     //     text: 'Categories',
