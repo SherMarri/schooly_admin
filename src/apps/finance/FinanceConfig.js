@@ -2,6 +2,8 @@ import { DailyExpensesPage, ExpenseReportsPage } from './expenses';
 import { FeeStructuresPage, FeeChallanPage } from './fees';
 import AuthRoles from '../../core/AuthRoles';
 import { IncomePage, DailyIncomePage, IncomeReportsPage } from './income';
+import {CategoriesPage as ExpenseCategoriesPage} from "./expenses/categories";
+import {CategoriesPage as IncomeCategoriesPage} from "./income/categories";
 
 
 export const FinanceConfig = {
@@ -18,6 +20,11 @@ export const FinanceConfig = {
             exact: true,
         },
         {
+            path: '/expenses/categories',
+            component: ExpenseCategoriesPage,
+            exact: true,
+        },
+        {
             path: '/income',
             component: IncomePage,
             exact: true
@@ -30,6 +37,11 @@ export const FinanceConfig = {
         {
             path: '/income/daily',
             component: DailyIncomePage,
+            exact: true,
+        },
+        {
+            path: '/income/categories',
+            component: IncomeCategoriesPage,
             exact: true,
         },
         {
