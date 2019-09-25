@@ -95,7 +95,7 @@ class ChallanTable extends React.Component {
 
     hasDueDatePassed = (date) => {
         const due_date = endOfDay(date);
-        return differenceInDays(new Date(), due_date) > 0;
+        return differenceInDays(endOfDay(new Date()), due_date) > 0;
     }
 
     renderStatusColumn = (item, table_meta, update_value) => {
