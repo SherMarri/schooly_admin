@@ -42,6 +42,7 @@ export function addExpenseItem(data) {
         
         UrlService.post('finance/expenses/items', data)
         .then(response => {
+            dispatch(fetchDailyExpenses());
             dispatch(toggleSnackbar({
                 message: `Item added successfully.`,
                 variant: SNACKBAR_SUCCESS

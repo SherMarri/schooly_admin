@@ -7,7 +7,7 @@ import fees from '../../fees/store/reducers';
 const finance = combineReducers({
     expenses,
     income,
-    fees
+    fees,
 });
 
 export default finance;

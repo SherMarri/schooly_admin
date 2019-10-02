@@ -36,7 +36,6 @@ class StudentTable extends React.Component {
         super(props);
         this.state = {
             open_view_details: false,
-            data: this.data,
         };
     }
 
@@ -46,6 +45,7 @@ class StudentTable extends React.Component {
             page: page + 1,
         });
     }
+
 
     getMappedData = () => {
         const {data} = this.props.details;

@@ -89,20 +89,22 @@ class PayChallanDialog extends React.Component {
                                 <Typography variant="caption">Student:</Typography><br />
                                 <Typography variant="subtitle2">{item.student.fullname}</Typography>
 
-                                <Typography variant="caption">Discount:</Typography><br />
-                                <Typography variant="subtitle2">Rs. {item.discount}</Typography>
+                                <Typography variant="caption">Total:</Typography><br />
+                                <Typography variant="subtitle2">Rs. {item.total}</Typography>
 
+                                <Typography variant="caption">Paid:</Typography><br />
+                                <Typography variant="subtitle2">Rs. {item.paid ? item.paid : 0}</Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
 
                                 <Typography variant="caption">Due Date:</Typography><br />
                                 <Typography variant="subtitle2">{item.due_date}</Typography>
 
-                                <Typography variant="caption">Total:</Typography><br />
-                                <Typography variant="subtitle2">Rs. {item.total}</Typography>
+                                <Typography variant="caption">GR #:</Typography><br />
+                                <Typography variant="subtitle2">{item.student.gr_number}</Typography>
 
-                                <Typography variant="caption">Paid:</Typography><br />
-                                <Typography variant="subtitle2">Rs. {item.paid ? item.paid : 0}</Typography>
+                                <Typography variant="caption">Discount:</Typography><br />
+                                <Typography variant="subtitle2">Rs. {item.discount}</Typography>
 
                             </Grid>
                         </Grid>

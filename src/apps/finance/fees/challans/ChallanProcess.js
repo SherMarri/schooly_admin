@@ -99,8 +99,9 @@ class ChallanProcess extends React.Component {
   }
 
   handleSave = () => {
-    const form = this.formatForm();    
-    this.props.generateChallans(form);
+    const form = this.formatForm(); 
+    this.props.generateChallans(form, this.props.challans.filter_form);
+    this.props.onComplete();
   }
   
 
@@ -146,30 +147,6 @@ class ChallanProcess extends React.Component {
   render() {
     const { classes, challans } = this.props;
     const { activeStep } = this.state;
-    
-    if (challans.item_status === Actions.PROCESSING) {
-      return <Loading message="Saving..."/>
-    }
-
-    else if (challans.item_status === Actions.SUCCESSFUL) {
-      return (
-      <Paper className={classes.success_message}>
-          <Typography style={{color:'white'}}>
-              Fee challans successfully generated.
-          </Typography>
-      </Paper>
-      );
-    }
-
-    else if (challans.item_status === Actions.UNSUCCESSFUL) {
-      return (
-      <Paper className={classes.error_message}>
-        <Typography style={{color: 'white'}}>
-            We were unable to process your request. Please contact Schooli Support.
-        </Typography>
-      </Paper>
-      );
-    }
 
     return (
         <Grid container>

@@ -120,6 +120,7 @@ class StructureProcess extends React.Component {
     else {
       this.props.addStructure(form);
     }
+    this.props.onComplete();
   }
   
 
@@ -166,37 +167,6 @@ class StructureProcess extends React.Component {
     const { classes, structures, item } = this.props;
     const { activeStep } = this.state;
     
-    if (structures.item_status === Actions.PROCESSING) {
-      return <Loading message="Saving..."/>
-    }
-
-    else if (structures.item_status === Actions.SUCCESSFUL) {
-      return (
-      <Paper className={classes.success_message}>
-          {item &&
-            <Typography style={{color:'white'}}>
-                Fee structure successfully updated.
-            </Typography>
-          }
-          {!item &&
-            <Typography style={{color:'white'}}>
-                Fee structure successfully created.
-            </Typography>
-          }
-      </Paper>
-      );
-    }
-
-    else if (structures.item_status === Actions.UNSUCCESSFUL) {
-      return (
-      <Paper className={classes.error_message}>
-        <Typography style={{color: 'white'}}>
-            We were unable to process your request. Please contact Schooli Support.
-        </Typography>
-      </Paper>
-      );
-    }
-
     return (
         <Grid container spacing={24}>
             <Grid item xs={3}/>

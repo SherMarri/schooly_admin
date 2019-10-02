@@ -60,6 +60,22 @@ class Utils {
     }
 
     /**
+     * Format date in dd//mm/yyyy.
+     * @param {*} date
+     */
+    static formatDateLocal(date) {
+        let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [day, month, year].join('/');
+    }
+
+    /**
      * Converts date string of 'YYYY-MM-DD' to Javascript date object
      */
     static getDateFromString(date) {

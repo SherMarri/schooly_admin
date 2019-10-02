@@ -15,7 +15,7 @@ const styles = theme => ({
     },
     th: {
         width: '50%',
-        border: '1px solid black',        
+        border: '1px solid black',
         padding: '5px',
     },
     td: {
@@ -37,13 +37,22 @@ class FeeChallanPrintable extends Component {
                     <Typography style={{textAlign: 'center'}} variant={"body1"}>C-11, Makhdoom Bilawal Village, Near Kiran Hospital Karachi</Typography>
                     <Typography style={{textAlign: 'center'}} variant={"body1"}>Contact: 0337-7800073, 0349-3585786</Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid container item xs={12}>
+                    <Grid item xs={12} md={6}>
                     <br/><br/>
                     <Typography variant="caption">Invoice #: <strong><u>{item.id}</u></strong></Typography>
                     <br/>
                     <Typography variant="caption">Name: <strong><u>{item.student.fullname}</u></strong></Typography>
                     <br/>
                     <Typography variant="caption">Due Date: <strong><u>{item.due_date}</u></strong></Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                    <br/><br/>
+                    <Typography variant="caption">GR #: <strong><u>{item.student.gr_number}</u></strong></Typography>
+                    <br/>
+                    <Typography variant="caption">Guardian Name: <strong><u>{item.student.guardian_name}</u></strong></Typography>
+                    <br/>
+                    </Grid>
                 </Grid>
                 <Grid item xs={12}>
                     <br/><br/>

@@ -127,7 +127,7 @@ class BasicInfoForm extends React.Component {
                 <Grid container>
                     <Grid className={classes.gridItem} item xs={12} md={4}>
                         <FormControl component="fieldset">
-                            <FormLabel component="legend">Target</FormLabel>
+                            <FormLabel component="legend">Target *</FormLabel>
                             <RadioGroup
                                 aria-label="Target"
                                 name="target_type"
@@ -147,7 +147,7 @@ class BasicInfoForm extends React.Component {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <DatePicker
                                 margin="normal"
-                                label="Due Date"
+                                label="Due Date *"
                                 fullWidth
                                 value={form.due_date}
                                 onChange={this.handleDateChange}

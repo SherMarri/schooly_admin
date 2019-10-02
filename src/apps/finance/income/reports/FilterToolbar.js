@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import * as Actions from '../store/actions/common.actions';
 import DateFnsUtils from '@date-io/date-fns';
+import { startOfMonth } from 'date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -33,9 +34,16 @@ class FilterToolbar extends Component {
     
     constructor(props) {
         super(props);
+        let form = props.form;
+        if (!form.start_date && !form.end_date) {
+            form.start_date = startOfMonth(new Date());
+            form.end_date = new Date();
+            form.category_id = -1;
+        }
         this.state = {
-            form: this.props.form
+            form,
         };
+        this.handleSubmit();
     }
 
     componentDidMount() {
@@ -95,7 +103,7 @@ class FilterToolbar extends Component {
                                 fullWidth
                                 clearable
                                 disableFuture
-                                maxDate={form.to ? form.to : null}
+                                maxDate={form.end_date ? form.end_date : null}
                                 value={form.start_date}
                                 onChange={(date)=>this.handleDateChange('start_date', date)}
                             />
@@ -108,7 +116,7 @@ class FilterToolbar extends Component {
                                 label="To"
                                 fullWidth
                                 clearable
-                                minDate={form.from ? form.from : null}
+                                minDate={form.start_date ? form.start_date : null}
                                 disableFuture
                                 value={form.end_date}
                                 onChange={(date)=>this.handleDateChange('end_date', date)}

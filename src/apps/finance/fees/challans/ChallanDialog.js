@@ -53,7 +53,7 @@ class ChallanDialog extends React.Component {
               </Button>
             </Toolbar>
           </AppBar>
-          <ChallanProcess/>
+          <ChallanProcess onComplete={this.handleClose}/>
         </Dialog>
     );
   }
