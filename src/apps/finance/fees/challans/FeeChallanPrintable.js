@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
+import Utils from "../../../../core/Utils";
 
 const styles = theme => ({
     container: {
@@ -44,7 +45,7 @@ class FeeChallanPrintable extends Component {
                     <br/>
                     <Typography variant="caption">Name: <strong><u>{item.student.fullname}</u></strong></Typography>
                     <br/>
-                    <Typography variant="caption">Due Date: <strong><u>{item.due_date}</u></strong></Typography>
+                    <Typography variant="caption">Due Date: <strong><u>{ Utils.formatDateLocal(item.due_date)}</u></strong></Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
                     <br/><br/>

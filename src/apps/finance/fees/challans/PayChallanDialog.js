@@ -15,6 +15,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FeeChallanPrintable from './FeeChallanPrintable';
 import ReactToPrint from 'react-to-print';
+import Utils from "../../../../core/Utils";
 
 const styles = theme => ({
     descriptionTable: {
@@ -98,7 +99,7 @@ class PayChallanDialog extends React.Component {
                             <Grid item xs={12} md={6}>
 
                                 <Typography variant="caption">Due Date:</Typography><br />
-                                <Typography variant="subtitle2">{item.due_date}</Typography>
+                                <Typography variant="subtitle2">{ Utils.formatDateLocal(item.due_date) }</Typography>
 
                                 <Typography variant="caption">GR #:</Typography><br />
                                 <Typography variant="subtitle2">{item.student.gr_number}</Typography>
