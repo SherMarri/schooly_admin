@@ -29,69 +29,12 @@ const styles = theme => ({
     table_div: {
         marginTop: theme.spacing(2),
     },
-    toolbar: {
-        backgroundColor: theme.palette.primary.main,
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-    },
     title: {
-        color: 'white',
-        marginLeft: '20px',
-        marginTop: '12px',
+        float: 'left',
     },
     titleDiv: {
-        height: '100%',
+        width: '100%'
     },
-    actionsDiv: {
-        margin: theme.spacing(1),
-        marginTop: '10px',
-        float: 'right',
-    },
-    button: {
-        marginLeft: '10px',
-    },
-    leftIcon: {
-        marginRight: theme.spacing(1),
-    },
-    card: {
-        margin: '10px',
-    },
-    cardLocationLeft: {
-        marginTop: '10px',
-        marginBottom: '10px',
-        marginRight: '10px',
-    },
-    cardLocationRight: {
-        marginTop: '10px',
-        marginBottom: '10px',
-        marginLeft: '10px',
-    },
-    gridLeft: {
-        marginTop: '10px',
-        marginBottom: '10px',
-    },
-    gridRight: {
-        marginLeft: '10px',
-        marginTop: '10px',
-        marginBottom: '10px',
-    },
-    cardLeft: {
-        width: '30%',
-        float: 'left',
-    },
-    cardRight: {
-        width: '70%',
-        float: 'left',
-        paddingLeft: '20%',
-    },
-    cardIcon: {
-        fontSize: '5em',
-        marginBottom: '15px',
-    },
-    cardCaption: {
-        fontSize: '0.8rem',
-        marginTop: '11px',
-    }
 });
 
 class ExamsTab extends React.Component {

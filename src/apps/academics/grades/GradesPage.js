@@ -64,11 +64,6 @@ const styles = theme => ({
         marginBottom: '10px',
         marginLeft: '10px',
     },
-    cardGraph: {
-        marginLeft: '10px',
-        marginTop: '10px',
-        marginBottom: '10px',
-    },
     cardLeft: {
         width: '30%',
         float: 'left',
@@ -269,7 +264,7 @@ class GradesPage extends React.Component {
                             <GradesTable/>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <Card className={classes.cardGraph}>
+                            <Card className={classes.cardLocationRight}>
                                 <Line
                                     data={this.getAttendanceChartData()}
                                     width={50}
