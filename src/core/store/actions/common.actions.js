@@ -27,7 +27,7 @@ export function toggleSnackbar({ message, variant }) {
 
 export function fetchGrades() {
     return dispatch => {
-      UrlService.get('structure/grades')
+      UrlService.get('academics/grades')
       .then(response=>{
           return dispatch({
               type: SET_GRADES,

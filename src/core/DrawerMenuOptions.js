@@ -31,12 +31,12 @@ const getMenuItems = () => [
                 icon: <img src={StudentsIcon} alt="StudentsIcon" style={{opacity:0.6}}/>,
                 link: '/academics/students'
             },
-//             {
-//                 text: 'Classes',
-//                 code: 'academics>classes',
-//                 icon: <People/>,
-//                 link: '/academics/classes'
-//             },
+            {
+                text: 'Classes',
+                code: 'academics>classes',
+                icon: <People/>,
+                link: '/academics/classes'
+            },
             {
                 text: 'Subjects',
                 code: 'academics>subjects',
