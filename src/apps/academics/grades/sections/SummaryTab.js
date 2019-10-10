@@ -27,6 +27,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Line} from "react-chartjs-2";
+import Fab from "@material-ui/core/Fab";
 
 
 const styles = theme => ({
@@ -40,8 +41,11 @@ const styles = theme => ({
         marginLeft: '20px',
         marginTop: '12px',
     },
+    titleNotifs: {
+        float: 'left',
+    },
     titleDiv: {
-        height: '100%',
+        width: '100%',
     },
     actionsDiv: {
         margin: theme.spacing(1),
@@ -92,6 +96,11 @@ const styles = theme => ({
     cardCaption: {
         fontSize: '0.8rem',
         marginTop: '11px',
+    },
+    fab: {
+        float: 'right',
+        width: '40px',
+        height: '40px',
     }
 });
 
@@ -333,7 +342,12 @@ class SummaryTab extends React.Component {
                             <Card className={classes.cardTable}>
                                 <List className={classes.root}>
                                     <ListItem alignItems="flex-start">
-                                        <Typography variant="h5">Recent Notifs</Typography>
+                                        <div className={classes.titleDiv}>
+                                        <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
+                                        <Fab color="primary" aria-label="add" className={classes.fab}>
+                                            <AddIcon />
+                                        </Fab>
+                                        </div>
                                     </ListItem>
                                     <Divider component="li" />
                                     <ListItem alignItems="flex-start">

@@ -275,19 +275,6 @@ class GradesPage extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-
-
-                {/*
-                <Grid item xs={12}>
-                    <Grid item xs={12} md={6}>
-                        <GradesTable />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Paper className={classes.paper}><Chart options={chart_options(this.getAttendanceOptions())} /></Paper>
-                    </Grid>
-                </Grid>
-*/}
-
             </Grid>
         );
     }

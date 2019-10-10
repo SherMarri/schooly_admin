@@ -6,17 +6,8 @@ import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
 import * as Actions from './store/grades.actions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 import {Card, CardContent, Grid, IconButton, Paper, Tooltip, Typography} from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
-import AddEditGradeDialog from "./AddEditGradeDialog";
-import GradesTable from "./GradesTable";
 import {Chart, ConfirmDialog, Loading} from "../../../core/components";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import MUIDataTable from "mui-datatables";
@@ -34,7 +25,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import {Bar, Line} from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
+import Fab from "@material-ui/core/Fab";
+import ListIcon from '@material-ui/icons/List';
+import AddIcon from "@material-ui/core/SvgIcon/SvgIcon";
 
 const styles = theme => ({
     toolbar: {
@@ -50,15 +44,18 @@ const styles = theme => ({
     titleCard: {
         fontSize: 14,
     },
+    titleNotifs: {
+        float: 'left',
+    },
     titleDiv: {
-        height: '100%',
+        width: '100%',
     },
     actionsDiv: {
         margin: theme.spacing(1),
         marginTop: '10px',
     },
     button: {
-        marginLeft: '10px',
+        float: 'right'
     },
     backButton: {},
     leftIcon: {
@@ -105,6 +102,11 @@ const styles = theme => ({
     },
     inline: {
         display: 'inline',
+    },
+    fab: {
+        float: 'right',
+        width: '40px',
+        height: '40px',
     },
 });
 
@@ -199,8 +201,8 @@ class GradeDetailPage extends React.Component {
 
     constructor(props) {
         super(props);
-        const class_id = this.props.match.params.class_id;
-        props.fetchGradeDetails(class_id);
+        const grade_id = this.props.match.params.grade_id;
+        props.fetchGradeDetails(grade_id);
         // const { item } = this.props;
     }
 
@@ -242,47 +244,12 @@ class GradeDetailPage extends React.Component {
         });
     }
 
-
-    // handleClose = () => {
-    //     this.props.onClose();
-    // }
-
-    // handleChange = (event) => {
-    //     let form = {
-    //         ...this.state.form,
-    //         [event.target.name]: event.target.value
-    //     }
-    //     this.setState({
-    //         ...this.state,
-    //         form: form,
-    //     });
-    // }
-
-    // isFormValid = () => {
-    //     const keys = Object.keys(this.state.form);
-    //     for (const k of keys) {
-    //         if (this.state.form[k] === '' || this.state.form[k] === null) {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // }
-
-    // handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     if (!this.isFormValid()) return;
-    //     let { form } = this.state;
-    //     if (this.props.item && this.props.edit) {
-    //         this.props.updateGrade(form.id, form);
-    //     }
-    //     else {
-    //         this.props.addGrade(form);
-    //     }
-    //     this.handleClose();
-    // }
-
     handleViewItem = (item) => {
         history.push(`/academics/classes/${this.props.item.id}/sections/${item.id}`);
+    };
+
+    handleViewAllNotifs = (item) => {
+        history.push(`/academics/classes/${this.props.item.id}/notifications`);
     };
 
 
@@ -514,7 +481,13 @@ class GradeDetailPage extends React.Component {
                             <Card className={classes.cardTable}>
                                 <List className={classes.root}>
                                     <ListItem alignItems="flex-start">
-                                        <Typography variant="h5">Recent Notifs</Typography>
+                                        <div className={classes.titleDiv}>
+                                            <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
+                                            <Button onClick={this.handleViewAllNotifs} variant="contained" color="secondary" className={classes.button}>
+                                                <ListIcon className={classes.leftIcon} />
+                                                View All
+                                            </Button>
+                                        </div>
                                     </ListItem>
                                     <Divider component="li" />
                                     <ListItem alignItems="flex-start">
