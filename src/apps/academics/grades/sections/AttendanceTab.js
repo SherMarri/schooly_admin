@@ -4,26 +4,20 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
-import People from '@material-ui/icons/People';
-import Library from '@material-ui/icons/LocalLibrary';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import PortraitIcon from '@material-ui/icons/Portrait';
-import {Chart, ConfirmDialog, DownloadDialog} from "../../../../core/components";
-import Format from "date-fns/format";
-
-import {
-    Grid,
-    Card,
-    CardContent,
-    Paper,
-    Typography,
-    Button, Tooltip, IconButton,
-} from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import MUIDataTable from "mui-datatables";
-import CloudDownloadIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import AddEditStudentDialog from "../../students/AddEditStudentDialog";
-
+import {
+    Typography,
+    Button, Tooltip, IconButton, Grid,
+} from '@material-ui/core';
+import * as Actions from "../store/attendance.actions";
+import {Loading} from "../../../../core/components";
+import AddAttendanceDialog from "../attendance/AddAttendanceDialog";
+import ViewEditAttendanceDialog from "../attendance/ViewEditAttendanceDialog";
 
 const styles = theme => ({
     table_div: {
@@ -95,64 +89,123 @@ const styles = theme => ({
 });
 
 class AttendanceTab extends React.Component {
-    state = {
-        open_add_grade_dialog: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            section_id: this.props.match.params.section_id,
+            add_attendance_dialog: false,
+            view_edit_attendance_dialog: false,
+            selected_attendance_id: null,
+        };
+        props.fetchAttendance(this.state.section_id);
     }
 
-    handleGradeDialogOpen = () => {
+    handleNewAttendanceDialogOpen = () => {
         this.setState({
             ...this.state,
-            open_add_grade_dialog: true
+            add_attendance_dialog: true
         });
     }
 
+    handleRefresh = () => {
+        this.props.fetchAttendance(this.state.section_id);
+    }
 
-    handleCloseDialog = () => {
+
+    handleAddAttendanceCloseDialog = () => {
         this.setState({
             ...this.state,
-            open_add_grade_dialog: false,
+            add_attendance_dialog: false,
         });
     }
+
+    handleViewEditAttendanceCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            view_edit_attendance_dialog: false,
+            selected_attendance_id: null,
+        });
+    }
+
+    handleViewItem = (value) => {
+        this.setState({
+            ...this.state,
+            view_edit_attendance_dialog: true,
+            selected_attendance_id: value,
+        });
+    }
+
+    handleEditItem = (value) => {
+        this.setState({
+            ...this.state,
+            view_edit_attendance_dialog: true,
+            selected_attendance_id: value,
+        });
+    }
+
+    renderActionColumn = (value, table_meta, update_value) => {
+        const {classes} = this.props;
+        return (
+            <>
+                <Tooltip title="View">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleViewItem(value)}
+                                aria-label="View">
+                        <RemoveRedEye/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleEditItem(value)}
+                                aria-label="Edit">
+                        <EditIcon/>
+                    </IconButton>
+                </Tooltip>
+            </>
+        );
+    }
+
 
     getMappedData = () => {
-        return [{
-            gr_number: Math.floor(Math.random() * (1000 - 0)) + 0,
-            fullname: 'Test',
-            guardian_name: 'Test',
-            section: 'A',
-            percentage: Math.floor(Math.random() * (100 - 60)) + 60,
-        }];
+        return this.props.items.data.data.map(item => {
+            return {
+                date: item.date,
+                average: item.average ? item.average : '-',
+                id: item.id,
+            };
+        });
     };
 
 
-
     render() {
-        const {classes} = this.props;
+        const {classes, items, loading} = this.props;
+        if (loading) return <Loading/>;
+        if (!items) return null;
+        let {page, count} = items;
+        page -= 1;
         const columns = [{
-            name: 'gr_number',
-            label: "GR #",
+            name: 'date',
+            label: "Date",
             options: {
                 filter: false,
             }
-        }, {
-            name: 'fullname',
-            label: "Name",
-            options: {
-                filter: false,
+        },
+            {
+                name: 'average',
+                label: "Average Attendance",
+                options: {
+                    filter: false,
+                }
+            },
+            {
+                name: 'id',
+                label: 'Action',
+                options: {
+                    customBodyRender: (value, table_data, update_value) =>
+                        this.renderActionColumn(value, table_data, update_value),
+                    filter: false,
+                    download: false,
+                }
             }
-        }, {
-            name: 'section',
-            label: "Class",
-        }, {
-            name: 'guardian_name',
-            label: "Guardian",
-            options: {
-                filter: false,
-            }
-        }
         ];
-        // let {page, count} = details;
-        // page -= 1;
         const options = {
             sort: false,
             print: false,
@@ -166,8 +219,30 @@ class AttendanceTab extends React.Component {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
             },
+            customToolbar: () => {
+                return (
+                    <>
+                        <Tooltip title="Add">
+                            <IconButton aria-label="add" onClick={this.handleNewAttendanceDialogOpen}>
+                                <AddIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        {this.props.items.count > 0 &&
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download">
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        }
+                        <Tooltip title="Refresh">
+                            <IconButton aria-label="refresh" onClick={this.handleRefresh}>
+                                <RefreshIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
+                )
+            }
         };
-
 
 
         return (
@@ -180,6 +255,8 @@ class AttendanceTab extends React.Component {
                     data={this.getMappedData()}
                     columns={columns}
                     options={options}/>
+                <AddAttendanceDialog open={this.state.add_attendance_dialog} onClose={this.handleAddAttendanceCloseDialog} section_id={this.state.section_id}/>
+                <ViewEditAttendanceDialog open={this.state.view_edit_attendance_dialog} onClose={this.handleViewEditAttendanceCloseDialog} attendance_id={this.state.selected_attendance_id}/>
             </div>
         );
     }
@@ -189,12 +266,19 @@ AttendanceTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({academics}) {
-    return {}
+function mapStateToProps({academics, user}) {
+    return {
+        items: academics.attendance.items,
+        loading: academics.attendance.loading,
+        user: user
+    };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({
+        fetchAttendance: Actions.fetchAttendance,
+        updateAttendance: Actions.updateAttendance,
+    }, dispatch);
 }
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AttendanceTab)));
