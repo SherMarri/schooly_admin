@@ -6,16 +6,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
 import * as Actions from '../store/attendance.actions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import {Grid} from "@material-ui/core";
 import Utils from "../../../../core/Utils";
 
 const styles = theme => ({
@@ -32,20 +28,9 @@ class AddAttendanceDialog extends React.Component {
 
     constructor(props) {
         super(props);
-        const { item } = this.props;
-        let form = {};
-        if (item) {
-            form = {
-                id: item.id,
-                date: item.date,
-                average: item.average,
-            };
-        }
-        else {
-            form = {
-                date: '',
-            };
-        }
+        const form = {
+            date: new Date(),
+        };
         this.state = { form };
     }
 
@@ -80,13 +65,7 @@ class AddAttendanceDialog extends React.Component {
         let { form } = this.state;
         form.date = Utils.formatDate(form.date);
         form.section_id = this.props.section_id;
-        form.session = 2;
-        if (this.props.item && this.props.edit) {
-            this.props.updateAttendance(form.id, form);
-        }
-        else {
-            this.props.createAttendance(form);
-        }
+        this.props.createAttendance(form);
         this.handleClose();
     }
 
@@ -114,12 +93,12 @@ class AddAttendanceDialog extends React.Component {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DatePicker
                             margin="normal"
-                            label="Date Hired"
+                            label="Date"
                             fullWidth
                             required
                             clearable
                             disableFuture
-                            value={form.date_hired}
+                            value={form.date}
                             onChange={(date) => this.handleDateChange('date', date)}
                             format="dd/MM/yyyy"
                             disabled={item && !edit}

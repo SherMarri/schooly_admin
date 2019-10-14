@@ -19,10 +19,20 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {Chip} from "@material-ui/core";
+import {Chip, Grid, Divider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import { Doughnut } from 'react-chartjs-2';
+import Format from 'date-fns/format';
+import { Utils } from '../../../../core';
 
+const PRESENT = 1;
+const ABSENT = 2;
+const LEAVE = 3;
+
+const PRESENT_COLOR = '#1c6504';
+const ABSENT_COLOR = '#ab0000';
+const LEAVE_COLOR = '#ff6700';
+const NOT_SET_COLOR = '#ada7a6';
 
 const styles = theme => ({
     appBar: {
@@ -37,55 +47,68 @@ const styles = theme => ({
         display: 'block', // Fix IE 11 issue.
         marginLeft: theme.spacing(1.5),
         marginRight: theme.spacing(1.5),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            width: 900,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
+    },
+    grid: {
+        margin: theme.spacing(2),
+        // marginBottom: theme.spacing(2),
+        // display: 'flex',
+        // flexDirection: 'column',
+    },
+    grid_item: {
+        padding: theme.spacing(1),
     },
     paper: {
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
+        marginBottom: theme.spacing(1),
     },
     submitButton: {
-        marginTop: '10px',
-        marginLeft: '790px',
-        float: 'right',
+        alignSelf: 'flex-end',
+        margin: '10px',
     },
     cancelButton: {
         float: 'right',
         marginRight: theme.spacing(2),
     },
-    gridItem: {
-        padding: theme.spacing(2),
-    },
-    table: {
-        minWidth: 650,
-    },
     danger_chip: {
-        background: '#ab0000',
+        backgroundColor: ABSENT_COLOR,
         color: 'white',
-        marginRight: '2px'
+        marginRight: '2px',
+        '&:focus': {
+            backgroundColor: ABSENT_COLOR,
+       },
     },
     success_chip: {
-        background: '#1c6504',
+        backgroundColor: PRESENT_COLOR,
         color: 'white',
-        marginRight: '2px'
+        marginRight: '2px',
+        '&:focus': {
+            backgroundColor: PRESENT_COLOR,
+       },
     },
     warning_chip: {
-        background: '#ff6700',
+        backgroundColor: LEAVE_COLOR,
         color: 'white',
-        marginRight: '2px'
+        marginRight: '2px',
+        '&:focus': {
+            backgroundColor: LEAVE_COLOR,
+       },
     },
-    unknown_status_chip: {
+    default_chip: {
         background: '#ADA7A6',
         color: 'white',
         marginRight: '2px',
         cursor: 'pointer',
+    },
+    chip_div: {
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    chip_description: {
+        fontSize: '18px',
+        marginTop: '2px',
+        marginLeft: '8px',
     },
 });
 
@@ -96,66 +119,165 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 class ViewEditAttendanceDialog extends React.Component {
 
     handleClose = () => {
+        this.props.resetDailyAttendanceData();
         this.props.onClose();
+        this.setState({
+            items: null
+        });
     };
 
     componentDidUpdate(prevProps, prevState, snapShot) {
-        const {attendance_id, fetchAttendanceDetails} = this.props;
-        if (attendance_id && (attendance_id !== prevProps.attendance_id)) {
-            fetchAttendanceDetails(attendance_id);
+        const {attendance, fetchAttendanceDetails} = this.props;
+        if (!(attendance && attendance.id)) return;
+        if (prevProps.attendance && prevProps.attendance.id === attendance.id) return;
+        fetchAttendanceDetails(attendance.id);
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        const { daily_attendance } = props;
+        if (!(daily_attendance && daily_attendance.items)) return null;
+        else if (state && state.items) return null;
+        const items = daily_attendance.items.map((item) => {
+            const { student } = item;
+            return {
+                id: item.id,
+                gr_number: student.profile.gr_number,
+                fullname: student.profile.fullname,
+                status: item.status,
+                comments: item.comments,
+            };
+        });
+        return {
+            items,
         }
     }
 
     handleStatusChange = (id, status) => {
+        const { items } = this.state;
+        const updated_items = items.map((item) => {
+            if (item.id !== id) return {...item};
+            else return {
+                ...item,
+                status: status !== item.status ? status : null,
+            };
+        });
+        this.setState({
+            items: updated_items,
+        });
     };
 
+    renderStatusChips = (row) => {
+        const { classes, read_only } = this.props;
+        const chips_config = [
+            {
+                label: "P",
+                class_name: row.status === PRESENT ? classes.success_chip : classes.default_chip,
+                status_value: PRESENT,
+            },
+            {
+                label: "L",
+                class_name: row.status === LEAVE ? classes.warning_chip : classes.default_chip,
+                status_value: LEAVE,
+            },
+            {
+                label: "A",
+                class_name: row.status === ABSENT ? classes.danger_chip : classes.default_chip,
+                status_value: ABSENT,
+            },
+        ]
+        return (
+            <>
+            {chips_config.map((config) => {
+                return (
+                    <Chip
+                        key={config.status_value}
+                        label={config.label}
+                        className={config.class_name}
+                        onClick={() => read_only ? null : this.handleStatusChange(row.id, config.status_value)}
+                    />
+                );
 
-    getMappedData = (classes) => {
+            })
+            }
+            </>
+        );
+    }
+
+    getMappedData = () => {
         const studentAttendance =
-            this.props.daily_attendance.items.map(row => (
-                <TableRow key={row.student.id}>
-                    <TableCell>{row.student.profile.gr_number}</TableCell>
+            this.state.items.map(row => (
+                <TableRow key={row.id}>
+                    <TableCell>{row.gr_number}</TableCell>
                     <TableCell component="th" scope="row">
-                        {row.student.profile.fullname}
+                        {row.fullname}
                     </TableCell>
                     <TableCell>
-                        {row.status === 1 &&
-                            <React.Fragment>
-                                <Chip label="P" className={classes.success_chip}/>
-                                <Chip label="A" className={classes.unknown_status_chip}/>
-                                <Chip label="L" className={classes.unknown_status_chip}/>
-                            </React.Fragment>
-                        }
-                        {row.status === 2 &&
-                            <React.Fragment>
-                                <Chip label="P" className={classes.unknown_status_chip}/>
-                                <Chip label="A" className={classes.danger_chip}/>
-                                <Chip label="L" className={classes.unknown_status_chip}/>
-                            </React.Fragment>
-                        }
-                        {row.status === 3 &&
-                            <React.Fragment>
-                                <Chip label="P" className={classes.unknown_status_chip}/>
-                                <Chip label="A" className={classes.unknown_status_chip}/>
-                                <Chip label="L" className={classes.warning_chip}/>
-                            </React.Fragment>
-                        }
-                        {!row.status &&
-                        <React.Fragment>
-                            <Chip label="P" className={classes.unknown_status_chip} onClick={() => {this.handleStatusChange(row.id, 1)}}/>
-                            <Chip label="A" className={classes.unknown_status_chip} onClick={() => {this.handleStatusChange(row.id, 2)}}/>
-                            <Chip label="L" className={classes.unknown_status_chip} onClick={() => {this.handleStatusChange(row.id, 3)}}/>
-                        </React.Fragment>
-                        }
+                        {this.renderStatusChips(row)}
                     </TableCell>
-                    <TableCell align="right">{row.comments}</TableCell>
+                    <TableCell>{row.comments}</TableCell>
                 </TableRow>
             ))
         return studentAttendance;
     }
 
+    handleSubmit = () => {
+        const { daily_attendance } = this.props;
+        const { items } = this.state;
+        const data = {
+            items,
+            attendance_id: daily_attendance.id,
+            section_id: daily_attendance.section.id,
+        }
+        this.handleClose();
+        this.props.updateAttendanceDetails(data);
+    }
+
+    getDoughnutData = () => {
+        const { items } = this.state;
+        let counts = {
+            present: 0,
+            absent: 0,
+            leave: 0,
+            not_set: 0,
+        }
+        items.forEach((item) => {
+            switch(item.status) {
+                case PRESENT:
+                    counts.present += 1;
+                    break;
+                case ABSENT:
+                    counts.absent += 1;
+                    break;
+                case LEAVE:
+                    counts.leave += 1;
+                    break;
+                default:
+                    counts.not_set += 1;
+                    break;
+            };
+        });
+        return {
+            labels: [
+              'Present',
+              'Absent',
+              'Leave',
+              'Unmarked'
+            ],
+            datasets: [{
+              data: [counts.present, counts.absent, counts.leave, counts.not_set],
+              backgroundColor: [
+                PRESENT_COLOR,
+                ABSENT_COLOR,
+                LEAVE_COLOR,
+                NOT_SET_COLOR,
+              ],
+            }]
+          };
+    }
+
     render() {
-        const {open, classes, loading, daily_attendance} = this.props;
+        const { open, classes, loading, daily_attendance, attendance, read_only } = this.props;
+        if (!open) return null;
         return (
             <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
@@ -164,41 +286,76 @@ class ViewEditAttendanceDialog extends React.Component {
                             <CloseIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Attendance Details
+                            Attendance - {Format(Utils.getDateFromString(attendance.date), 'MMMM do, yyyy')}
                         </Typography>
                     </Toolbar>
                 </AppBar>
                 <main className={classes.main}>
                     <CssBaseline/>
-                    <Paper className={classes.paper}>
-                        {loading &&
-                        <Loading
-                            message={"Fetching records..."}
-                        />
+                    {loading &&
+                    <Loading
+                        message={"Fetching records..."}
+                    />
+                    }
+                    {daily_attendance &&
+                        <Grid container  className={classes.grid}>
+                            <Grid item xs={12} md={9} className={classes.grid_item}>
+                                <Paper className={classes.paper}>
+                                    <Table className={classes.table}>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>GR#</TableCell>
+                                                <TableCell>Full Name</TableCell>
+                                                <TableCell>Status</TableCell>
+                                                <TableCell>Comments</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {this.getMappedData()}
+                                        </TableBody>
+                                    </Table>
+                                    {!read_only &&
+                                        <Button
+                                            variant="contained" color="primary"
+                                            onClick={this.handleSubmit} className={classes.submitButton}
+                                        >
+                                            Submit
+                                        </Button>
+                                    }
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={12} md={3} className={classes.grid_item}>
+                                <Paper className={classes.paper}>
+                                    <div className={classes.chip_div}>
+                                        <Chip
+                                            label="P"
+                                            className={classes.success_chip}
+                                        />
+                                        <Typography className={classes.chip_description}>Present</Typography>
+                                    </div>
+                                    <Divider/>
+                                    <div className={classes.chip_div}>
+                                        <Chip
+                                            label="A"
+                                            className={classes.danger_chip}
+                                        />
+                                        <Typography className={classes.chip_description}>Absent</Typography>
+                                    </div>
+                                    <Divider/>
+                                    <div className={classes.chip_div}>
+                                        <Chip
+                                            label="L"
+                                            className={classes.warning_chip}
+                                        />
+                                        <Typography className={classes.chip_description}>Leave</Typography>
+                                    </div>
+                                </Paper>
+                                <Paper className={classes.paper}>
+                                    <Doughnut data={this.getDoughnutData()}/>
+                                </Paper>
+                            </Grid>
+                        </Grid>
                         }
-                        {daily_attendance &&
-                        <Table className={classes.table}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>GR#</TableCell>
-                                    <TableCell>Full Name</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell align="right">Comments</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.getMappedData(classes)}
-                            </TableBody>
-                        </Table>
-                        }
-                    <Button
-                        variant="contained" color="primary"
-                        onClick={this.handleSubmit} className={classes.submitButton}
-                    >
-                        Submit
-                    </Button>
-                    </Paper>
-
                 </main>
             </Dialog>
         );
@@ -220,6 +377,8 @@ function mapStateToProps({user, academics}) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchAttendanceDetails: Actions.fetchAttendanceDetails,
+        resetDailyAttendanceData: Actions.resetDailyAttendanceData,
+        updateAttendanceDetails: Actions.updateAttendanceDetails,
     }, dispatch);
 }
 

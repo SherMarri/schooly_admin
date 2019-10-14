@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
@@ -12,12 +12,26 @@ import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import MUIDataTable from "mui-datatables";
 import {
     Typography,
-    Button, Tooltip, IconButton, Grid,
+    Tooltip,
+    IconButton,
 } from '@material-ui/core';
 import * as Actions from "../store/attendance.actions";
 import {Loading} from "../../../../core/components";
 import AddAttendanceDialog from "../attendance/AddAttendanceDialog";
 import ViewEditAttendanceDialog from "../attendance/ViewEditAttendanceDialog";
+
+const getMuiTheme = () => (
+    createMuiTheme({
+      overrides: {
+        MUIDataTableBodyCell: {
+          root: {
+            paddingTop: '0px',
+            paddingBottom: '0px',
+          }
+        }
+      }
+    })
+);
 
 const styles = theme => ({
     table_div: {
@@ -91,13 +105,14 @@ const styles = theme => ({
 class AttendanceTab extends React.Component {
     constructor(props) {
         super(props);
+        const { section_id } = this.props.match.params;
         this.state = {
-            section_id: this.props.match.params.section_id,
+            section_id,
             add_attendance_dialog: false,
             view_edit_attendance_dialog: false,
-            selected_attendance_id: null,
+            selected_attendance: null,
         };
-        props.fetchAttendance(this.state.section_id);
+        props.fetchAttendance(section_id);
     }
 
     handleNewAttendanceDialogOpen = () => {
@@ -123,7 +138,8 @@ class AttendanceTab extends React.Component {
         this.setState({
             ...this.state,
             view_edit_attendance_dialog: false,
-            selected_attendance_id: null,
+            selected_attendance: null,
+            attendance_dialog_read_only: null,
         });
     }
 
@@ -131,7 +147,8 @@ class AttendanceTab extends React.Component {
         this.setState({
             ...this.state,
             view_edit_attendance_dialog: true,
-            selected_attendance_id: value,
+            selected_attendance: value,
+            attendance_dialog_read_only: true,
         });
     }
 
@@ -139,7 +156,8 @@ class AttendanceTab extends React.Component {
         this.setState({
             ...this.state,
             view_edit_attendance_dialog: true,
-            selected_attendance_id: value,
+            selected_attendance: value,
+            attendance_dialog_read_only: null,
         });
     }
 
@@ -165,21 +183,23 @@ class AttendanceTab extends React.Component {
 
 
     getMappedData = () => {
-        return this.props.items.data.data.map(item => {
+        const items = this.props.section_attendance.data.map(item => {
             return {
                 date: item.date,
-                average: item.average ? item.average : '-',
-                id: item.id,
+                average: item.average_attendance !== null ? item.average_attendance.toFixed(2) : '',
+                id: item,
             };
         });
+        return items;
     };
 
 
     render() {
-        const {classes, items, loading} = this.props;
+        const {classes, section_attendance, loading} = this.props;
         if (loading) return <Loading/>;
-        if (!items) return null;
-        let {page, count} = items;
+        if (!section_attendance) return null;
+        let {page, count} = section_attendance;
+        const items = this.getMappedData();
         page -= 1;
         const columns = [{
             name: 'date',
@@ -190,7 +210,7 @@ class AttendanceTab extends React.Component {
         },
             {
                 name: 'average',
-                label: "Average Attendance",
+                label: "Average Attendance (%)",
                 options: {
                     filter: false,
                 }
@@ -211,8 +231,8 @@ class AttendanceTab extends React.Component {
             print: false,
             search: false,
             selectableRows: 'none',
-            rowsPerPage: 20,
-            rowsPerPageOptions: [20],
+            rowsPerPage: 30,
+            rowsPerPageOptions: [30],
             serverSide: true,
             download: false,
             toolbar: {
@@ -227,7 +247,7 @@ class AttendanceTab extends React.Component {
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
-                        {this.props.items.count > 0 &&
+                        {section_attendance.count > 0 &&
                         <Tooltip title="Download">
                             <IconButton aria-label="download">
                                 <CloudDownloadIcon/>
@@ -247,16 +267,25 @@ class AttendanceTab extends React.Component {
 
         return (
             <div className={classes.table_div}>
-                <MUIDataTable
-                    title={<Typography variant="h5">
-                        Attendance
-                    </Typography>
-                    }
-                    data={this.getMappedData()}
-                    columns={columns}
-                    options={options}/>
+                <MuiThemeProvider theme={getMuiTheme()}>
+                    <MUIDataTable
+                        title={
+                            <Typography variant="h5">
+                                Attendance
+                            </Typography>
+                        }
+                        data={items}
+                        columns={columns}
+                        options={options}
+                    />
+                </MuiThemeProvider>
                 <AddAttendanceDialog open={this.state.add_attendance_dialog} onClose={this.handleAddAttendanceCloseDialog} section_id={this.state.section_id}/>
-                <ViewEditAttendanceDialog open={this.state.view_edit_attendance_dialog} onClose={this.handleViewEditAttendanceCloseDialog} attendance_id={this.state.selected_attendance_id}/>
+                <ViewEditAttendanceDialog
+                    open={this.state.view_edit_attendance_dialog}
+                    onClose={this.handleViewEditAttendanceCloseDialog}
+                    attendance={this.state.selected_attendance}
+                    read_only={this.state.attendance_dialog_read_only}
+                />
             </div>
         );
     }
@@ -268,7 +297,7 @@ AttendanceTab.propTypes = {
 
 function mapStateToProps({academics, user}) {
     return {
-        items: academics.attendance.items,
+        section_attendance: academics.attendance.section_attendance,
         loading: academics.attendance.loading,
         user: user
     };

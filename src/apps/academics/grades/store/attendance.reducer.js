@@ -46,13 +46,20 @@ const common = function (state = initialState, action) {
         case Actions.SET_ATTENDANCE: {
             return {
                 ...state,
-                items: {...action.payload},
+                section_attendance: {...action.payload},
             };
         }
         case Actions.SET_ATTENDANCE_DETAILS: {
             return {
                 ...state,
                 daily_attendance: {...action.payload},
+            };
+        }
+        case Actions.RESET_DAILY_ATTENDANCE_DATA: {
+            return {
+                ...state,
+                daily_attendance: null,
+                loading_daily_attendance: null,
             };
         }
         default:

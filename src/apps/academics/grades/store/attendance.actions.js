@@ -8,7 +8,7 @@ export const ACTION_FAILURE = '[ACADEMICS] ATTENDANCE ACTION FAILURE';
 export const ACTION_FETCH_DAILY_ATTENDANCE_INIT = '[ACADEMICS] FETCH DAILY ATTENDANCE ACTION INIT';
 export const ACTION_FETCH_DAILY_ATTENDANCE_SUCCESS = '[ACADEMICS] FETCH DAILY ATTENDANCE ACTION SUCCESS';
 export const ACTION_FETCH_DAILY_ATTENDANCE_FAILURE = '[ACADEMICS] FETCH DAILY ATTENDANCE ACTION FAILURE';
-
+export const RESET_DAILY_ATTENDANCE_DATA = '[ACADEMICS] RESET DAILY ATTENDANCE DATA';
 export const SET_ATTENDANCE = '[ACADEMICS] SET ATTENDANCE';
 export const SET_ATTENDANCE_DETAILS = '[ACADEMICS] SET ATTENDANCE DETAILS';
 
@@ -16,14 +16,14 @@ export function createAttendance(data) {
     return (dispatch) => {
         UrlService.post(`attendance/students/daily`, data)
             .then(response => {
-                dispatch(fetchAttendance());
-                dispatch(toggleSnackbar({
+                dispatch(fetchAttendance(data.section_id));
+                return dispatch(toggleSnackbar({
                     message: `Attendance created successfully.`,
                     variant: SNACKBAR_SUCCESS
                 }));
             })
             .catch(error => {
-                dispatch(toggleSnackbar({
+                return dispatch(toggleSnackbar({
                     message: 'Unable to create attendance, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
@@ -36,13 +36,13 @@ export function updateAttendance(data) {
         UrlService.post(`attendance`, data)
             .then(response => {
                 dispatch(fetchAttendance());
-                dispatch(toggleSnackbar({
+                return dispatch(toggleSnackbar({
                     message: `Attendance updated successfully.`,
                     variant: SNACKBAR_SUCCESS
                 }));
             })
             .catch(error => {
-                dispatch(toggleSnackbar({
+                return dispatch(toggleSnackbar({
                     message: 'Unable to update attendance, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
@@ -59,9 +59,9 @@ export function fetchAttendance(section_id, page=1) {
             .then(response => {
                 dispatch({
                     type: SET_ATTENDANCE,
-                    payload: response
+                    payload: response.data
                 });
-                dispatch({
+                return dispatch({
                     type: ACTION_SUCCESS
                 });
             })
@@ -69,6 +69,36 @@ export function fetchAttendance(section_id, page=1) {
                 dispatch({
                     type: ACTION_FAILURE
                 });
+                return dispatch(toggleSnackbar({
+                    message: 'Unable to retrieve attendance, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
+export function resetDailyAttendanceData() {
+    return dispatch => {
+        return dispatch({
+            type: RESET_DAILY_ATTENDANCE_DATA,
+        });
+    };
+}
+
+/**
+ * Updates daily attendance items
+ */
+export function updateAttendanceDetails({ attendance_id, items, section_id }) {
+    return dispatch => {
+        UrlService.put(`attendance/students/daily/${attendance_id}`, { items })
+            .then(response => {
+                dispatch(toggleSnackbar({
+                    message: 'Attendance updated successfully.',
+                    variant: SNACKBAR_SUCCESS
+                }));
+                dispatch(fetchAttendance(section_id));
+            })
+            .catch(error => {
                 dispatch(toggleSnackbar({
                     message: 'Unable to retrieve attendance, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
