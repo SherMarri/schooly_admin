@@ -8,7 +8,11 @@ export const ACTION_FAILURE = '[ACADEMICS] SECTION NOTIFICATIONS ACTION FAILURE'
 export const SET_NOTIFICATIONS = '[ACADEMICS] SET SECTION NOTIFICATIONS';
 export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET SECTION NOTIFICATIONS DETAILS';
 
-export function createNotification(section_id, data) {
+export const CLEAR_TABLE_DATA = '[ACADEMICS] SECTIONS NOTIFICATIONS CLEAR TABLE DATA';
+
+
+export function createNotification(data) {
+    debugger;
     return (dispatch) => {
         UrlService.post(`notifications`, data)
             .then(response => {
@@ -20,7 +24,7 @@ export function createNotification(section_id, data) {
             })
             .catch(error => {
                 dispatch(toggleSnackbar({
-                    message: 'Unable to create class, please contact Schooli support.',
+                    message: 'Unable to create notification, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
             });
@@ -46,12 +50,17 @@ export function updateNotification(data) {
     };
 }
 
-export function fetchNotifications(section_id, page=1) {
+export function fetchNotifications(section_id, page=1, form) {
     return dispatch => {
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get(`academics/sections/${section_id}/notifications`, {page: page, target_type: 3, target_id: section_id})
+        let params = {};
+        if(form)
+            params = {page: page, target_type: 3, target_id: section_id, search_term: form.search_term, start_date: form.start_date, end_date: form.end_date};
+        else
+            params = {page: page, target_type: 3, target_id: section_id};
+        UrlService.get(`academics/sections/${section_id}/notifications`, params)
             .then(response => {
                 dispatch({
                     type: SET_NOTIFICATIONS,
@@ -93,7 +102,7 @@ export function fetchNotificationDetails(section_id, notification_id) {
                     type: ACTION_FAILURE
                 });
                 dispatch(toggleSnackbar({
-                    message: 'Unable to retrieve classes, please contact Schooli support.',
+                    message: 'Unable to retrieve notification, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
             });
@@ -118,3 +127,10 @@ export function deleteNotification(section_id, notification_id) {
             });
     }
 }
+
+export function updateFilters(form) {
+    return dispatch => {
+        return dispatch(fetchNotifications(form.grade_id, form.page, form));
+    }
+}
+

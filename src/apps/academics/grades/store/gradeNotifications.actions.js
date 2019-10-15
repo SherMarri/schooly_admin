@@ -8,6 +8,9 @@ export const ACTION_FAILURE = '[ACADEMICS] GRADES NOTIFICATIONS ACTION FAILURE';
 export const SET_NOTIFICATIONS = '[ACADEMICS] SET GRADE NOTIFICATIONS';
 export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET GRADE NOTIFICATIONS DETAILS';
 
+// export const CLEAR_TABLE_DATA = '[ACADEMICS] GRADE NOTIFICATIONS CLEAR TABLE DATA';
+
+
 export function createNotification(data) {
     return (dispatch) => {
         UrlService.post(`notifications`, data)
@@ -20,7 +23,7 @@ export function createNotification(data) {
             })
             .catch(error => {
                 dispatch(toggleSnackbar({
-                    message: 'Unable to create class, please contact Schooli support.',
+                    message: 'Unable to create notification, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
             });
@@ -46,12 +49,17 @@ export function updateNotification(data) {
     };
 }
 
-export function fetchNotifications(grade_id, page=1) {
+export function fetchNotifications(grade_id, page=1, form) {
     return dispatch => {
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get(`academics/grades/${grade_id}/notifications`, {page: page, target_type: 2, target_id: grade_id})
+        let params = {};
+        if(form)
+            params = {page: page, target_type: 2, target_id: grade_id, search_term: form.search_term, start_date: form.start_date, end_date: form.end_date};
+        else
+            params = {page: page, target_type: 2, target_id: grade_id};
+        UrlService.get(`academics/grades/${grade_id}/notifications`, params)
             .then(response => {
                 dispatch({
                     type: SET_NOTIFICATIONS,
@@ -66,7 +74,7 @@ export function fetchNotifications(grade_id, page=1) {
                     type: ACTION_FAILURE
                 });
                 dispatch(toggleSnackbar({
-                    message: 'Unable to retrieve classes, please contact Schooli support.',
+                    message: 'Unable to retrieve notifications, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
             });
@@ -93,7 +101,7 @@ export function fetchNotificationDetails(notification_id) {
                     type: ACTION_FAILURE
                 });
                 dispatch(toggleSnackbar({
-                    message: 'Unable to retrieve classes, please contact Schooli support.',
+                    message: 'Unable to retrieve notification, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
             });
@@ -118,3 +126,10 @@ export function deleteNotification(notification_id) {
             });
     }
 }
+
+export function updateFilters(form) {
+    return dispatch => {
+        return dispatch(fetchNotifications(form.grade_id, form.page, form));
+    }
+}
+

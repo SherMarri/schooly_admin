@@ -11,6 +11,11 @@ import TablePagination from "@material-ui/core/TablePagination";
 import ListItemText from "@material-ui/core/ListItemText";
 import Utils from "../../../../core/Utils";
 import AddNotificationDialog from "./AddNotificationDialog";
+import * as GradeActions from '../store/gradeNotifications.actions';
+import * as SectionActions from '../store/sectionNotifications.actions';
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+
 
 const styles = theme => ({
     root: {
@@ -59,6 +64,10 @@ class NotificationsList extends React.Component {
             ...this.state,
             open_add_notification_dialog: false,
         });
+    }
+
+    handleSubmitDialog = (form) => {
+        this.props.onFormSubmit(form);
     }
 
 
@@ -134,7 +143,7 @@ class NotificationsList extends React.Component {
                         />
                     </Card>
                 </Grid>
-                <AddNotificationDialog open={this.state.open_add_notification_dialog} onClose={this.handleCloseDialog} target_id={target_id} target_type={target_type}/>
+                <AddNotificationDialog open={this.state.open_add_notification_dialog} onClose={this.handleCloseDialog} onSubmit={this.handleSubmitDialog}/>
             </Grid>
         )
     }
@@ -144,4 +153,5 @@ NotificationsList.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NotificationsList);
+
+export default withStyles(styles)((NotificationsList));

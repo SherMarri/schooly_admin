@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import * as Actions from '../store/gradeNotifications.actions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -75,20 +74,13 @@ class AddNotificationDialog extends React.Component {
         event.preventDefault();
         if (!this.isFormValid()) return;
         let { form } = this.state;
-        form.target_type = this.props.target_type;
-        form.target_id = this.props.target_id;
-        if (this.props.item && this.props.edit) {
-            this.props.updateNotification(form.id, form);
-        }
-        else {
-            this.props.createNotification(form);
-        }
+        this.props.onSubmit(form);
         this.handleClose();
     }
 
 
     render() {
-        const { open, classes, target_id, target_type, item, edit } = this.props;
+        const { open, classes, item, edit } = this.props;
         const { form } = this.state;
         return (
             <Dialog
@@ -161,10 +153,6 @@ function mapStateToProps({ common, academics }) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        createNotification: Actions.createNotification,
-        updateNotification: Actions.updateNotification,
-    }, dispatch);
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddNotificationDialog));

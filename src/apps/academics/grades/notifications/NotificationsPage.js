@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {Loading} from "../../../../core/components";
 import NotificationsList from "./NotificationsList";
+import GradeNotificationFilter from "./GradeNotificationFilter";
 
 
 const styles = theme => ({
@@ -49,22 +50,33 @@ class NotificationsPage extends React.Component {
         this.props.fetchNotifications(this.state.grade_id, page + 1);
     }
 
+    handleFormSubmit = (form) => {
+        form.target_id = this.state.grade_id;
+        form.target_type = 2;
+        this.props.createNotification(form);
+    }
+
 
     render() {
-        const {items, loading} = this.props;
+        const {items, classes, loading} = this.props;
         if (loading) return <Loading/>;
         if (!items) return null;
         let {page, count} = items;
         page -= 1;
         return (
-            <Grid item>
-                <NotificationsList onPageChange={this.handleChangePage} data={{
-                    items: items.data,
-                    page: page,
-                    count: count,
-                    target_id: this.state.grade_id,
-                    target_type: 2,
-                }}/>
+            <Grid container>
+                <Grid item xs={12} className={classes.toolbar}>
+                    <GradeNotificationFilter grade_id={this.state.grade_id}></GradeNotificationFilter>
+                </Grid>
+                <Grid item xs={12}>
+                    <NotificationsList onPageChange={this.handleChangePage}
+                                       onFormSubmit={this.handleFormSubmit}
+                                       data={{
+                                           items: items.data,
+                                           page: page,
+                                           count: count,
+                                       }}/>
+                </Grid>
             </Grid>
         );
     }
@@ -85,6 +97,7 @@ function mapStateToProps({academics, user}) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchNotifications: Actions.fetchNotifications,
+        createNotification: Actions.createNotification,
         deleteNotification: Actions.deleteNotification
     }, dispatch);
 }
