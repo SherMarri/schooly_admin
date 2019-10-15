@@ -6,12 +6,13 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
+import * as Actions from '../store/attendance.actions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import Utils from "../../../../core/Utils";
 
 const styles = theme => ({
     dialog_content: {
@@ -23,25 +24,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-class AddNotificationDialog extends React.Component {
+class AddAttendanceDialog extends React.Component {
 
     constructor(props) {
         super(props);
-        const { item } = this.props;
-        let form = {};
-        if (item) {
-            form = {
-                id: item.id,
-                title: item.title,
-                content: item.content,
-            };
-        }
-        else {
-            form = {
-                title: '',
-                content: '',
-            };
-        }
+        const form = {
+            date: new Date(),
+        };
         this.state = { form };
     }
 
@@ -49,16 +38,16 @@ class AddNotificationDialog extends React.Component {
         this.props.onClose();
     }
 
-    handleChange = (event) => {
+    handleDateChange = (field_name, date) => {
         let form = {
             ...this.state.form,
-            [event.target.name]: event.target.value
+            [field_name]: date
         }
         this.setState({
             ...this.state,
             form: form,
         });
-    }
+    };
 
     isFormValid = () => {
         const keys = Object.keys(this.state.form);
@@ -74,13 +63,15 @@ class AddNotificationDialog extends React.Component {
         event.preventDefault();
         if (!this.isFormValid()) return;
         let { form } = this.state;
-        this.props.onSubmit(form);
+        form.date = Utils.formatDate(form.date);
+        form.section_id = this.props.section_id;
+        this.props.createAttendance(form);
         this.handleClose();
     }
 
 
     render() {
-        const { open, classes, item, edit } = this.props;
+        const { open, classes, target_id, target_type, item, edit } = this.props;
         const { form } = this.state;
         return (
             <Dialog
@@ -90,31 +81,29 @@ class AddNotificationDialog extends React.Component {
                 aria-labelledby="form-dialog-title"
             >
                 {!item &&
-                <DialogTitle id="form-dialog-title">Add Notification</DialogTitle>
+                <DialogTitle id="form-dialog-title">Add Attendance</DialogTitle>
                 }
                 {item && !edit &&
-                <DialogTitle id="form-dialog-title">Notification Details</DialogTitle>
+                <DialogTitle id="form-dialog-title">Attendance Details</DialogTitle>
                 }
                 {item && edit &&
-                <DialogTitle id="form-dialog-title">Update Notification</DialogTitle>
+                <DialogTitle id="form-dialog-title">Update Attendance</DialogTitle>
                 }
                 <DialogContent className={classes.dialog_content}>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="name">Title</InputLabel>
-                        <Input id="name" name="title"
-                               onChange={this.handleChange}
-                               value={form.title || ''}
-                               readOnly={item && !edit}
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DatePicker
+                            margin="normal"
+                            label="Date"
+                            fullWidth
+                            required
+                            clearable
+                            disableFuture
+                            value={form.date}
+                            onChange={(date) => this.handleDateChange('date', date)}
+                            format="dd/MM/yyyy"
+                            disabled={item && !edit}
                         />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="content">Content</InputLabel>
-                        <Input id="content" name="content"
-                               onChange={this.handleChange}
-                               value={form.content || ''}
-                               readOnly={item && !edit}
-                        />
-                    </FormControl>
+                    </MuiPickersUtilsProvider>
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -143,7 +132,7 @@ class AddNotificationDialog extends React.Component {
     }
 }
 
-AddNotificationDialog.propTypes = {
+AddAttendanceDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
@@ -153,6 +142,10 @@ function mapStateToProps({ common, academics }) {
 }
 
 function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        createAttendance: Actions.createAttendance,
+        updateAttendance: Actions.updateAttendance,
+    }, dispatch);
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddNotificationDialog));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddAttendanceDialog));

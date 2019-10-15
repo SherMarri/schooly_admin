@@ -5,19 +5,12 @@ import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
 import * as Actions from "../store/sectionNotifications.actions";
-import AddIcon from '@material-ui/icons/Add';
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
-import ListItemText from "@material-ui/core/ListItemText";
-import Fab from "@material-ui/core/Fab";
 import {
     Grid,
-    Card,
-    Typography,
 } from '@material-ui/core';
 import NotificationsList from "../notifications/NotificationsList";
 import {Loading} from "../../../../core/components";
+import SectionNotificationFilter from "../notifications/SectionNotificationFilter";
 
 
 const styles = theme => ({
@@ -35,6 +28,14 @@ const styles = theme => ({
         width: '40px',
         height: '40px',
     },
+    toolbar: {
+        backgroundColor: theme.palette.primary.main,
+        marginTop: theme.spacing(2),
+    },
+    searchBar: {
+        width: '100%',
+    }
+
 });
 
 class NotificationsTab extends React.Component {
@@ -66,21 +67,35 @@ class NotificationsTab extends React.Component {
         this.props.fetchNotifications(this.state.section_id, page + 1);
     }
 
+    handleFormSubmit = (form) => {
+        form.target_id = this.state.grade_id;
+        form.target_type = 3;
+        this.props.createNotification(form);
+    }
+
+
 
     render() {
-        const {items, loading} = this.props;
+        const {items, classes, loading} = this.props;
         if (loading) return <Loading/>;
         if (!items) return null;
         let {page, count} = items;
         page -= 1;
         return (
-            <NotificationsList onPageChange={this.handleChangePage} data={{
-                items: items.data,
-                page: page,
-                count: count,
-                target_id: this.state.section_id,
-                target_type: 3,
-            }}/>
+            <Grid container>
+                <Grid item xs={12} className={classes.toolbar}>
+                    <SectionNotificationFilter section_id={this.state.section_id}></SectionNotificationFilter>
+                </Grid>
+                <Grid item xs={12}>
+                    <NotificationsList onPageChange={this.handleChangePage}
+                                       onFormSubmit={this.handleFormSubmit}
+                                       data={{
+                                           items: items.data,
+                                           page: page,
+                                           count: count,
+                                       }}/>
+                </Grid>
+            </Grid>
         );
     }
 }
@@ -100,6 +115,7 @@ function mapStateToProps({academics, user}) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchNotifications: Actions.fetchNotifications,
+        createNotification: Actions.createNotification,
         deleteNotification: Actions.deleteNotification
     }, dispatch);
 }
