@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import {Typography, Grid, Card} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
+import {Typography, Grid, Card, Tooltip, IconButton} from '@material-ui/core';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Fab from "@material-ui/core/Fab";
@@ -15,6 +15,8 @@ import * as GradeActions from '../store/gradeNotifications.actions';
 import * as SectionActions from '../store/sectionNotifications.actions';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
+import AddEditStudentDialog from "../../students/AddEditStudentDialog";
 
 
 const styles = theme => ({
@@ -39,11 +41,18 @@ const styles = theme => ({
         width: '40px',
         height: '40px',
     },
+    view_button: {
+        padding: theme.spacing(0),
+        marginLeft: theme.spacing(1),
+        float: 'right',
+    },
+    notification: {
+        float: 'left',
+    }
 });
 
 
 class NotificationsList extends React.Component {
-
     state = {
         open_add_notification_dialog: false
     }
@@ -70,8 +79,17 @@ class NotificationsList extends React.Component {
         this.props.onFormSubmit(form);
     }
 
+    handleViewItem = (item) => {
+        this.setState({
+            ...this.state,
+            selected_item: item,
+            open_add_notification_dialog: true
+        });
+    }
+
 
     notificationsList = (items) => {
+        const {classes} = this.props;
         const listItems = items.map((item) => {
             return (
                 <React.Fragment>
@@ -80,22 +98,31 @@ class NotificationsList extends React.Component {
                             primary={item.title}
                             secondary={
                                 <React.Fragment>
-                                    <Typography
-                                        component="span"
-                                        variant="body1"
-                                        color="primary"
-                                    >
-                                        {item.creator !== null ? item.creator.fullname : 'Unknown'} -
-                                    </Typography>
-                                    {" " + (item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content)}
-                                    <br/>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        color="secondary"
-                                    >
-                                        {Utils.formatDateLocal(item.created_at)}
-                                    </Typography>
+                                    <div className={classes.notification}>
+                                        <Typography
+                                            component="span"
+                                            variant="body1"
+                                            color="primary"
+                                        >
+                                            {item.creator !== null ? item.creator.fullname : 'Unknown'} -
+                                        </Typography>
+                                        {" " + (item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content)}
+                                        <br/>
+                                        <Typography
+                                            component="span"
+                                            variant="body2"
+                                            color="secondary"
+                                        >
+                                            {Utils.formatDateLocal(item.created_at)}
+                                        </Typography>
+                                    </div>
+                                    <Tooltip title="View">
+                                        <IconButton aria-label="View" className={classes.view_button}
+                                                    onClick={() => this.handleViewItem(item)}>
+                                            <RemoveRedEye/>
+                                        </IconButton>
+                                    </Tooltip>
+
                                 </React.Fragment>
                             }
                         />
@@ -109,8 +136,8 @@ class NotificationsList extends React.Component {
 
 
     render() {
-        const { classes } = this.props;
-        const { items, page, count, target_id, target_type } = this.props.data;
+        const {classes} = this.props;
+        const {items, page, count, target_id, target_type} = this.props.data;
         return (
             <Grid container className={classes.table_div}>
                 <Grid item xs={12} md={12}>
@@ -119,7 +146,8 @@ class NotificationsList extends React.Component {
                             <ListItem alignItems="flex-start">
                                 <div className={classes.titleDiv}>
                                     <Typography variant="h5" className={classes.title}>All Notifications</Typography>
-                                    <Fab color="primary" aria-label="add" className={classes.fab} onClick={this.handleNotificationDialogOpen}>
+                                    <Fab color="primary" aria-label="add" className={classes.fab}
+                                         onClick={this.handleNotificationDialogOpen}>
                                         <AddIcon/>
                                     </Fab>
                                 </div>
@@ -143,7 +171,12 @@ class NotificationsList extends React.Component {
                         />
                     </Card>
                 </Grid>
-                <AddNotificationDialog open={this.state.open_add_notification_dialog} onClose={this.handleCloseDialog} onSubmit={this.handleSubmitDialog}/>
+                {this.state.open_add_notification_dialog &&
+                <AddNotificationDialog open={this.state.open_add_notification_dialog}
+                                       item={this.state.selected_item}
+                                       onClose={this.handleCloseDialog}
+                                       onSubmit={this.handleSubmitDialog}/>
+                }
             </Grid>
         )
     }
