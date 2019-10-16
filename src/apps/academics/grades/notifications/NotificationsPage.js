@@ -9,6 +9,7 @@ import {withRouter} from "react-router-dom";
 import {Loading} from "../../../../core/components";
 import NotificationsList from "./NotificationsList";
 import GradeNotificationFilter from "./GradeNotificationFilter";
+import { NOTIFICATION_TYPES } from '../../../../core/constants/Notifications';
 
 
 const styles = theme => ({
@@ -46,13 +47,15 @@ class NotificationsPage extends React.Component {
     }
 
     handleChangePage = (page) => {
-        this.props.fetchNotifications({target_type: 2, target_id: this.state.grade_id, page: page + 1});
+        this.props.fetchNotifications({
+            ...this.props.filter_form, page: page + 1
+        });
     }
 
     handleFormSubmit = (form) => {
         form.target_id = this.state.grade_id;
-        form.target_type = 2;
-        this.props.createNotification(form);
+        form.target_type = NOTIFICATION_TYPES.CLASS;
+        this.props.createNotification(form, this.props.filter_form);
     }
 
     renderNotificationsList = () => {
@@ -102,6 +105,7 @@ NotificationsPage.propTypes = {
 function mapStateToProps({academics, user}) {
     return {
         items: academics.gradeNotifications.items,
+        filter_form: academics.gradeNotifications.filter_form,
         loading: academics.gradeNotifications.loading,
         user: user
     };

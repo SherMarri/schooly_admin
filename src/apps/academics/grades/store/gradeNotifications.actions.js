@@ -12,11 +12,11 @@ export const SET_FILTERS = '[ACADEMICS] SET GRADE NOTIFICATIONS FILTERS';
 // export const CLEAR_TABLE_DATA = '[ACADEMICS] GRADE NOTIFICATIONS CLEAR TABLE DATA';
 
 
-export function createNotification(data) {
+export function createNotification(data, filter_form) {
     return (dispatch) => {
         UrlService.post(`notifications`, data)
             .then(response => {
-                dispatch(fetchNotifications());
+                dispatch(fetchNotifications(filter_form));
                 dispatch(toggleSnackbar({
                     message: `Notification created successfully.`,
                     variant: SNACKBAR_SUCCESS

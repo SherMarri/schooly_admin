@@ -16,6 +16,7 @@ import { Input } from '@material-ui/core';
 import Utils from "../../../../core/Utils";
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { NOTIFICATION_TYPES } from '../../../../core/constants/Notifications';
 
 
 const styles = theme => ({
@@ -52,7 +53,7 @@ class SectionNotificationFilter extends Component {
         const form = {
             ...this.state.form,
             target_id: this.props.section_id,
-            target_type: 3,
+            target_type: NOTIFICATION_TYPES.SECTION,
         };
         this.props.updateFilters(form);
     }

@@ -71,6 +71,7 @@ class NotificationsList extends React.Component {
     handleCloseDialog = () => {
         this.setState({
             ...this.state,
+            selected_item: null,
             open_add_notification_dialog: false,
         });
     }

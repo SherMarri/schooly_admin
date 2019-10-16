@@ -11,6 +11,7 @@ import {
 import NotificationsList from "../notifications/NotificationsList";
 import {Loading} from "../../../../core/components";
 import SectionNotificationFilter from "../notifications/SectionNotificationFilter";
+import { NOTIFICATION_TYPES } from '../../../../core/constants/Notifications';
 
 
 const styles = theme => ({
@@ -64,13 +65,16 @@ class NotificationsTab extends React.Component {
     };
 
     handleChangePage = (page) => {
-        this.props.fetchNotifications({target_type: 3, target_id: this.state.section_id, page: page + 1});
+        this.props.fetchNotifications({
+            ...this.props.filter_form,
+            page: page + 1
+        });
     };
 
     handleFormSubmit = (form) => {
-        form.target_id = this.state.grade_id;
-        form.target_type = 3;
-        this.props.createNotification(form);
+        form.target_id = this.state.section_id;
+        form.target_type = NOTIFICATION_TYPES.SECTION;
+        this.props.createNotification(form, this.props.filter_form);
     };
 
     renderNotificationsList = () => {
@@ -119,6 +123,7 @@ NotificationsTab.propTypes = {
 function mapStateToProps({academics, user}) {
     return {
         items: academics.sectionNotifications.items,
+        filter_form: academics.sectionNotifications.filter_form,
         loading: academics.sectionNotifications.loading,
         user: user
     };

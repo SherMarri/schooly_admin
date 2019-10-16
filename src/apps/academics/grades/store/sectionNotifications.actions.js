@@ -12,12 +12,11 @@ export const SET_FILTERS = '[ACADEMICS] SET SECTION NOTIFICATIONS FILTERS';
 export const CLEAR_TABLE_DATA = '[ACADEMICS] SECTIONS NOTIFICATIONS CLEAR TABLE DATA';
 
 
-export function createNotification(data) {
-    debugger;
+export function createNotification(data, filter_form) {
     return (dispatch) => {
         UrlService.post(`notifications`, data)
             .then(response => {
-                dispatch(fetchNotifications());
+                dispatch(fetchNotifications(filter_form));
                 dispatch(toggleSnackbar({
                     message: `Notification created successfully.`,
                     variant: SNACKBAR_SUCCESS
