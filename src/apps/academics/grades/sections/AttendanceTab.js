@@ -13,12 +13,14 @@ import MUIDataTable from "mui-datatables";
 import {
     Typography,
     Tooltip,
-    IconButton,
+    IconButton, Grid,
 } from '@material-ui/core';
 import * as Actions from "../store/attendance.actions";
 import {Loading} from "../../../../core/components";
 import AddAttendanceDialog from "../attendance/AddAttendanceDialog";
 import ViewEditAttendanceDialog from "../attendance/ViewEditAttendanceDialog";
+import AttendanceFilter from "../attendance/AttendanceFilter";
+import Utils from "../../../../core/Utils";
 
 const getMuiTheme = () => (
     createMuiTheme({
@@ -73,6 +75,9 @@ const styles = theme => ({
         marginTop: '10px',
         marginBottom: '10px',
         marginLeft: '10px',
+    },
+    grid: {
+        marginTop: '10px',
     },
     gridLeft: {
         marginTop: '10px',
@@ -185,7 +190,7 @@ class AttendanceTab extends React.Component {
     getMappedData = () => {
         const items = this.props.section_attendance.data.map(item => {
             return {
-                date: item.date,
+                date: Utils.formatDateLocal(item.date),
                 average: item.average_attendance !== null ? item.average_attendance.toFixed(2) : '',
                 id: item,
             };
@@ -266,27 +271,39 @@ class AttendanceTab extends React.Component {
 
 
         return (
-            <div className={classes.table_div}>
-                <MuiThemeProvider theme={getMuiTheme()}>
-                    <MUIDataTable
-                        title={
-                            <Typography variant="h5">
-                                Attendance
-                            </Typography>
-                        }
-                        data={items}
-                        columns={columns}
-                        options={options}
-                    />
-                </MuiThemeProvider>
-                <AddAttendanceDialog open={this.state.add_attendance_dialog} onClose={this.handleAddAttendanceCloseDialog} section_id={this.state.section_id}/>
-                <ViewEditAttendanceDialog
-                    open={this.state.view_edit_attendance_dialog}
-                    onClose={this.handleViewEditAttendanceCloseDialog}
-                    attendance={this.state.selected_attendance}
-                    read_only={this.state.attendance_dialog_read_only}
-                />
-            </div>
+            <React.Fragment>
+                <Grid container  className={classes.grid}>
+                    <Grid item xs={12} md={12} className={classes.grid_item}>
+                        <AttendanceFilter section_id={this.state.section_id}></AttendanceFilter>
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={12} md={12} className={classes.grid_item}>
+                        <div className={classes.table_div}>
+                            <MuiThemeProvider theme={getMuiTheme()}>
+                                <MUIDataTable
+                                    title={
+                                        <Typography variant="h5">
+                                            Attendance
+                                        </Typography>
+                                    }
+                                    data={items}
+                                    columns={columns}
+                                    options={options}
+                                />
+                            </MuiThemeProvider>
+                            <AddAttendanceDialog open={this.state.add_attendance_dialog} onClose={this.handleAddAttendanceCloseDialog} section_id={this.state.section_id}/>
+                            <ViewEditAttendanceDialog
+                                open={this.state.view_edit_attendance_dialog}
+                                onClose={this.handleViewEditAttendanceCloseDialog}
+                                attendance={this.state.selected_attendance}
+                                read_only={this.state.attendance_dialog_read_only}
+                            />
+                        </div>
+
+                    </Grid>
+                </Grid>
+            </React.Fragment>
         );
     }
 }

@@ -24,6 +24,7 @@ import Button from "@material-ui/core/Button";
 import { Doughnut } from 'react-chartjs-2';
 import Format from 'date-fns/format';
 import { Utils } from '../../../../core';
+import AttendanceFilter from "./AttendanceFilter";
 
 const PRESENT = 1;
 const ABSENT = 2;

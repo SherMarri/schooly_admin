@@ -1,5 +1,6 @@
 import { UrlService } from "../../../../core";
 import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
+import {fetchNotifications} from "./gradeNotifications.actions";
 
 export const ACTION_INIT = '[ACADEMICS] ATTENDANCE ACTION INIT';
 export const ACTION_SUCCESS = '[ACADEMICS] ATTENDANCE ACTION SUCCESS';
@@ -50,12 +51,17 @@ export function updateAttendance(data) {
     };
 }
 
-export function fetchAttendance(section_id, page=1) {
+export function fetchAttendance(section_id, page=1, form) {
     return dispatch => {
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get(`academics/sections/${section_id}/attendance`, {page: page})
+        let params = {}
+        if(form)
+            params = {section_id: section_id, start_date: form.start_date, end_date: form.end_date, page: page};
+        else
+            params = {section_id: section_id, page: page};
+        UrlService.get(`academics/sections/${section_id}/attendance`, params)
             .then(response => {
                 dispatch({
                     type: SET_ATTENDANCE,
@@ -150,5 +156,11 @@ export function deleteAttendance(attendance_id) {
                     variant: SNACKBAR_FAILURE
                 }));
             });
+    }
+}
+
+export function updateFilters(form) {
+    return dispatch => {
+        return dispatch(fetchAttendance(form.section_id, form.page, form));
     }
 }
