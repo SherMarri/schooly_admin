@@ -11,6 +11,7 @@ const common = function (state = initialState, action) {
             return {
                 ...state,
                 loading: true,
+                section_attendance: null,
             };
         }
         case Actions.ACTION_SUCCESS: {
@@ -60,6 +61,12 @@ const common = function (state = initialState, action) {
                 ...state,
                 daily_attendance: null,
                 loading_daily_attendance: null,
+            };
+        }
+        case Actions.SET_FILTERS: {
+            return {
+                ...state,
+                filter_form: action.payload
             };
         }
         default:

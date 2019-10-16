@@ -1,5 +1,6 @@
 import { UrlService } from "../../../../core";
 import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
+import {fetchNotifications} from "./gradeNotifications.actions";
 
 export const ACTION_INIT = '[ACADEMICS] ATTENDANCE ACTION INIT';
 export const ACTION_SUCCESS = '[ACADEMICS] ATTENDANCE ACTION SUCCESS';
@@ -11,6 +12,7 @@ export const ACTION_FETCH_DAILY_ATTENDANCE_FAILURE = '[ACADEMICS] FETCH DAILY AT
 export const RESET_DAILY_ATTENDANCE_DATA = '[ACADEMICS] RESET DAILY ATTENDANCE DATA';
 export const SET_ATTENDANCE = '[ACADEMICS] SET ATTENDANCE';
 export const SET_ATTENDANCE_DETAILS = '[ACADEMICS] SET ATTENDANCE DETAILS';
+export const SET_FILTERS = '[ACADEMICS] SET ATTENDANCE FILTERS';
 
 export function createAttendance(data) {
     return (dispatch) => {
@@ -50,12 +52,22 @@ export function updateAttendance(data) {
     };
 }
 
-export function fetchAttendance(section_id, page=1) {
+export function setFilters(filters) {
     return dispatch => {
+        return dispatch({
+            type: SET_FILTERS,
+            payload: filters,
+        });
+    }
+}
+
+export function fetchAttendance(form) {
+    return dispatch => {
+        dispatch(setFilters(form));
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get(`academics/sections/${section_id}/attendance`, {page: page})
+        UrlService.get(`academics/sections/${form.section_id}/attendance`, form)
             .then(response => {
                 dispatch({
                     type: SET_ATTENDANCE,
@@ -150,5 +162,11 @@ export function deleteAttendance(attendance_id) {
                     variant: SNACKBAR_FAILURE
                 }));
             });
+    }
+}
+
+export function updateFilters(form) {
+    return dispatch => {
+        return dispatch(fetchAttendance(form));
     }
 }
