@@ -129,7 +129,9 @@ class AttendanceTab extends React.Component {
     }
 
     handleRefresh = () => {
-        this.props.fetchAttendance({section_id: this.state.section_id});
+        this.props.fetchAttendance({
+            ...this.props.filter_form,
+        });
     }
 
 
@@ -200,7 +202,10 @@ class AttendanceTab extends React.Component {
     };
 
     handleChangePage = (page) => {
-        this.props.fetchAttendance({section_id: this.state.section_id, page: page + 1});
+        this.props.fetchAttendance({
+            ...this.props.filter_form,
+            page: page + 1,
+        });
     }
 
 
@@ -333,6 +338,7 @@ AttendanceTab.propTypes = {
 function mapStateToProps({academics, user}) {
     return {
         section_attendance: academics.attendance.section_attendance,
+        filter_form: academics.attendance.filter_form,
         loading: academics.attendance.loading,
         user: user
     };
