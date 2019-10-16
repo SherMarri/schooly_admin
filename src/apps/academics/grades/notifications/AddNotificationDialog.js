@@ -101,7 +101,8 @@ class AddNotificationDialog extends React.Component {
                 }
                 {item &&
                 <DialogContent className={classes.dialog_content}>
-                    <Typography variant="body1"><strong>Ahmed Shah, {Utils.formatDateLocal(form.created_at)}</strong> - {form.content}</Typography>
+                    <Typography variant="body1"><strong>Ahmed Shah, {Utils.formatDateLocal(form.created_at)}</strong></Typography>
+                    <Typography variant="body1">{form.content}</Typography>
                 </DialogContent>
                 }
                 {!item &&
