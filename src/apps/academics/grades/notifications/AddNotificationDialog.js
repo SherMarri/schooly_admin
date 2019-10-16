@@ -12,6 +12,8 @@ import FormControl from '@material-ui/core/FormControl';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import {Typography} from "@material-ui/core";
+import Utils from "../../../../core/Utils";
 
 const styles = theme => ({
     dialog_content: {
@@ -34,6 +36,8 @@ class AddNotificationDialog extends React.Component {
                 id: item.id,
                 title: item.title,
                 content: item.content,
+                created_at: item.created_at,
+                created_by: item.created_by,
             };
         }
         else {
@@ -93,11 +97,14 @@ class AddNotificationDialog extends React.Component {
                 <DialogTitle id="form-dialog-title">Add Notification</DialogTitle>
                 }
                 {item && !edit &&
-                <DialogTitle id="form-dialog-title">Notification Details</DialogTitle>
+                <DialogTitle id="form-dialog-title">{form.title}</DialogTitle>
                 }
-                {item && edit &&
-                <DialogTitle id="form-dialog-title">Update Notification</DialogTitle>
+                {item &&
+                <DialogContent className={classes.dialog_content}>
+                    <Typography variant="body1"><strong>Ahmed Shah, {Utils.formatDateLocal(form.created_at)}</strong> - {form.content}</Typography>
+                </DialogContent>
                 }
+                {!item &&
                 <DialogContent className={classes.dialog_content}>
                     <FormControl margin="normal" required fullWidth>
                         <InputLabel htmlFor="name">Title</InputLabel>
@@ -116,6 +123,7 @@ class AddNotificationDialog extends React.Component {
                         />
                     </FormControl>
                 </DialogContent>
+                }
                 <DialogActions>
                     <Button
                         variant="contained"
@@ -123,7 +131,7 @@ class AddNotificationDialog extends React.Component {
                         className={classes.cancelButton}
                         onClick={this.handleClose}
                     >
-                        Cancel
+                        {item ? 'Close' : 'Cancel'}
                     </Button>
                     {((item && edit) || (!item)) &&
                     <Button
