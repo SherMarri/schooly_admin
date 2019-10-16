@@ -33,6 +33,7 @@ class GradeNotificationFilter extends Component {
 
     constructor(props) {
         super(props);
+        const form = props.form;
         this.state = {
             form: {
                 search_term: '',
@@ -40,6 +41,7 @@ class GradeNotificationFilter extends Component {
                 end_date: null,
             }
         };
+        this.handleSubmit(form);
     }
 
     // componentDidMount() {
@@ -49,8 +51,8 @@ class GradeNotificationFilter extends Component {
     handleSubmit = () => {
         const form = {
             ...this.state.form,
-            grade_id: this.props.grade_id,
-            page: 1,
+            target_id: this.props.grade_id,
+            target_type: 2,
         };
         this.props.updateFilters(form);
     }
@@ -142,7 +144,10 @@ GradeNotificationFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ academics, common }) {
+function mapStateToProps({ academics }) {
+    return {
+        form: academics.gradeNotifications.filter_form,
+    };
 }
 
 function mapDispatchToProps(dispatch) {

@@ -37,6 +37,12 @@ const common = function (state = initialState, action) {
                 item: {...action.payload},
             };
         }
+        case Actions.SET_FILTERS: {
+            return {
+                ...state,
+                filter_form: action.payload
+            };
+        }
         default:
         {
             return state;

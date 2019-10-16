@@ -33,6 +33,7 @@ class SectionNotificationFilter extends Component {
 
     constructor(props) {
         super(props);
+        const form = props.form;
         this.state = {
             form: {
                 search_term: '',
@@ -40,6 +41,7 @@ class SectionNotificationFilter extends Component {
                 end_date: null,
             }
         };
+        this.handleSubmit(form);
     }
 
     // componentDidMount() {
@@ -49,8 +51,8 @@ class SectionNotificationFilter extends Component {
     handleSubmit = () => {
         const form = {
             ...this.state.form,
-            section_id: this.props.section_id,
-            page: 1,
+            target_id: this.props.section_id,
+            target_type: 3,
         };
         this.props.updateFilters(form);
     }
@@ -142,10 +144,9 @@ SectionNotificationFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ academics, common }) {
+function mapStateToProps({ academics }) {
     return {
-        // form: hr.staff.filter_form,
-        // loading: hr.staff.loading
+        form: academics.sectionNotifications.filter_form,
     };
 }
 
