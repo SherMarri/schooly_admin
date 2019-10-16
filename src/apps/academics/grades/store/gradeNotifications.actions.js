@@ -7,6 +7,7 @@ export const ACTION_FAILURE = '[ACADEMICS] GRADES NOTIFICATIONS ACTION FAILURE';
 
 export const SET_NOTIFICATIONS = '[ACADEMICS] SET GRADE NOTIFICATIONS';
 export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET GRADE NOTIFICATIONS DETAILS';
+export const SET_FILTERS = '[ACADEMICS] SET GRADE NOTIFICATIONS FILTERS';
 
 // export const CLEAR_TABLE_DATA = '[ACADEMICS] GRADE NOTIFICATIONS CLEAR TABLE DATA';
 
@@ -49,17 +50,22 @@ export function updateNotification(data) {
     };
 }
 
-export function fetchNotifications(grade_id, page=1, form) {
+export function setFilters(filters) {
     return dispatch => {
+        return dispatch({
+            type: SET_FILTERS,
+            payload: filters,
+        });
+    }
+}
+
+export function fetchNotifications(form) {
+    return dispatch => {
+        dispatch(setFilters(form));
         dispatch({
             type: ACTION_INIT
         });
-        let params = {};
-        if(form)
-            params = {page: page, target_type: 2, target_id: grade_id, search_term: form.search_term, start_date: form.start_date, end_date: form.end_date};
-        else
-            params = {page: page, target_type: 2, target_id: grade_id};
-        UrlService.get(`academics/grades/${grade_id}/notifications`, params)
+        UrlService.get(`academics/grades/${form.target_id}/notifications`, form)
             .then(response => {
                 dispatch({
                     type: SET_NOTIFICATIONS,
@@ -129,7 +135,7 @@ export function deleteNotification(notification_id) {
 
 export function updateFilters(form) {
     return dispatch => {
-        return dispatch(fetchNotifications(form.grade_id, form.page, form));
+        return dispatch(fetchNotifications(form));
     }
 }
 

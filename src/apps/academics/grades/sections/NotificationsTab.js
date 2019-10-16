@@ -45,15 +45,15 @@ class NotificationsTab extends React.Component {
             section_id: this.props.match.params.section_id,
             open_add_notification_dialog: false
         };
-        props.fetchNotifications(this.state.section_id);
     }
+
 
     handleNotificationDialogOpen = () => {
         this.setState({
             ...this.state,
             open_add_notification_dialog: true
         });
-    }
+    };
 
 
     handleCloseDialog = () => {
@@ -61,40 +61,52 @@ class NotificationsTab extends React.Component {
             ...this.state,
             open_add_notification_dialog: false,
         });
-    }
+    };
 
     handleChangePage = (page) => {
-        this.props.fetchNotifications(this.state.section_id, page + 1);
-    }
+        this.props.fetchNotifications({target_type: 3, target_id: this.state.section_id, page: page + 1});
+    };
 
     handleFormSubmit = (form) => {
         form.target_id = this.state.grade_id;
         form.target_type = 3;
         this.props.createNotification(form);
-    }
+    };
 
-
+    renderNotificationsList = () => {
+        const {items} = this.props;
+        let {page, count} = items;
+        page -= 1;
+        return (
+            <Grid item xs={12}>
+                <NotificationsList onPageChange={this.handleChangePage}
+                                   onFormSubmit={this.handleFormSubmit}
+                                   data={{
+                                       items: items.data,
+                                       page: page,
+                                       count: count,
+                                   }}/>
+            </Grid>
+        )
+    };
 
     render() {
         const {items, classes, loading} = this.props;
-        if (loading) return <Loading/>;
-        if (!items) return null;
-        let {page, count} = items;
-        page -= 1;
+        // if (loading) return <Loading/>;
+        // if (!items) return null;
+        // let {page, count} = items;
+        // page -= 1;
         return (
             <Grid container>
                 <Grid item xs={12} className={classes.toolbar}>
                     <SectionNotificationFilter section_id={this.state.section_id}></SectionNotificationFilter>
                 </Grid>
-                <Grid item xs={12}>
-                    <NotificationsList onPageChange={this.handleChangePage}
-                                       onFormSubmit={this.handleFormSubmit}
-                                       data={{
-                                           items: items.data,
-                                           page: page,
-                                           count: count,
-                                       }}/>
-                </Grid>
+                {loading &&
+                    <Loading/>
+                }
+                {items &&
+                    this.renderNotificationsList()
+                }
             </Grid>
         );
     }

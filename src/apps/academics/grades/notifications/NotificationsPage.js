@@ -43,11 +43,10 @@ class NotificationsPage extends React.Component {
         this.state = {
             grade_id,
         };
-        props.fetchNotifications(grade_id);
     }
 
     handleChangePage = (page) => {
-        this.props.fetchNotifications(this.state.grade_id, page + 1);
+        this.props.fetchNotifications({target_type: 2, target_id: this.state.grade_id, page: page + 1});
     }
 
     handleFormSubmit = (form) => {
@@ -56,27 +55,41 @@ class NotificationsPage extends React.Component {
         this.props.createNotification(form);
     }
 
+    renderNotificationsList = () => {
+        const {items} = this.props;
+        let {page, count} = items;
+        page -= 1;
+        return (
+            <Grid item xs={12}>
+                <NotificationsList onPageChange={this.handleChangePage}
+                                   onFormSubmit={this.handleFormSubmit}
+                                   data={{
+                                       items: items.data,
+                                       page: page,
+                                       count: count,
+                                   }}/>
+            </Grid>
+        )
+
+    }
+
 
     render() {
         const {items, classes, loading} = this.props;
-        if (loading) return <Loading/>;
-        if (!items) return null;
-        let {page, count} = items;
-        page -= 1;
+        // if (loading) return <Loading/>;
+        // if (!items) return null;
+        // let {page, count} = items;
         return (
             <Grid container>
                 <Grid item xs={12} className={classes.toolbar}>
                     <GradeNotificationFilter grade_id={this.state.grade_id}></GradeNotificationFilter>
                 </Grid>
-                <Grid item xs={12}>
-                    <NotificationsList onPageChange={this.handleChangePage}
-                                       onFormSubmit={this.handleFormSubmit}
-                                       data={{
-                                           items: items.data,
-                                           page: page,
-                                           count: count,
-                                       }}/>
-                </Grid>
+                {loading &&
+                    <Loading/>
+                }
+                {items &&
+                    this.renderNotificationsList()
+                }
             </Grid>
         );
     }
