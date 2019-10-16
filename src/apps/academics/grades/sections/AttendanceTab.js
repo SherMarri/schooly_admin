@@ -242,6 +242,7 @@ class AttendanceTab extends React.Component {
             rowsPerPage: 30,
             rowsPerPageOptions: [30],
             count: count,
+            page: page,
             serverSide: true,
             download: false,
             toolbar: {
