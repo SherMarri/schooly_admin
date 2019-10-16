@@ -35,13 +35,15 @@ class AttendanceFilter extends Component {
 
     constructor(props) {
         super(props);
+        const form = props.form;
         this.state = {
             form: {
                 start_date: null,
                 end_date: null,
+                section_id: props.section_id,
             },
-            section_id: this.props.section_id,
         };
+        this.handleSubmit();
     }
 
     // componentDidMount() {
@@ -51,8 +53,6 @@ class AttendanceFilter extends Component {
     handleSubmit = () => {
         const form = {
             ...this.state.form,
-            section_id: this.state.section_id,
-            page: 1,
         };
         this.props.updateFilters(form);
     }
@@ -61,7 +61,7 @@ class AttendanceFilter extends Component {
         let form = {
             ...this.state.form,
             [field_name]: Utils.formatDate(date)
-        }
+        };
         this.setState({
             ...this.state,
             form: form,
@@ -78,7 +78,7 @@ class AttendanceFilter extends Component {
         this.setState({
             form,
         });
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -133,7 +133,10 @@ AttendanceFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ academics, common }) {
+function mapStateToProps({ academics }) {
+    return {
+        form: academics.attendance.filter_form,
+    };
 }
 
 function mapDispatchToProps(dispatch) {

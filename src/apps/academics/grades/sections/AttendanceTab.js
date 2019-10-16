@@ -21,6 +21,8 @@ import AddAttendanceDialog from "../attendance/AddAttendanceDialog";
 import ViewEditAttendanceDialog from "../attendance/ViewEditAttendanceDialog";
 import AttendanceFilter from "../attendance/AttendanceFilter";
 import Utils from "../../../../core/Utils";
+import TablePagination from "@material-ui/core/TablePagination";
+import Paper from "@material-ui/core/Paper";
 
 const getMuiTheme = () => (
     createMuiTheme({
@@ -117,7 +119,6 @@ class AttendanceTab extends React.Component {
             view_edit_attendance_dialog: false,
             selected_attendance: null,
         };
-        props.fetchAttendance(section_id);
     }
 
     handleNewAttendanceDialogOpen = () => {
@@ -128,7 +129,7 @@ class AttendanceTab extends React.Component {
     }
 
     handleRefresh = () => {
-        this.props.fetchAttendance(this.state.section_id);
+        this.props.fetchAttendance({section_id: this.state.section_id});
     }
 
 
@@ -198,11 +199,13 @@ class AttendanceTab extends React.Component {
         return items;
     };
 
+    handleChangePage = (page) => {
+        this.props.fetchAttendance({section_id: this.state.section_id, page: page + 1});
+    }
 
-    render() {
-        const {classes, section_attendance, loading} = this.props;
-        if (loading) return <Loading/>;
-        if (!section_attendance) return null;
+
+    renderAttendanceTable = () => {
+        const { section_attendance, classes } = this.props;
         let {page, count} = section_attendance;
         const items = this.getMappedData();
         page -= 1;
@@ -238,12 +241,14 @@ class AttendanceTab extends React.Component {
             selectableRows: 'none',
             rowsPerPage: 30,
             rowsPerPageOptions: [30],
+            count: count,
             serverSide: true,
             download: false,
             toolbar: {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
             },
+            onChangePage: (page) => {this.handleChangePage(page)},
             customToolbar: () => {
                 return (
                     <>
@@ -268,8 +273,39 @@ class AttendanceTab extends React.Component {
                 )
             }
         };
+        return (
+            <Grid container>
+                <Grid item xs={12} md={12} className={classes.grid_item}>
+                    <div className={classes.table_div}>
+                        <MuiThemeProvider theme={getMuiTheme()}>
+                            <MUIDataTable
+                                title={
+                                    <Typography variant="h5">
+                                        Attendance
+                                    </Typography>
+                                }
+                                data={items}
+                                columns={columns}
+                                options={options}
+                            />
+                        </MuiThemeProvider>
+                        <AddAttendanceDialog open={this.state.add_attendance_dialog} onClose={this.handleAddAttendanceCloseDialog} section_id={this.state.section_id}/>
+                        <ViewEditAttendanceDialog
+                            open={this.state.view_edit_attendance_dialog}
+                            onClose={this.handleViewEditAttendanceCloseDialog}
+                            attendance={this.state.selected_attendance}
+                            read_only={this.state.attendance_dialog_read_only}
+                        />
 
+                    </div>
 
+                </Grid>
+            </Grid>
+        );
+    };
+
+    render() {
+        const {classes, section_attendance, loading} = this.props;
         return (
             <React.Fragment>
                 <Grid container  className={classes.grid}>
@@ -277,32 +313,13 @@ class AttendanceTab extends React.Component {
                         <AttendanceFilter section_id={this.state.section_id}></AttendanceFilter>
                     </Grid>
                 </Grid>
-                <Grid container>
-                    <Grid item xs={12} md={12} className={classes.grid_item}>
-                        <div className={classes.table_div}>
-                            <MuiThemeProvider theme={getMuiTheme()}>
-                                <MUIDataTable
-                                    title={
-                                        <Typography variant="h5">
-                                            Attendance
-                                        </Typography>
-                                    }
-                                    data={items}
-                                    columns={columns}
-                                    options={options}
-                                />
-                            </MuiThemeProvider>
-                            <AddAttendanceDialog open={this.state.add_attendance_dialog} onClose={this.handleAddAttendanceCloseDialog} section_id={this.state.section_id}/>
-                            <ViewEditAttendanceDialog
-                                open={this.state.view_edit_attendance_dialog}
-                                onClose={this.handleViewEditAttendanceCloseDialog}
-                                attendance={this.state.selected_attendance}
-                                read_only={this.state.attendance_dialog_read_only}
-                            />
-                        </div>
+                {loading &&
+                    <Loading/>
+                }
+                {section_attendance &&
+                    this.renderAttendanceTable()
+                }
 
-                    </Grid>
-                </Grid>
             </React.Fragment>
         );
     }

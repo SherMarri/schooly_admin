@@ -12,6 +12,7 @@ export const ACTION_FETCH_DAILY_ATTENDANCE_FAILURE = '[ACADEMICS] FETCH DAILY AT
 export const RESET_DAILY_ATTENDANCE_DATA = '[ACADEMICS] RESET DAILY ATTENDANCE DATA';
 export const SET_ATTENDANCE = '[ACADEMICS] SET ATTENDANCE';
 export const SET_ATTENDANCE_DETAILS = '[ACADEMICS] SET ATTENDANCE DETAILS';
+export const SET_FILTERS = '[ACADEMICS] SET ATTENDANCE FILTERS';
 
 export function createAttendance(data) {
     return (dispatch) => {
@@ -51,17 +52,22 @@ export function updateAttendance(data) {
     };
 }
 
-export function fetchAttendance(section_id, page=1, form) {
+export function setFilters(filters) {
     return dispatch => {
+        return dispatch({
+            type: SET_FILTERS,
+            payload: filters,
+        });
+    }
+}
+
+export function fetchAttendance(form) {
+    return dispatch => {
+        dispatch(setFilters(form));
         dispatch({
             type: ACTION_INIT
         });
-        let params = {}
-        if(form)
-            params = {section_id: section_id, start_date: form.start_date, end_date: form.end_date, page: page};
-        else
-            params = {section_id: section_id, page: page};
-        UrlService.get(`academics/sections/${section_id}/attendance`, params)
+        UrlService.get(`academics/sections/${form.section_id}/attendance`, form)
             .then(response => {
                 dispatch({
                     type: SET_ATTENDANCE,
@@ -161,6 +167,6 @@ export function deleteAttendance(attendance_id) {
 
 export function updateFilters(form) {
     return dispatch => {
-        return dispatch(fetchAttendance(form.section_id, form.page, form));
+        return dispatch(fetchAttendance(form));
     }
 }
