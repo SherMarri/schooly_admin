@@ -21,8 +21,6 @@ import AddAttendanceDialog from "../attendance/AddAttendanceDialog";
 import ViewEditAttendanceDialog from "../attendance/ViewEditAttendanceDialog";
 import AttendanceFilter from "../attendance/AttendanceFilter";
 import Utils from "../../../../core/Utils";
-import TablePagination from "@material-ui/core/TablePagination";
-import Paper from "@material-ui/core/Paper";
 
 const getMuiTheme = () => (
     createMuiTheme({

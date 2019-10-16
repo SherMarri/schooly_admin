@@ -14,11 +14,11 @@ export const SET_ATTENDANCE = '[ACADEMICS] SET ATTENDANCE';
 export const SET_ATTENDANCE_DETAILS = '[ACADEMICS] SET ATTENDANCE DETAILS';
 export const SET_FILTERS = '[ACADEMICS] SET ATTENDANCE FILTERS';
 
-export function createAttendance(data) {
+export function createAttendance(data, filter_form) {
     return (dispatch) => {
         UrlService.post(`attendance/students/daily`, data)
             .then(response => {
-                dispatch(fetchAttendance(data.section_id));
+                dispatch(fetchAttendance(filter_form));
                 return dispatch(toggleSnackbar({
                     message: `Attendance created successfully.`,
                     variant: SNACKBAR_SUCCESS
