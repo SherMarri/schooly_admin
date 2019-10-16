@@ -100,7 +100,7 @@ export function resetDailyAttendanceData() {
 /**
  * Updates daily attendance items
  */
-export function updateAttendanceDetails({ attendance_id, items, section_id }) {
+export function updateAttendanceDetails({ attendance_id, items, section_id }, filter_form) {
     return dispatch => {
         UrlService.put(`attendance/students/daily/${attendance_id}`, { items })
             .then(response => {
@@ -108,7 +108,7 @@ export function updateAttendanceDetails({ attendance_id, items, section_id }) {
                     message: 'Attendance updated successfully.',
                     variant: SNACKBAR_SUCCESS
                 }));
-                dispatch(fetchAttendance(section_id));
+                dispatch(fetchAttendance(filter_form));
             })
             .catch(error => {
                 dispatch(toggleSnackbar({
