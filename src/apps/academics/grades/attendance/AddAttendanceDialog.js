@@ -65,7 +65,7 @@ class AddAttendanceDialog extends React.Component {
         let { form } = this.state;
         form.date = Utils.formatDate(form.date);
         form.section_id = this.props.section_id;
-        this.props.createAttendance(form);
+        this.props.createAttendance(form, this.props.filter_form);
         this.handleClose();
     }
 
@@ -136,8 +136,9 @@ AddAttendanceDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ common, academics }) {
+function mapStateToProps({ academics }) {
     return {
+        filter_form: academics.attendance.filter_form,
     }
 }
 

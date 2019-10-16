@@ -19,7 +19,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {Chip, Grid, Divider} from "@material-ui/core";
+import {Chip, Grid, Divider, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Doughnut } from 'react-chartjs-2';
 import Format from 'date-fns/format';
@@ -111,6 +111,11 @@ const styles = theme => ({
         marginTop: '2px',
         marginLeft: '8px',
     },
+    commentsField: {
+      marginTop: '0px',
+      marginBottom: '0px',
+      width: '100%',
+    },
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -167,6 +172,20 @@ class ViewEditAttendanceDialog extends React.Component {
         });
     };
 
+    handleCommentsChange = (id, comment) => {
+        const { items } = this.state;
+        const updated_items = items.map((item) => {
+            if (item.id !== id) return {...item};
+            else return {
+                ...item,
+                comments: comment,
+            };
+        });
+        this.setState({
+            items: updated_items,
+        });
+    };
+
     renderStatusChips = (row) => {
         const { classes, read_only } = this.props;
         const chips_config = [
@@ -205,6 +224,7 @@ class ViewEditAttendanceDialog extends React.Component {
     }
 
     getMappedData = () => {
+        const { read_only, classes } = this.props;
         const studentAttendance =
             this.state.items.map(row => (
                 <TableRow key={row.id}>
@@ -215,7 +235,18 @@ class ViewEditAttendanceDialog extends React.Component {
                     <TableCell>
                         {this.renderStatusChips(row)}
                     </TableCell>
-                    <TableCell>{row.comments}</TableCell>
+                    {read_only &&
+                        <TableCell>{row.comments}</TableCell>
+                    }
+                    {!read_only &&
+                        <TableCell>
+                            <TextField
+                                className={classes.commentsField}
+                                defaultValue={row.comments || ''}
+                                onChange={(event) => this.handleCommentsChange(row.id, event.target.value) }
+                            />
+                        </TableCell>
+                    }
                 </TableRow>
             ))
         return studentAttendance;
@@ -230,7 +261,7 @@ class ViewEditAttendanceDialog extends React.Component {
             section_id: daily_attendance.section.id,
         }
         this.handleClose();
-        this.props.updateAttendanceDetails(data);
+        this.props.updateAttendanceDetails(data, this.props.filter_form);
     }
 
     getDoughnutData = () => {
@@ -371,6 +402,7 @@ function mapStateToProps({user, academics}) {
     return {
         daily_attendance: academics.attendance.daily_attendance,
         loading: academics.attendance.loading_daily_attendance,
+        filter_form: academics.attendance.filter_form,
         user: user
     }
 }
