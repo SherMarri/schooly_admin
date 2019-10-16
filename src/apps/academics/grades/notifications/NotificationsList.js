@@ -99,14 +99,16 @@ class NotificationsList extends React.Component {
                             secondary={
                                 <React.Fragment>
                                     <div className={classes.notification}>
-                                        <Typography
-                                            component="span"
-                                            variant="body1"
-                                            color="primary"
-                                        >
-                                            {item.creator !== null ? item.creator.fullname : 'Unknown'} -
-                                        </Typography>
-                                        {" " + (item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content)}
+                                        {item.creator &&
+                                            <Typography
+                                                component="span"
+                                                variant="body1"
+                                                color="primary"
+                                            >
+                                                {`${item.creator.fullname} - `}
+                                            </Typography>
+                                        }
+                                        {item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content}
                                         <br/>
                                         <Typography
                                             component="span"

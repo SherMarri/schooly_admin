@@ -37,7 +37,7 @@ class AddNotificationDialog extends React.Component {
                 title: item.title,
                 content: item.content,
                 created_at: item.created_at,
-                created_by: item.created_by,
+                creator: item.creator,
             };
         }
         else {
@@ -101,7 +101,7 @@ class AddNotificationDialog extends React.Component {
                 }
                 {item &&
                 <DialogContent className={classes.dialog_content}>
-                    <Typography variant="body1"><strong>Ahmed Shah, {Utils.formatDateLocal(form.created_at)}</strong></Typography>
+                    <Typography variant="body1"><strong>{form.creator && `${form.creator.fullname}, `}{Utils.formatDateLocal(form.created_at)}</strong></Typography>
                     <Typography variant="body1">{form.content}</Typography>
                 </DialogContent>
                 }
