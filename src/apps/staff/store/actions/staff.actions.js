@@ -94,6 +94,34 @@ export function fetchDetails(params) {
     }
 }
 
+export function fetchTeachers() {
+    return dispatch => {
+        dispatch({
+            type: ACTION_INIT
+        });
+        let filters = {dropdown: true, profile_type: '3'};
+        UrlService.get('users/staff', filters)
+        .then(response => {
+            dispatch({
+                type: SET_DETAILS,
+                payload: response.data
+            });
+            dispatch({
+                type: ACTION_SUCCESS
+            });
+        })
+        .catch(error => {
+            dispatch({
+                type: ACTION_FAILURE
+            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
+        });
+    }
+}
+
 export function clearDownloadLink() {
     return dispatch => {
         return dispatch({

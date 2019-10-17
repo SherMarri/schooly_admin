@@ -5,24 +5,16 @@ import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import People from '@material-ui/icons/People';
-import Library from '@material-ui/icons/LocalLibrary';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import PortraitIcon from '@material-ui/icons/Portrait';
-import {Chart, ConfirmDialog, DownloadDialog} from "../../../../core/components";
-import Format from "date-fns/format";
+import EditIcon from '@material-ui/icons/Edit';
 
 import {
-    Grid,
-    Card,
-    CardContent,
-    Paper,
     Typography,
-    Button, Tooltip, IconButton,
+    Tooltip, IconButton,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
-import CloudDownloadIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import AddEditStudentDialog from "../../students/AddEditStudentDialog";
+import AddEditSectionSubjectDialog from "../sectionsubjects/AddEditSectionDialog";
+import * as Actions from "../store/sectionSubjects.actions";
+import {Loading} from "../../../../core/components";
 
 
 const styles = theme => ({
@@ -95,14 +87,26 @@ const styles = theme => ({
 });
 
 class SubjectsTab extends React.Component {
-    state = {
-        open_add_grade_dialog: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            open_add_edit_section_subject_dialog: false
+        };
+        this.props.fetchSectionSubjects(this.props.match.params.section_id);
     }
 
-    handleGradeDialogOpen = () => {
+    handleAddSectionSubjectDialogOpen = () => {
         this.setState({
             ...this.state,
-            open_add_grade_dialog: true
+            open_add_edit_section_subject_dialog: true
+        });
+    };
+
+    handleEditItem = (item) => {
+        this.setState({
+            open_add_edit_section_subject_dialog: true,
+            selected_item: item,
+            edit: true
         });
     }
 
@@ -110,64 +114,106 @@ class SubjectsTab extends React.Component {
     handleCloseDialog = () => {
         this.setState({
             ...this.state,
-            open_add_grade_dialog: false,
+            open_add_edit_section_subject_dialog: false,
         });
-    }
+    };
 
     getMappedData = () => {
-        return [{
-            gr_number: Math.floor(Math.random() * (1000 - 0)) + 0,
-            fullname: 'Test',
-            guardian_name: 'Test',
-            section: 'A',
-            percentage: Math.floor(Math.random() * (100 - 60)) + 60,
-        }];
+        const {items} = this.props;
+        return items.map(d => {
+            return {
+                subject: d.subject.name,
+                teacher: d.teacher.fullname,
+                id: d,
+            };
+        });
+
     };
+
+    renderActionColumn = (value, table_meta, update_value) => {
+        const {classes} = this.props;
+        return (
+            <>
+                <Tooltip title="Edit">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleEditItem(value)}
+                                aria-label="Edit">
+                        <EditIcon/>
+                    </IconButton>
+                </Tooltip>
+            </>
+        );
+    }
 
 
 
     render() {
-        const {classes} = this.props;
+        const {classes, loading, items} = this.props;
+        if (loading) return <Loading/>;
+        if (!items) return null;
         const columns = [{
-            name: 'gr_number',
-            label: "GR #",
+            name: 'subject',
+            label: "Subject",
             options: {
                 filter: false,
             }
-        }, {
-            name: 'fullname',
-            label: "Name",
-            options: {
-                filter: false,
+        },
+            {
+                name: 'teacher',
+                label: "Teacher",
+                options: {
+                    filter: false,
+                }
+            },
+            {
+                name: 'id',
+                label: 'Action',
+                options: {
+                    customBodyRender: (value, table_data, update_value) =>
+                        this.renderActionColumn(value, table_data, update_value)
+                }
             }
-        }, {
-            name: 'section',
-            label: "Class",
-        }, {
-            name: 'guardian_name',
-            label: "Guardian",
-            options: {
-                filter: false,
-            }
-        }
         ];
-        // let {page, count} = details;
-        // page -= 1;
         const options = {
             sort: false,
             print: false,
             search: false,
             selectableRows: 'none',
-            rowsPerPage: 20,
-            rowsPerPageOptions: [20],
             serverSide: true,
             download: false,
+            pagination: false,
             toolbar: {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
             },
-        };
+            customToolbar: () => {
+                return (
+                    <>
+                        <Tooltip title="Add">
+                            <IconButton aria-label="add" onClick={this.handleAddSectionSubjectDialogOpen}>
+                                <AddIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        {/*
+                        {section_attendance.count > 0 &&
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download">
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        }
+*/}
+                        {/*
+                        <Tooltip title="Refresh">
+                            <IconButton aria-label="refresh" onClick={this.handleRefresh}>
+                                <RefreshIcon/>
+                            </IconButton>
+                        </Tooltip>
+*/}
+                    </>
+                )
+            }
 
+        };
 
 
         return (
@@ -180,6 +226,14 @@ class SubjectsTab extends React.Component {
                     data={this.getMappedData()}
                     columns={columns}
                     options={options}/>
+                {this.state.open_add_edit_section_subject_dialog &&
+                <AddEditSectionSubjectDialog open={this.state.open_add_edit_section_subject_dialog}
+                                             edit={this.state.edit}
+                                             item={this.state.selected_item}
+                                             onClose={this.handleCloseDialog}
+                                             onSubmit={this.handleSubmitDialog}/>
+                }
+
             </div>
         );
     }
@@ -190,11 +244,15 @@ SubjectsTab.propTypes = {
 };
 
 function mapStateToProps({academics}) {
-    return {}
+    return {
+        items: academics.sectionSubjects.items
+    }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({
+        fetchSectionSubjects: Actions.fetchSectionSubjects,
+    }, dispatch);
 }
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SubjectsTab)));

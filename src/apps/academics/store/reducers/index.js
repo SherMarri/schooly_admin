@@ -5,6 +5,7 @@ import grades from '../../grades/store/grades.reducer';
 import attendance from '../../grades/store/attendance.reducer';
 import gradeNotifications from '../../grades/store/gradeNotifications.reducer';
 import sectionNotifications from '../../grades/store/sectionNotifications.reducer';
+import sectionSubjects from '../../grades/store/sectionSubjects.reducer';
 
 const academics = combineReducers({
     students,
@@ -12,6 +13,7 @@ const academics = combineReducers({
     grades,
     gradeNotifications,
     sectionNotifications,
+    sectionSubjects,
     attendance,
 });
 
