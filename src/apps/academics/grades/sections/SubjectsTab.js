@@ -12,7 +12,7 @@ import {
     Tooltip, IconButton,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
-import AddEditSectionSubjectDialog from "../sectionsubjects/AddEditSectionDialog";
+import AddEditSubjectDialog from "./AddEditSubjectDialog";
 import * as Actions from "../store/sectionSubjects.actions";
 import {Loading} from "../../../../core/components";
 
@@ -123,7 +123,7 @@ class SubjectsTab extends React.Component {
         return items.map(d => {
             return {
                 subject: d.subject.name,
-                teacher: d.teacher.fullname,
+                teacher: d.teacher ? d.teacher.fullname: '',
                 id: d,
             };
         });
@@ -227,7 +227,7 @@ class SubjectsTab extends React.Component {
                     columns={columns}
                     options={options}/>
                 {this.state.open_add_edit_section_subject_dialog &&
-                <AddEditSectionSubjectDialog open={this.state.open_add_edit_section_subject_dialog}
+                <AddEditSubjectDialog open={this.state.open_add_edit_section_subject_dialog}
                                              edit={this.state.edit}
                                              item={this.state.selected_item}
                                              onClose={this.handleCloseDialog}

@@ -28,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-class AddEditSectionDialog extends React.Component {
+class AddEditSubjectDialog extends React.Component {
 
     constructor(props) {
         super(props);
@@ -38,7 +38,7 @@ class AddEditSectionDialog extends React.Component {
             form = {
                 id: item.id,
                 subject_id: item.subject.id,
-                teacher_id: item.teacher.id,
+                teacher_id: item.teacher? item.teacher.id : null,
             };
         }
         else {
@@ -199,14 +199,14 @@ class AddEditSectionDialog extends React.Component {
     }
 }
 
-AddEditSectionDialog.propTypes = {
+AddEditSubjectDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 function mapStateToProps({ academics, hr }) {
     return {
         subjects: academics.subjects.items,
-        teachers: hr.staff.details,
+        teachers: hr.staff.teachers,
     }
 }
 
@@ -219,4 +219,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddEditSectionDialog)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddEditSubjectDialog)));

@@ -9,7 +9,7 @@ import {withRouter} from "react-router-dom";
 import {Loading} from "../../../../core/components";
 import NotificationsList from "./NotificationsList";
 import GradeNotificationFilter from "./GradeNotificationFilter";
-import { NOTIFICATION_TYPES } from '../../../../core/constants/Notifications';
+import { NOTIFICATION_TYPES } from '../../../../core/constants';
 
 
 const styles = theme => ({

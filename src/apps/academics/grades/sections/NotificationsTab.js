@@ -11,7 +11,7 @@ import {
 import NotificationsList from "../notifications/NotificationsList";
 import {Loading} from "../../../../core/components";
 import SectionNotificationFilter from "../notifications/SectionNotificationFilter";
-import { NOTIFICATION_TYPES } from '../../../../core/constants/Notifications';
+import { NOTIFICATION_TYPES } from '../../../../core/constants';
 
 
 const styles = theme => ({

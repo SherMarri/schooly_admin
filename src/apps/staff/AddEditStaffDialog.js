@@ -21,6 +21,7 @@ import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { Grid, Select, MenuItem } from '@material-ui/core';
 import * as Actions from './store/actions/staff.actions';
 import { Utils } from '../../core';
+import { PROFILE_TYPES } from '../../core/constants';
 
 const styles = theme => ({
     appBar: {
@@ -89,6 +90,7 @@ class AddEditStaffDialog extends React.Component {
                 address: item.staff_info.address || '',
                 gender: item.staff_info.gender  || '',
                 contact: item.contact  || '',
+                profile_type: item.profile_type || null,
             };
         }
         else {
@@ -98,12 +100,10 @@ class AddEditStaffDialog extends React.Component {
                 address: '',
                 contact: '',
                 gender: null,
+                profile_type: null,
             };
         }
         this.state = { form, sections };
-        // if (!props.grades) {
-        //     this.props.fetchGrades();
-        // }
     }
 
     handleClose = () => {
@@ -154,20 +154,6 @@ class AddEditStaffDialog extends React.Component {
         this.props.addUpdateStaff(form, this.props.filter_form, form.update);
         this.handleClose();
     }
-
-    // handleGradeChange = (event) => {
-    //     const sections = this.props.grades.find(g=>g.id===event.target.value).sections;
-    //     let form = {
-    //         ...this.state.form,
-    //         grade_id: event.target.value,
-    //         section_id: null,
-    //     };
-    //     this.setState({
-    //         ...this.state,
-    //         form: form,
-    //         sections: sections,
-    //     });
-    // }
 
     handleSectionChange = (event) => {
         let form = {
@@ -257,26 +243,6 @@ class AddEditStaffDialog extends React.Component {
                                         />
                                     </FormControl>
                                 </Grid>
-                                {/*<Grid item xs={12} md={6} className={classes.gridItem}>*/}
-                                {/*    <FormControl required fullWidth margin="normal">*/}
-                                {/*        <InputLabel htmlFor="grade_id">Grade</InputLabel>*/}
-                                {/*        <Select*/}
-                                {/*            value={form.grade_id}*/}
-                                {/*            onChange={this.handleGradeChange}*/}
-                                {/*            inputProps={{*/}
-                                {/*                name: 'grade_id',*/}
-                                {/*                id: 'grade_id',*/}
-                                {/*            }}*/}
-                                {/*            readOnly={item && !edit}*/}
-                                {/*        >*/}
-                                {/*            {grades &&*/}
-                                {/*                grades.map(c =>*/}
-                                {/*                    <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>*/}
-                                {/*                )*/}
-                                {/*            }*/}
-                                {/*        </Select>*/}
-                                {/*    </FormControl>*/}
-                                {/*</Grid>*/}
                                 <Grid item xs={12} md={6} className={classes.gridItem}>
                                     <FormControl required fullWidth margin="normal">
                                         <InputLabel htmlFor="gender">Gender</InputLabel>
@@ -291,6 +257,23 @@ class AddEditStaffDialog extends React.Component {
                                         >
                                             <MenuItem key={GENDER_TYPES.MALE} value={GENDER_TYPES.MALE}>Male</MenuItem>
                                             <MenuItem key={GENDER_TYPES.FEMALE} value={GENDER_TYPES.FEMALE}>Female</MenuItem>                                            
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12} md={6} className={classes.gridItem}>
+                                    <FormControl required fullWidth margin="normal">
+                                        <InputLabel htmlFor="profile_type">Role</InputLabel>
+                                        <Select
+                                            value={form.profile_type}
+                                            onChange={this.handleChange}
+                                            inputProps={{
+                                                name: 'profile_type',
+                                                id: 'profile_type',
+                                            }}
+                                            readOnly={item && !edit}
+                                        >
+                                            <MenuItem key={PROFILE_TYPES.STAFF} value={PROFILE_TYPES.STAFF}>Staff</MenuItem>
+                                            <MenuItem key={PROFILE_TYPES.TEACHER} value={PROFILE_TYPES.TEACHER}>Teacher</MenuItem>                                            
                                         </Select>
                                     </FormControl>
                                 </Grid>
