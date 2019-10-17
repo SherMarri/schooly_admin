@@ -35,9 +35,9 @@ const staff = function (state = initialState, action) {
         case Actions.SET_DETAILS: {
             return {
                 ...state,
-                details: {
+                details: [
                     ...action.payload
-                }
+                ]
             };
         }
         case Actions.FETCHING_STAFF_DOWNLOAD_LINK: {

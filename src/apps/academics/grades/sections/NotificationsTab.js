@@ -96,10 +96,6 @@ class NotificationsTab extends React.Component {
 
     render() {
         const {items, classes, loading} = this.props;
-        // if (loading) return <Loading/>;
-        // if (!items) return null;
-        // let {page, count} = items;
-        // page -= 1;
         return (
             <Grid container>
                 <Grid item xs={12} className={classes.toolbar}>
