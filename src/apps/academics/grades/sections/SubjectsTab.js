@@ -198,8 +198,6 @@ class SubjectsTab extends React.Component {
             }
 
         };
-
-
         return (
             <div className={classes.table_div}>
                 <MUIDataTable
