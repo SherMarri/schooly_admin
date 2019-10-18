@@ -16,7 +16,6 @@ import AddEditSectionSubjectDialog from "./AddEditSectionSubjectDialog";
 import * as Actions from "./store/actions/subjects.actions"
 import {Loading} from "../../../../core/components";
 
-
 const styles = theme => ({
     table_div: {
         marginTop: theme.spacing(2),
