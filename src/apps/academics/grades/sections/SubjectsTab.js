@@ -193,22 +193,6 @@ class SubjectsTab extends React.Component {
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
-                        {/*
-                        {section_attendance.count > 0 &&
-                        <Tooltip title="Download">
-                            <IconButton aria-label="download">
-                                <CloudDownloadIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        }
-*/}
-                        {/*
-                        <Tooltip title="Refresh">
-                            <IconButton aria-label="refresh" onClick={this.handleRefresh}>
-                                <RefreshIcon/>
-                            </IconButton>
-                        </Tooltip>
-*/}
                     </>
                 )
             }
