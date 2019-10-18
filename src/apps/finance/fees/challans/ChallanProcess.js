@@ -13,8 +13,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import * as Actions from '../store/actions';
-import { Loading } from '../../../../core/components';
-import { Typography } from '@material-ui/core';
 import { Utils } from '../../../../core';
 
 const styles = theme => ({
@@ -145,7 +143,7 @@ class ChallanProcess extends React.Component {
   };
 
   render() {
-    const { classes, challans } = this.props;
+    const { classes } = this.props;
     const { activeStep } = this.state;
 
     return (

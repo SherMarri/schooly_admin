@@ -1,10 +1,10 @@
-import * as Actions from './gradeNotifications.actions';
+import * as Actions from '../actions/notifications.actions';
 
 const initialState = {
     loading: false,
 };
 
-const common = function (state = initialState, action) {
+const notifications = function (state = initialState, action) {
     switch ( action.type )
     {
         case Actions.ACTION_INIT: {
@@ -50,4 +50,4 @@ const common = function (state = initialState, action) {
     }
 };
 
-export default common;
+export default notifications;

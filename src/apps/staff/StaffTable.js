@@ -6,7 +6,7 @@ import * as Actions from './store/actions/staff.actions';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
-import {Typography, Tooltip, IconButton, Paper} from '@material-ui/core';
+import {Typography, Tooltip, IconButton} from '@material-ui/core';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import EditIcon from '@material-ui/icons/Edit';
 import AddEditStaffDialog from './AddEditStaffDialog';

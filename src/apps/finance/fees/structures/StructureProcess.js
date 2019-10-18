@@ -13,8 +13,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import * as Actions from '../store/actions';
-import { Loading } from '../../../../core/components';
-import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
   appBar: {
@@ -164,7 +162,7 @@ class StructureProcess extends React.Component {
   };
 
   render() {
-    const { classes, structures, item } = this.props;
+    const { classes } = this.props;
     const { activeStep } = this.state;
     
     return (

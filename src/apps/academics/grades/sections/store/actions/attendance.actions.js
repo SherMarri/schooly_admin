@@ -1,6 +1,5 @@
-import { UrlService } from "../../../../core";
-import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
-import {fetchNotifications} from "./gradeNotifications.actions";
+import { UrlService } from "../../../../../../core";
+import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../../../core/store/actions/common.actions";
 
 export const ACTION_INIT = '[ACADEMICS] ATTENDANCE ACTION INIT';
 export const ACTION_SUCCESS = '[ACADEMICS] ATTENDANCE ACTION SUCCESS';

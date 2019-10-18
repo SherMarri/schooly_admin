@@ -81,7 +81,6 @@ class AddEditStaffDialog extends React.Component {
         super(props);
         const { item } = this.props;
         let form = {};
-        let sections;
         if (item) {
             form = {
                 user: item.id,
@@ -103,7 +102,7 @@ class AddEditStaffDialog extends React.Component {
                 profile_type: null,
             };
         }
-        this.state = { form, sections };
+        this.state = { form };
     }
 
     handleClose = () => {
@@ -168,7 +167,7 @@ class AddEditStaffDialog extends React.Component {
 
     render() {
         const { open, classes, item, edit } = this.props;
-        const { form, sections } = this.state;
+        const { form } = this.state;
         return (
             <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>

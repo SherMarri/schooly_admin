@@ -5,17 +5,18 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import * as Actions from '../store/attendance.actions';
+import * as Actions from './store/actions/notifications.actions';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { Loading } from '../../../../core/components';
+import { Loading } from '../../../core/components';
 import { Input } from '@material-ui/core';
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import Utils from "../../../../core/Utils";
+import Utils from "../../../core/Utils";
+import { NOTIFICATION_TYPES } from '../../../core/constants';
 
 
 const styles = theme => ({
@@ -27,23 +28,21 @@ const styles = theme => ({
         marginTop: theme.spacing(3),
         float: 'right',
     },
-    paper: {
-    },
 });
 
-class AttendanceFilter extends Component {
+class GradeNotificationFilter extends Component {
 
     constructor(props) {
         super(props);
         const form = props.form;
         this.state = {
             form: {
+                search_term: '',
                 start_date: null,
                 end_date: null,
-                section_id: props.section_id,
-            },
+            }
         };
-        this.handleSubmit();
+        this.handleSubmit(form);
     }
 
     // componentDidMount() {
@@ -53,6 +52,8 @@ class AttendanceFilter extends Component {
     handleSubmit = () => {
         const form = {
             ...this.state.form,
+            target_id: this.props.grade_id,
+            target_type: NOTIFICATION_TYPES.CLASS,
         };
         this.props.updateFilters(form);
     }
@@ -61,7 +62,7 @@ class AttendanceFilter extends Component {
         let form = {
             ...this.state.form,
             [field_name]: Utils.formatDate(date)
-        };
+        }
         this.setState({
             ...this.state,
             form: form,
@@ -78,11 +79,13 @@ class AttendanceFilter extends Component {
         this.setState({
             form,
         });
-    };
+    }
 
     render() {
-        const { classes } = this.props;
+        const { classes, loading } = this.props;
         const { form } = this.state;
+
+        if (loading) return <Loading/>;
 
         return (
             <Paper className={classes.paper}>
@@ -115,7 +118,16 @@ class AttendanceFilter extends Component {
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={12} md={2}>
+                    <Grid item className={classes.grid_item} xs={12} md={3}>
+                        <FormControl margin="normal" fullWidth>
+                            <InputLabel htmlFor="search_term">Notification title or body...</InputLabel>
+                            <Input id="search_term" name="search_term"
+                                   onChange={this.handleChange}
+                                   value={form.search_term || ''}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item className={classes.grid_item} xs={12} md={3}>
                         <Button
                             variant="contained" color="primary"
                             onClick={this.handleSubmit} className={classes.button}
@@ -129,13 +141,13 @@ class AttendanceFilter extends Component {
     }
 }
 
-AttendanceFilter.propTypes = {
+GradeNotificationFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 function mapStateToProps({ academics }) {
     return {
-        form: academics.attendance.filter_form,
+        form: academics.grades.notifications.filter_form,
     };
 }
 
@@ -145,4 +157,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AttendanceFilter)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(GradeNotificationFilter)));

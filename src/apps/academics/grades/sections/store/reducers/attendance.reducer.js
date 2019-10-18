@@ -1,4 +1,4 @@
-import * as Actions from './attendance.actions';
+import * as Actions from '../actions/attendance.actions';
 
 const initialState = {
     loading: false,

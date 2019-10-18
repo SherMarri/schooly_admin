@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as Actions from './store/grades.actions';
+import * as Actions from './store/actions/grades.actions';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
 import MUIDataTable from "mui-datatables";
@@ -248,8 +248,8 @@ GradesTable.propTypes = {
 
 function mapStateToProps({academics, user}) {
     return {
-        items: academics.grades.items,
-        loading: academics.grades.loading,
+        items: academics.grades.items.items,
+        loading: academics.grades.items.loading,
         user: user
     };
 }

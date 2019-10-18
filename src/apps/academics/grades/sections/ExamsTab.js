@@ -1,28 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import People from '@material-ui/icons/People';
-import Library from '@material-ui/icons/LocalLibrary';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import PortraitIcon from '@material-ui/icons/Portrait';
-import {Chart, ConfirmDialog, DownloadDialog} from "../../../../core/components";
-import Format from "date-fns/format";
 
 import {
-    Grid,
-    Card,
-    CardContent,
-    Paper,
     Typography,
-    Button, Tooltip, IconButton,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
-import CloudDownloadIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import AddEditStudentDialog from "../../students/AddEditStudentDialog";
 
 
 const styles = theme => ({
@@ -132,12 +116,4 @@ ExamsTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({academics}) {
-    return {}
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
-}
-
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ExamsTab)));
+export default withRouter(withStyles(styles)(ExamsTab));

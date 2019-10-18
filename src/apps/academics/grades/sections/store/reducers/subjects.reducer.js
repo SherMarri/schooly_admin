@@ -1,4 +1,4 @@
-import * as Actions from './sectionNotifications.actions';
+import * as Actions from '../actions/subjects.actions';
 
 const initialState = {
     loading: false,
@@ -25,22 +25,16 @@ const common = function (state = initialState, action) {
                 loading: false,
             };
         }
-        case Actions.SET_NOTIFICATIONS: {
+        case Actions.SET_SECTION_SUBJECTS: {
             return {
                 ...state,
-                items: {...action.payload},
+                items: [...action.payload],
             };
         }
-        case Actions.SET_NOTIFICATION_DETAILS: {
+        case Actions.SET_SECTION_SUBJECT_DETAILS: {
             return {
                 ...state,
                 item: {...action.payload},
-            };
-        }
-        case Actions.SET_FILTERS: {
-            return {
-                ...state,
-                filter_form: action.payload
             };
         }
         default:

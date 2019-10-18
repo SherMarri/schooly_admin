@@ -1,10 +1,10 @@
-import * as Actions from './sectionSubjects.actions';
+import * as Actions from '../actions/grades.actions';
 
 const initialState = {
     loading: false,
 };
 
-const common = function (state = initialState, action) {
+const items = function (state = initialState, action) {
     switch ( action.type )
     {
         case Actions.ACTION_INIT: {
@@ -25,13 +25,13 @@ const common = function (state = initialState, action) {
                 loading: false,
             };
         }
-        case Actions.SET_SECTION_SUBJECTS: {
+        case Actions.SET_GRADES: {
             return {
                 ...state,
                 items: [...action.payload],
             };
         }
-        case Actions.SET_SECTION_SUBJECT_DETAILS: {
+        case Actions.SET_GRADE_DETAILS: {
             return {
                 ...state,
                 item: {...action.payload},
@@ -44,4 +44,4 @@ const common = function (state = initialState, action) {
     }
 };
 
-export default common;
+export default items;

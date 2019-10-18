@@ -15,11 +15,11 @@ import {
     Tooltip,
     IconButton, Grid,
 } from '@material-ui/core';
-import * as Actions from "../store/attendance.actions";
+import * as Actions from "../sections/store/actions/attendance.actions";
 import {Loading} from "../../../../core/components";
-import AddAttendanceDialog from "../attendance/AddAttendanceDialog";
-import ViewEditAttendanceDialog from "../attendance/ViewEditAttendanceDialog";
-import AttendanceFilter from "../attendance/AttendanceFilter";
+import AddAttendanceDialog from "../sections/AddAttendanceDialog";
+import ViewEditAttendanceDialog from "../sections/ViewEditAttendanceDialog";
+import AttendanceFilter from "../sections/AttendanceFilter";
 import Utils from "../../../../core/Utils";
 
 const getMuiTheme = () => (
@@ -335,9 +335,9 @@ AttendanceTab.propTypes = {
 
 function mapStateToProps({academics, user}) {
     return {
-        section_attendance: academics.attendance.section_attendance,
-        filter_form: academics.attendance.filter_form,
-        loading: academics.attendance.loading,
+        section_attendance: academics.grades.section.attendance.section_attendance,
+        filter_form: academics.grades.section.attendance.filter_form,
+        loading: academics.grades.section.attendance.loading,
         user: user
     };
 }

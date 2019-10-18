@@ -1,14 +1,12 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
 import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import * as Actions from './store/grades.actions';
+import * as Actions from './store/actions/grades.actions';
 import {Card, CardContent, Grid, IconButton, Paper, Tooltip, Typography} from "@material-ui/core";
-import {Chart, ConfirmDialog, Loading} from "../../../core/components";
+import {Loading} from "../../../core/components";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import MUIDataTable from "mui-datatables";
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
@@ -26,9 +24,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import {Line} from 'react-chartjs-2';
-import Fab from "@material-ui/core/Fab";
 import ListIcon from '@material-ui/icons/List';
-import AddIcon from "@material-ui/core/SvgIcon/SvgIcon";
 
 const styles = theme => ({
     toolbar: {
@@ -110,6 +106,7 @@ const styles = theme => ({
     },
 });
 
+/*
 const chart_options = ({title, data_points}) => {
 
     return {
@@ -191,11 +188,8 @@ const chart_options = ({title, data_points}) => {
         ]
     };
 };
+*/
 
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 class GradeDetailPage extends React.Component {
 
@@ -304,7 +298,7 @@ class GradeDetailPage extends React.Component {
 
 
     render() {
-        const {open, loading, classes, edit, item} = this.props;
+        const {loading, classes, item} = this.props;
         if (loading) {
             return (
                 <div className={classes.table_div}>
@@ -586,12 +580,6 @@ class GradeDetailPage extends React.Component {
                                 options={{ maintainAspectRatio: false }}
                             />
                             </Card>
-{/*
-                            <Card className={classes.cardGraph}>
-                                <Paper className={classes.paper}><Chart
-                                    options={chart_options(this.getAttendanceOptions())}/></Paper>
-                            </Card>
-*/}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -605,10 +593,10 @@ GradeDetailPage.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({common, academics, user}) {
+function mapStateToProps({academics, user}) {
     return {
-        item: academics.grades.item,
-        loading: academics.grades.loading,
+        item: academics.grades.items.item,
+        loading: academics.grades.items.loading,
         user: user
     }
 }
