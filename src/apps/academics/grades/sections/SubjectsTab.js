@@ -181,6 +181,7 @@ class SubjectsTab extends React.Component {
             serverSide: true,
             download: false,
             pagination: false,
+            filter: false,
             toolbar: {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
