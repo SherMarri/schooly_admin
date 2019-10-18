@@ -1,4 +1,4 @@
-import * as Actions from './grades.actions';
+import * as Actions from '../actions/notifications.actions';
 
 const initialState = {
     loading: false,
@@ -25,16 +25,22 @@ const common = function (state = initialState, action) {
                 loading: false,
             };
         }
-        case Actions.SET_GRADES: {
+        case Actions.SET_NOTIFICATIONS: {
             return {
                 ...state,
-                items: [...action.payload],
+                items: {...action.payload},
             };
         }
-        case Actions.SET_GRADE_DETAILS: {
+        case Actions.SET_NOTIFICATION_DETAILS: {
             return {
                 ...state,
                 item: {...action.payload},
+            };
+        }
+        case Actions.SET_FILTERS: {
+            return {
+                ...state,
+                filter_form: action.payload
             };
         }
         default:

@@ -4,13 +4,13 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
-import * as Actions from "../store/sectionNotifications.actions";
+import * as Actions from "../sections/store/actions/notifications.actions";
 import {
     Grid,
 } from '@material-ui/core';
-import NotificationsList from "../notifications/NotificationsList";
+import NotificationsList from "../NotificationsList";
 import {Loading} from "../../../../core/components";
-import SectionNotificationFilter from "../notifications/SectionNotificationFilter";
+import SectionNotificationFilter from "../sections/SectionNotificationFilter";
 import { NOTIFICATION_TYPES } from '../../../../core/constants';
 
 
@@ -47,15 +47,6 @@ class NotificationsTab extends React.Component {
             open_add_notification_dialog: false
         };
     }
-
-
-    handleNotificationDialogOpen = () => {
-        this.setState({
-            ...this.state,
-            open_add_notification_dialog: true
-        });
-    };
-
 
     handleCloseDialog = () => {
         this.setState({
@@ -118,9 +109,9 @@ NotificationsTab.propTypes = {
 
 function mapStateToProps({academics, user}) {
     return {
-        items: academics.sectionNotifications.items,
-        filter_form: academics.sectionNotifications.filter_form,
-        loading: academics.sectionNotifications.loading,
+        items: academics.grades.section.notifications.items,
+        filter_form: academics.grades.section.notifications.filter_form,
+        loading: academics.grades.section.notifications.loading,
         user: user
     };
 }

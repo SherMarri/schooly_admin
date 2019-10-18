@@ -3,8 +3,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -13,7 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {Typography} from "@material-ui/core";
-import Utils from "../../../../core/Utils";
+import Utils from "../../../core/Utils";
 
 const styles = theme => ({
     dialog_content: {
@@ -156,12 +154,4 @@ AddNotificationDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ common, academics }) {
-    return {
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddNotificationDialog));
+export default withStyles(styles)(AddNotificationDialog);

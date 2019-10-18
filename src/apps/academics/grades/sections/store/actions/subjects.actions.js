@@ -1,5 +1,5 @@
-import { UrlService } from "../../../../core";
-import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
+import { UrlService } from "../../../../../../core";
+import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../../../core/store/actions/common.actions";
 
 export const ACTION_INIT = '[ACADEMICS] SECTION SUBJECTS ACTION INIT';
 export const ACTION_SUCCESS = '[ACADEMICS] SECTION SUBJECTS ACTION SUCCESS';

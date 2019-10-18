@@ -23,7 +23,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import * as Actions from '../store/actions';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import { Utils } from '../../../../core';
 
 const styles = theme => ({

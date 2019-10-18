@@ -12,7 +12,7 @@ import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
-import * as Actions from "../store/attendance.actions";
+import * as Actions from "./store/actions/attendance.actions";
 import {Loading} from "../../../../core/components";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -24,7 +24,6 @@ import Button from "@material-ui/core/Button";
 import { Doughnut } from 'react-chartjs-2';
 import Format from 'date-fns/format';
 import { Utils } from '../../../../core';
-import AttendanceFilter from "./AttendanceFilter";
 
 const PRESENT = 1;
 const ABSENT = 2;
@@ -51,9 +50,6 @@ const styles = theme => ({
     },
     grid: {
         margin: theme.spacing(2),
-        // marginBottom: theme.spacing(2),
-        // display: 'flex',
-        // flexDirection: 'column',
     },
     grid_item: {
         padding: theme.spacing(1),
@@ -400,9 +396,9 @@ ViewEditAttendanceDialog.propTypes = {
 
 function mapStateToProps({user, academics}) {
     return {
-        daily_attendance: academics.attendance.daily_attendance,
-        loading: academics.attendance.loading_daily_attendance,
-        filter_form: academics.attendance.filter_form,
+        daily_attendance: academics.grades.section.attendance.daily_attendance,
+        loading: academics.grades.section.loading_daily_attendance,
+        filter_form: academics.grades.section.attendance.filter_form,
         user: user
     }
 }

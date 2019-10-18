@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import * as Actions from '../store/gradeNotifications.actions';
+import * as Actions from './store/actions/notifications.actions';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
@@ -13,9 +13,9 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { Loading } from '../../../../core/components';
 import { Input } from '@material-ui/core';
+import Utils from "../../../../core/Utils";
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import Utils from "../../../../core/Utils";
 import { NOTIFICATION_TYPES } from '../../../../core/constants';
 
 
@@ -26,11 +26,11 @@ const styles = theme => ({
     button: {
         margin: theme.spacing(2),
         marginTop: theme.spacing(3),
-        float: 'right',
+        // float: 'right',
     },
 });
 
-class GradeNotificationFilter extends Component {
+class SectionNotificationFilter extends Component {
 
     constructor(props) {
         super(props);
@@ -52,8 +52,8 @@ class GradeNotificationFilter extends Component {
     handleSubmit = () => {
         const form = {
             ...this.state.form,
-            target_id: this.props.grade_id,
-            target_type: NOTIFICATION_TYPES.CLASS,
+            target_id: this.props.section_id,
+            target_type: NOTIFICATION_TYPES.SECTION,
         };
         this.props.updateFilters(form);
     }
@@ -141,13 +141,13 @@ class GradeNotificationFilter extends Component {
     }
 }
 
-GradeNotificationFilter.propTypes = {
+SectionNotificationFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 function mapStateToProps({ academics }) {
     return {
-        form: academics.gradeNotifications.filter_form,
+        form: academics.grades.section.notifications.filter_form,
     };
 }
 
@@ -157,4 +157,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(GradeNotificationFilter)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SectionNotificationFilter)));

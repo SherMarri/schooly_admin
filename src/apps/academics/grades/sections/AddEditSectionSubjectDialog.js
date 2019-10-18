@@ -14,7 +14,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import * as SubjectActions from "../../subjects/store/subjects.actions";
 import * as StaffActions from "../../../staff/store/actions/staff.actions";
-import * as SectionSubjectActions from "../store/sectionSubjects.actions";
+import * as SectionSubjectActions from "./store/actions/subjects.actions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
@@ -28,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-class AddEditSubjectDialog extends React.Component {
+class AddEditSectionSubjectDialog extends React.Component {
 
     constructor(props) {
         super(props);
@@ -199,7 +199,7 @@ class AddEditSubjectDialog extends React.Component {
     }
 }
 
-AddEditSubjectDialog.propTypes = {
+AddEditSectionSubjectDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
@@ -219,4 +219,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddEditSubjectDialog)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddEditSectionSubjectDialog)));

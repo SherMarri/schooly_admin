@@ -9,14 +9,9 @@ import AddIcon from '@material-ui/icons/Add';
 import Divider from "@material-ui/core/Divider";
 import TablePagination from "@material-ui/core/TablePagination";
 import ListItemText from "@material-ui/core/ListItemText";
-import Utils from "../../../../core/Utils";
+import Utils from "../../../core/Utils";
 import AddNotificationDialog from "./AddNotificationDialog";
-import * as GradeActions from '../store/gradeNotifications.actions';
-import * as SectionActions from '../store/sectionNotifications.actions';
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
-import AddEditStudentDialog from "../../students/AddEditStudentDialog";
 
 
 const styles = theme => ({
@@ -140,7 +135,7 @@ class NotificationsList extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {items, page, count, target_id, target_type} = this.props.data;
+        const {items, page, count} = this.props.data;
         return (
             <Grid container className={classes.table_div}>
                 <Grid item xs={12} md={12}>

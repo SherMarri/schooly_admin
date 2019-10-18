@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -9,19 +7,14 @@ import People from '@material-ui/icons/People';
 import Library from '@material-ui/icons/LocalLibrary';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import PortraitIcon from '@material-ui/icons/Portrait';
-import {Chart} from "../../../../core/components";
-import Format from "date-fns/format";
 
 import {
     Grid,
     Card,
     CardContent,
-    Paper,
     Typography,
-    Button, Tooltip, IconButton,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
-import RefreshIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -104,6 +97,7 @@ const styles = theme => ({
     }
 });
 
+/*
 const chart_options = ({title, data_points}) => {
 
     return {
@@ -143,6 +137,7 @@ const chart_options = ({title, data_points}) => {
         ]
     };
 };
+*/
 
 
 class SummaryTab extends React.Component {
@@ -223,6 +218,7 @@ class SummaryTab extends React.Component {
             }
         },
         ];
+/*
         const needImprovementTableColumns = [{
             name: 'name',
             label: "Name",
@@ -237,6 +233,7 @@ class SummaryTab extends React.Component {
             }
         },
         ];
+*/
         const options = {
             pagination: false,
             sort: false,
@@ -464,18 +461,6 @@ class SummaryTab extends React.Component {
                     </Grid>
                 </Grid>
 
-
-                {/*
-                <Grid item xs={12}>
-                    <Grid item xs={12} md={6}>
-                        <GradesTable />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Paper className={classes.paper}><Chart options={chart_options(this.getAttendanceOptions())} /></Paper>
-                    </Grid>
-                </Grid>
-*/}
-
             </Grid>
         );
     }
@@ -484,13 +469,4 @@ class SummaryTab extends React.Component {
 SummaryTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-
-function mapStateToProps({academics}) {
-    return {}
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
-}
-
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SummaryTab)));
+export default withRouter(withStyles(styles)(SummaryTab));

@@ -11,8 +11,6 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import PortraitIcon from '@material-ui/icons/Portrait';
 import AddEditGradeDialog from "./AddEditGradeDialog";
 import GradesTable from "./GradesTable";
-import {Chart} from "../../../core/components";
-import Format from "date-fns/format";
 
 import {
     Grid,
@@ -22,7 +20,6 @@ import {
     Typography,
     Button,
 } from '@material-ui/core';
-import DailyExpensesTable from "../../finance/expenses/daily/DailyExpensesTable";
 import {Line} from "react-chartjs-2";
 
 
@@ -82,47 +79,6 @@ const styles = theme => ({
         marginTop: '11px',
     }
 });
-
-const chart_options = ({title, data_points}) => {
-
-    return {
-        animationEnabled: true,
-        title: {
-            text: title
-        },
-        axisX: {
-            valueFormatString: "DD"
-        },
-        axisY: {
-            title: "Count",
-            includeZero: false,
-        },
-        legend: {
-            cursor: "pointer",
-            fontSize: 16,
-        },
-        toolTip: {
-            shared: true
-        },
-        data: [{
-            name: "Attendance",
-            type: "spline",
-            yValueFormatString: "#",
-            showInLegend: true,
-            dataPoints: [
-                {x: new Date(2017, 6, 1), y: 72},
-                {x: new Date(2017, 6, 2), y: 80},
-                {x: new Date(2017, 6, 3), y: 74},
-                {x: new Date(2017, 6, 4), y: 85},
-                {x: new Date(2017, 6, 5), y: 92},
-                {x: new Date(2017, 6, 6), y: 65},
-                {x: new Date(2017, 6, 7), y: 95}
-            ]
-        },
-        ]
-    };
-};
-
 
 class GradesPage extends React.Component {
     state = {

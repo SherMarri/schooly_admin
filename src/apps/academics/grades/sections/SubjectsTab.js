@@ -12,8 +12,8 @@ import {
     Tooltip, IconButton,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
-import AddEditSubjectDialog from "./AddEditSubjectDialog";
-import * as Actions from "../store/sectionSubjects.actions";
+import AddEditSectionSubjectDialog from "./AddEditSectionSubjectDialog";
+import * as Actions from "./store/actions/subjects.actions"
 import {Loading} from "../../../../core/components";
 
 
@@ -95,7 +95,7 @@ class SubjectsTab extends React.Component {
         this.props.fetchSectionSubjects(this.props.match.params.section_id);
     }
 
-    handleAddSectionSubjectDialogOpen = () => {
+    handleAddEditSectionSubjectDialogOpen = () => {
         this.setState({
             ...this.state,
             open_add_edit_section_subject_dialog: true
@@ -189,7 +189,7 @@ class SubjectsTab extends React.Component {
                 return (
                     <>
                         <Tooltip title="Add">
-                            <IconButton aria-label="add" onClick={this.handleAddSectionSubjectDialogOpen}>
+                            <IconButton aria-label="add" onClick={this.handleAddEditSectionSubjectDialogOpen}>
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
@@ -227,7 +227,7 @@ class SubjectsTab extends React.Component {
                     columns={columns}
                     options={options}/>
                 {this.state.open_add_edit_section_subject_dialog &&
-                <AddEditSubjectDialog open={this.state.open_add_edit_section_subject_dialog}
+                <AddEditSectionSubjectDialog open={this.state.open_add_edit_section_subject_dialog}
                                              edit={this.state.edit}
                                              item={this.state.selected_item}
                                              onClose={this.handleCloseDialog}
@@ -245,7 +245,7 @@ SubjectsTab.propTypes = {
 
 function mapStateToProps({academics}) {
     return {
-        items: academics.sectionSubjects.items
+        items: academics.grades.section.subjects.items
     }
 }
 

@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {Grid} from "@material-ui/core";
 import {bindActionCreators} from "redux";
-import * as Actions from "../store/gradeNotifications.actions";
+import * as Actions from "./store/actions/notifications.actions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
-import {Loading} from "../../../../core/components";
+import {Loading} from "../../../core/components";
 import NotificationsList from "./NotificationsList";
 import GradeNotificationFilter from "./GradeNotificationFilter";
-import { NOTIFICATION_TYPES } from '../../../../core/constants';
+import { NOTIFICATION_TYPES } from '../../../core/constants';
 
 
 const styles = theme => ({
@@ -79,9 +79,6 @@ class NotificationsPage extends React.Component {
 
     render() {
         const {items, classes, loading} = this.props;
-        // if (loading) return <Loading/>;
-        // if (!items) return null;
-        // let {page, count} = items;
         return (
             <Grid container>
                 <Grid item xs={12} className={classes.toolbar}>
@@ -104,9 +101,9 @@ NotificationsPage.propTypes = {
 
 function mapStateToProps({academics, user}) {
     return {
-        items: academics.gradeNotifications.items,
-        filter_form: academics.gradeNotifications.filter_form,
-        loading: academics.gradeNotifications.loading,
+        items: academics.grades.notifications.items,
+        filter_form: academics.grades.notifications.filter_form,
+        loading: academics.grades.notifications.loading,
         user: user
     };
 }

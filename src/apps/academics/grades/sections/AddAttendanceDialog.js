@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import * as Actions from '../store/attendance.actions';
+import * as Actions from './store/actions/attendance.actions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -71,7 +71,7 @@ class AddAttendanceDialog extends React.Component {
 
 
     render() {
-        const { open, classes, target_id, target_type, item, edit } = this.props;
+        const { open, classes, item, edit } = this.props;
         const { form } = this.state;
         return (
             <Dialog
@@ -138,7 +138,7 @@ AddAttendanceDialog.propTypes = {
 
 function mapStateToProps({ academics }) {
     return {
-        filter_form: academics.attendance.filter_form,
+        filter_form: academics.grades.section.attendance.filter_form,
     }
 }
 

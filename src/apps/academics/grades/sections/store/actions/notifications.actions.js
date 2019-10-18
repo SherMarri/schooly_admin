@@ -1,15 +1,15 @@
-import { UrlService } from "../../../../core";
-import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
+import { UrlService } from "../../../../../../core";
+import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../../../core/store/actions/common.actions";
 
-export const ACTION_INIT = '[ACADEMICS] GRADE NOTIFICATIONS ACTION INIT';
-export const ACTION_SUCCESS = '[ACADEMICS] GRADES NOTIFICATIONS ACTION SUCCESS';
-export const ACTION_FAILURE = '[ACADEMICS] GRADES NOTIFICATIONS ACTION FAILURE';
+export const ACTION_INIT = '[ACADEMICS] SECTION NOTIFICATIONS ACTION INIT';
+export const ACTION_SUCCESS = '[ACADEMICS] SECTION NOTIFICATIONS ACTION SUCCESS';
+export const ACTION_FAILURE = '[ACADEMICS] SECTION NOTIFICATIONS ACTION FAILURE';
 
-export const SET_NOTIFICATIONS = '[ACADEMICS] SET GRADE NOTIFICATIONS';
-export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET GRADE NOTIFICATIONS DETAILS';
-export const SET_FILTERS = '[ACADEMICS] SET GRADE NOTIFICATIONS FILTERS';
+export const SET_NOTIFICATIONS = '[ACADEMICS] SET SECTION NOTIFICATIONS';
+export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET SECTION NOTIFICATIONS DETAILS';
+export const SET_FILTERS = '[ACADEMICS] SET SECTION NOTIFICATIONS FILTERS';
 
-// export const CLEAR_TABLE_DATA = '[ACADEMICS] GRADE NOTIFICATIONS CLEAR TABLE DATA';
+export const CLEAR_TABLE_DATA = '[ACADEMICS] SECTIONS NOTIFICATIONS CLEAR TABLE DATA';
 
 
 export function createNotification(data, filter_form) {
@@ -59,13 +59,14 @@ export function setFilters(filters) {
     }
 }
 
+
 export function fetchNotifications(form) {
     return dispatch => {
         dispatch(setFilters(form));
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get(`academics/grades/${form.target_id}/notifications`, form)
+        UrlService.get(`academics/sections/${form.target_id}/notifications`, form)
             .then(response => {
                 dispatch({
                     type: SET_NOTIFICATIONS,
@@ -87,7 +88,7 @@ export function fetchNotifications(form) {
     }
 }
 
-export function fetchNotificationDetails(notification_id) {
+export function fetchNotificationDetails(section_id, notification_id) {
     return dispatch => {
         dispatch({
             type: ACTION_INIT
@@ -114,7 +115,7 @@ export function fetchNotificationDetails(notification_id) {
     }
 }
 
-export function deleteNotification(notification_id) {
+export function deleteNotification(section_id, notification_id) {
     return dispatch => {
         UrlService.delete(`notifications/${notification_id}`)
             .then(response => {

@@ -5,18 +5,13 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import * as Actions from '../store/sectionNotifications.actions';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
+import * as Actions from './store/actions/attendance.actions';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { Loading } from '../../../../core/components';
-import { Input } from '@material-ui/core';
-import Utils from "../../../../core/Utils";
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { NOTIFICATION_TYPES } from '../../../../core/constants';
+import Utils from "../../../../core/Utils";
 
 
 const styles = theme => ({
@@ -26,23 +21,24 @@ const styles = theme => ({
     button: {
         margin: theme.spacing(2),
         marginTop: theme.spacing(3),
-        // float: 'right',
+        float: 'right',
+    },
+    paper: {
     },
 });
 
-class SectionNotificationFilter extends Component {
+class AttendanceFilter extends Component {
 
     constructor(props) {
         super(props);
-        const form = props.form;
         this.state = {
             form: {
-                search_term: '',
                 start_date: null,
                 end_date: null,
-            }
+                section_id: props.section_id,
+            },
         };
-        this.handleSubmit(form);
+        this.handleSubmit();
     }
 
     // componentDidMount() {
@@ -52,8 +48,6 @@ class SectionNotificationFilter extends Component {
     handleSubmit = () => {
         const form = {
             ...this.state.form,
-            target_id: this.props.section_id,
-            target_type: NOTIFICATION_TYPES.SECTION,
         };
         this.props.updateFilters(form);
     }
@@ -62,7 +56,7 @@ class SectionNotificationFilter extends Component {
         let form = {
             ...this.state.form,
             [field_name]: Utils.formatDate(date)
-        }
+        };
         this.setState({
             ...this.state,
             form: form,
@@ -79,13 +73,11 @@ class SectionNotificationFilter extends Component {
         this.setState({
             form,
         });
-    }
+    };
 
     render() {
-        const { classes, loading } = this.props;
+        const { classes } = this.props;
         const { form } = this.state;
-
-        if (loading) return <Loading/>;
 
         return (
             <Paper className={classes.paper}>
@@ -118,16 +110,7 @@ class SectionNotificationFilter extends Component {
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={12} md={3}>
-                        <FormControl margin="normal" fullWidth>
-                            <InputLabel htmlFor="search_term">Notification title or body...</InputLabel>
-                            <Input id="search_term" name="search_term"
-                                   onChange={this.handleChange}
-                                   value={form.search_term || ''}
-                            />
-                        </FormControl>
-                    </Grid>
-                    <Grid item className={classes.grid_item} xs={12} md={3}>
+                    <Grid item className={classes.grid_item} xs={12} md={2}>
                         <Button
                             variant="contained" color="primary"
                             onClick={this.handleSubmit} className={classes.button}
@@ -141,13 +124,13 @@ class SectionNotificationFilter extends Component {
     }
 }
 
-SectionNotificationFilter.propTypes = {
+AttendanceFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 function mapStateToProps({ academics }) {
     return {
-        form: academics.sectionNotifications.filter_form,
+        form: academics.grades.section.attendance.filter_form,
     };
 }
 
@@ -157,4 +140,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SectionNotificationFilter)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AttendanceFilter)));

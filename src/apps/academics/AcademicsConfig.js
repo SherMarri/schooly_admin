@@ -4,7 +4,7 @@ import { SubjectsPage } from './subjects';
 import GradesPage from "./grades/GradesPage";
 import GradeDetailPage from "./grades/GradeDetailPage";
 import SectionsPage from "./grades/sections/SectionsPage";
-import NotificationsPage from "./grades/notifications/NotificationsPage";
+import NotificationsPage from "./grades/NotificationsPage";
 
 
 export const AcademicsConfig = {
