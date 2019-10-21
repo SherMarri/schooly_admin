@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
+import {bindActionCreators} from "redux";
+import * as Actions from "./store/actions/students.actions";
 
 import {
     Grid,
@@ -10,6 +12,8 @@ import {
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import {Doughnut} from "react-chartjs-2";
+import {connect} from "react-redux";
+import {Loading} from "../../../../core/components";
 
 
 const styles = theme => ({
@@ -80,8 +84,9 @@ const styles = theme => ({
 });
 
 class StudentsTab extends React.Component {
-    state = {
-        open_add_grade_dialog: false
+    constructor(props) {
+        super(props);
+        this.props.fetchSectionStudents(this.props.match.params.section_id);
     }
 
     handleGradeDialogOpen = () => {
@@ -100,13 +105,14 @@ class StudentsTab extends React.Component {
     }
 
     getMappedData = () => {
-        return [{
-            gr_number: Math.floor(Math.random() * (1000 - 0)) + 0,
-            fullname: 'Test',
-            guardian_name: 'Test',
-            section: 'A',
-            percentage: Math.floor(Math.random() * (100 - 60)) + 60,
-        }];
+        const {items} = this.props;
+        return items.map(d => {
+            return {
+                gr_number: d.profile.gr_number,
+                fullname: d.profile.fullname,
+                average_attendance: '75%',
+            };
+        });
     };
 
     getChartData = () => {
@@ -132,7 +138,9 @@ class StudentsTab extends React.Component {
 
 
     render() {
-        const {classes} = this.props;
+        const {classes, loading, items} = this.props;
+        if (loading) return <Loading/>;
+        if (!items) return null;
         const columns = [{
             name: 'gr_number',
             label: "GR #",
@@ -146,25 +154,17 @@ class StudentsTab extends React.Component {
                 filter: false,
             }
         }, {
-            name: 'section',
+            name: 'average_attendance',
             label: "Class",
-        }, {
-            name: 'guardian_name',
-            label: "Guardian",
-            options: {
-                filter: false,
-            }
-        }
+        },
         ];
-        // let {page, count} = details;
-        // page -= 1;
         const options = {
             sort: false,
             print: false,
             search: false,
             selectableRows: 'none',
-            rowsPerPage: 20,
-            rowsPerPageOptions: [20],
+            pagination: false,
+            filter: false,
             serverSide: true,
             download: false,
             toolbar: {
@@ -202,4 +202,17 @@ StudentsTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(StudentsTab));
+function mapStateToProps({academics}) {
+    return {
+        items: academics.grades.section.students.items
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        fetchSectionStudents: Actions.fetchSectionStudents,
+    }, dispatch);
+}
+
+
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(StudentsTab)));

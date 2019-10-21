@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import AddEditSectionSubjectDialog from "./AddEditSectionSubjectDialog";
-import * as Actions from "./store/actions/subjects.actions"
+import * as Actions from "./store/actions/subjects.actions";
 import {Loading} from "../../../../core/components";
 
 const styles = theme => ({
