@@ -8,12 +8,14 @@ import * as Actions from "./store/actions/students.actions";
 import {
     Grid,
     Card,
-    Typography,
+    Typography, Tooltip, IconButton,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import {Doughnut} from "react-chartjs-2";
 import {connect} from "react-redux";
 import {Loading} from "../../../../core/components";
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 
 const styles = theme => ({
@@ -89,20 +91,9 @@ class StudentsTab extends React.Component {
         this.props.fetchSectionStudents(this.props.match.params.section_id);
     }
 
-    handleGradeDialogOpen = () => {
-        this.setState({
-            ...this.state,
-            open_add_grade_dialog: true
-        });
-    }
-
-
-    handleCloseDialog = () => {
-        this.setState({
-            ...this.state,
-            open_add_grade_dialog: false,
-        });
-    }
+    handleDownload = () => {
+        this.props.fetchDownloadLink(this.props.match.params.section_id);
+    };
 
     getMappedData = () => {
         const {items} = this.props;
@@ -155,7 +146,7 @@ class StudentsTab extends React.Component {
             }
         }, {
             name: 'average_attendance',
-            label: "Class",
+            label: "Avg. Attendance",
         },
         ];
         const options = {
@@ -171,6 +162,24 @@ class StudentsTab extends React.Component {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
             },
+            customToolbar: () => {
+                return (
+                    <>
+                        {this.props.items.length > 0 &&
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download" onClick={this.handleDownload}>
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        }
+                        <Tooltip title="Refresh">
+                            <IconButton aria-label="Refresh" onClick={this.handleRefresh}>
+                                <RefreshIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
+                )
+            }
         };
 
 
@@ -202,15 +211,20 @@ StudentsTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({academics}) {
+function mapStateToProps({academics, hr}) {
     return {
-        items: academics.grades.section.students.items
+        items: academics.grades.section.students.items,
+        loading: hr.staff.loading,
+        fetching_download_link: academics.grades.section.students.fetching_download_link,
+        download_url: academics.grades.section.students.download_url,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchSectionStudents: Actions.fetchSectionStudents,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 

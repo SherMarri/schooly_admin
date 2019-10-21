@@ -5,8 +5,7 @@ const initialState = {
 };
 
 const students = function (state = initialState, action) {
-    switch ( action.type )
-    {
+    switch (action.type) {
         case Actions.ACTION_INIT: {
             return {
                 ...state,
@@ -31,8 +30,28 @@ const students = function (state = initialState, action) {
                 items: [...action.payload],
             };
         }
-        default:
-        {
+        case Actions.FETCHING_SECTION_STUDENTS_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: action.payload
+            };
+        }
+        case Actions.SET_SECTION_STUDENTS_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: action.payload
+            };
+        }
+        case Actions.CLEAR_SECTION_STUDENTS_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: null,
+            };
+        }
+
+        default: {
             return state;
         }
     }
