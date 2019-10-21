@@ -13,7 +13,7 @@ import {
 import MUIDataTable from "mui-datatables";
 import {Doughnut} from "react-chartjs-2";
 import {connect} from "react-redux";
-import {Loading} from "../../../../core/components";
+import {DownloadDialog, Loading} from "../../../../core/components";
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
@@ -129,7 +129,7 @@ class StudentsTab extends React.Component {
 
 
     render() {
-        const {classes, loading, items} = this.props;
+        const {classes, loading, items, fetching_download_link, download_url} = this.props;
         if (loading) return <Loading/>;
         if (!items) return null;
         const columns = [{
@@ -202,6 +202,14 @@ class StudentsTab extends React.Component {
                         <Doughnut data={this.getChartData()}/>
                     </Card>
                 </Grid>
+                {(fetching_download_link || download_url) &&
+                <DownloadDialog
+                    loading={fetching_download_link}
+                    link={download_url}
+                    onClose={this.props.clearDownloadLink}
+                />
+                }
+
             </Grid>
         );
     }
