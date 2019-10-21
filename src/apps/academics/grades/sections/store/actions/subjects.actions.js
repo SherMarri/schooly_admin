@@ -10,7 +10,6 @@ export const SET_SECTION_SUBJECT_DETAILS = '[ACADEMICS] SET SECTION SUBJECTS DET
 
 
 export function createSectionSubject(data) {
-    debugger;
     return (dispatch) => {
         UrlService.post(`academics/sections/${data.section_id}/subjects`, data)
             .then(response => {
@@ -21,10 +20,18 @@ export function createSectionSubject(data) {
                 }));
             })
             .catch(error => {
-                dispatch(toggleSnackbar({
-                    message: 'Unable to create section subject, please contact Schooli support.',
-                    variant: SNACKBAR_FAILURE
-                }));
+                if (error.response.data && error.response.data.code === 'SUBJECT_EXISTS') {
+                    dispatch(toggleSnackbar({
+                        message: error.response.data.message,
+                        variant: SNACKBAR_FAILURE
+                    }));
+                }
+                else {
+                    dispatch(toggleSnackbar({
+                        message: 'Unable to create section subject, please contact Schooli support.',
+                        variant: SNACKBAR_FAILURE
+                    }));
+                }
             });
     };
 }
