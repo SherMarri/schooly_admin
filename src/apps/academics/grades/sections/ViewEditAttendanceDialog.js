@@ -19,11 +19,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {Chip, Grid, Divider, TextField} from "@material-ui/core";
+import {Chip, Grid, Divider, TextField, Select, MenuItem} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { Doughnut } from 'react-chartjs-2';
+import {Doughnut} from 'react-chartjs-2';
 import Format from 'date-fns/format';
-import { Utils } from '../../../../core';
+import {Utils} from '../../../../core';
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
 
 const PRESENT = 1;
 const ABSENT = 2;
@@ -73,7 +75,7 @@ const styles = theme => ({
         marginRight: '2px',
         '&:focus': {
             backgroundColor: ABSENT_COLOR,
-       },
+        },
     },
     success_chip: {
         backgroundColor: PRESENT_COLOR,
@@ -81,7 +83,7 @@ const styles = theme => ({
         marginRight: '2px',
         '&:focus': {
             backgroundColor: PRESENT_COLOR,
-       },
+        },
     },
     warning_chip: {
         backgroundColor: LEAVE_COLOR,
@@ -89,7 +91,7 @@ const styles = theme => ({
         marginRight: '2px',
         '&:focus': {
             backgroundColor: LEAVE_COLOR,
-       },
+        },
     },
     default_chip: {
         background: '#ADA7A6',
@@ -108,10 +110,14 @@ const styles = theme => ({
         marginLeft: '8px',
     },
     commentsField: {
-      marginTop: '0px',
-      marginBottom: '0px',
-      width: '100%',
+        marginTop: '0px',
+        marginBottom: '0px',
+        width: '100%',
     },
+    mark_all_select: {
+        margin: '10px',
+        marginTop: '0px'
+    }
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -136,11 +142,11 @@ class ViewEditAttendanceDialog extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        const { daily_attendance } = props;
+        const {daily_attendance} = props;
         if (!(daily_attendance && daily_attendance.items)) return null;
         else if (state && state.items) return null;
         const items = daily_attendance.items.map((item) => {
-            const { student } = item;
+            const {student} = item;
             return {
                 id: item.id,
                 gr_number: student.profile.gr_number,
@@ -155,7 +161,7 @@ class ViewEditAttendanceDialog extends React.Component {
     }
 
     handleStatusChange = (id, status) => {
-        const { items } = this.state;
+        const {items} = this.state;
         const updated_items = items.map((item) => {
             if (item.id !== id) return {...item};
             else return {
@@ -169,7 +175,7 @@ class ViewEditAttendanceDialog extends React.Component {
     };
 
     handleCommentsChange = (id, comment) => {
-        const { items } = this.state;
+        const {items} = this.state;
         const updated_items = items.map((item) => {
             if (item.id !== id) return {...item};
             else return {
@@ -183,7 +189,7 @@ class ViewEditAttendanceDialog extends React.Component {
     };
 
     renderStatusChips = (row) => {
-        const { classes, read_only } = this.props;
+        const {classes, read_only} = this.props;
         const chips_config = [
             {
                 label: "P",
@@ -203,24 +209,24 @@ class ViewEditAttendanceDialog extends React.Component {
         ]
         return (
             <>
-            {chips_config.map((config) => {
-                return (
-                    <Chip
-                        key={config.status_value}
-                        label={config.label}
-                        className={config.class_name}
-                        onClick={() => read_only ? null : this.handleStatusChange(row.id, config.status_value)}
-                    />
-                );
+                {chips_config.map((config) => {
+                    return (
+                        <Chip
+                            key={config.status_value}
+                            label={config.label}
+                            className={config.class_name}
+                            onClick={() => read_only ? null : this.handleStatusChange(row.id, config.status_value)}
+                        />
+                    );
 
-            })
-            }
+                })
+                }
             </>
         );
     }
 
     getMappedData = () => {
-        const { read_only, classes } = this.props;
+        const {read_only, classes} = this.props;
         const studentAttendance =
             this.state.items.map(row => (
                 <TableRow key={row.id}>
@@ -232,16 +238,16 @@ class ViewEditAttendanceDialog extends React.Component {
                         {this.renderStatusChips(row)}
                     </TableCell>
                     {read_only &&
-                        <TableCell>{row.comments}</TableCell>
+                    <TableCell>{row.comments}</TableCell>
                     }
                     {!read_only &&
-                        <TableCell>
-                            <TextField
-                                className={classes.commentsField}
-                                defaultValue={row.comments || ''}
-                                onChange={(event) => this.handleCommentsChange(row.id, event.target.value) }
-                            />
-                        </TableCell>
+                    <TableCell>
+                        <TextField
+                            className={classes.commentsField}
+                            defaultValue={row.comments || ''}
+                            onChange={(event) => this.handleCommentsChange(row.id, event.target.value)}
+                        />
+                    </TableCell>
                     }
                 </TableRow>
             ))
@@ -249,8 +255,8 @@ class ViewEditAttendanceDialog extends React.Component {
     }
 
     handleSubmit = () => {
-        const { daily_attendance } = this.props;
-        const { items } = this.state;
+        const {daily_attendance} = this.props;
+        const {items} = this.state;
         const data = {
             items,
             attendance_id: daily_attendance.id,
@@ -258,10 +264,24 @@ class ViewEditAttendanceDialog extends React.Component {
         }
         this.handleClose();
         this.props.updateAttendanceDetails(data, this.props.filter_form);
-    }
+    };
+
+    handleMarkAllChange = (event) => {
+        const { value } = event.target;
+        const {items} = this.state;
+        const updated_items = items.map((item) => {
+            return {
+                ...item,
+                status: value,
+            };
+        });
+        this.setState({
+            items: updated_items,
+        });
+    };
 
     getDoughnutData = () => {
-        const { items } = this.state;
+        const {items} = this.state;
         let counts = {
             present: 0,
             absent: 0,
@@ -269,7 +289,7 @@ class ViewEditAttendanceDialog extends React.Component {
             not_set: 0,
         }
         items.forEach((item) => {
-            switch(item.status) {
+            switch (item.status) {
                 case PRESENT:
                     counts.present += 1;
                     break;
@@ -282,29 +302,30 @@ class ViewEditAttendanceDialog extends React.Component {
                 default:
                     counts.not_set += 1;
                     break;
-            };
+            }
+            ;
         });
         return {
             labels: [
-              'Present',
-              'Absent',
-              'Leave',
-              'Unmarked'
+                'Present',
+                'Absent',
+                'Leave',
+                'Unmarked'
             ],
             datasets: [{
-              data: [counts.present, counts.absent, counts.leave, counts.not_set],
-              backgroundColor: [
-                PRESENT_COLOR,
-                ABSENT_COLOR,
-                LEAVE_COLOR,
-                NOT_SET_COLOR,
-              ],
+                data: [counts.present, counts.absent, counts.leave, counts.not_set],
+                backgroundColor: [
+                    PRESENT_COLOR,
+                    ABSENT_COLOR,
+                    LEAVE_COLOR,
+                    NOT_SET_COLOR,
+                ],
             }]
-          };
+        };
     }
 
     render() {
-        const { open, classes, loading, daily_attendance, attendance, read_only } = this.props;
+        const {open, classes, loading, daily_attendance, attendance, read_only} = this.props;
         if (!open) return null;
         return (
             <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
@@ -326,64 +347,78 @@ class ViewEditAttendanceDialog extends React.Component {
                     />
                     }
                     {daily_attendance &&
-                        <Grid container  className={classes.grid}>
-                            <Grid item xs={12} md={9} className={classes.grid_item}>
-                                <Paper className={classes.paper}>
-                                    <Table className={classes.table}>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>GR#</TableCell>
-                                                <TableCell>Full Name</TableCell>
-                                                <TableCell>Status</TableCell>
-                                                <TableCell>Comments</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {this.getMappedData()}
-                                        </TableBody>
-                                    </Table>
-                                    {!read_only &&
-                                        <Button
-                                            variant="contained" color="primary"
-                                            onClick={this.handleSubmit} className={classes.submitButton}
-                                        >
-                                            Submit
-                                        </Button>
-                                    }
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={12} md={3} className={classes.grid_item}>
-                                <Paper className={classes.paper}>
-                                    <div className={classes.chip_div}>
-                                        <Chip
-                                            label="P"
-                                            className={classes.success_chip}
-                                        />
-                                        <Typography className={classes.chip_description}>Present</Typography>
-                                    </div>
-                                    <Divider/>
-                                    <div className={classes.chip_div}>
-                                        <Chip
-                                            label="A"
-                                            className={classes.danger_chip}
-                                        />
-                                        <Typography className={classes.chip_description}>Absent</Typography>
-                                    </div>
-                                    <Divider/>
-                                    <div className={classes.chip_div}>
-                                        <Chip
-                                            label="L"
-                                            className={classes.warning_chip}
-                                        />
-                                        <Typography className={classes.chip_description}>Leave</Typography>
-                                    </div>
-                                </Paper>
-                                <Paper className={classes.paper}>
-                                    <Doughnut data={this.getDoughnutData()}/>
-                                </Paper>
-                            </Grid>
+                    <Grid container className={classes.grid}>
+                        <Grid item xs={12} md={9} className={classes.grid_item}>
+                            <Paper className={classes.paper}>
+                                <Table className={classes.table}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>GR#</TableCell>
+                                            <TableCell>Full Name</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell>Comments</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {this.getMappedData()}
+                                    </TableBody>
+                                </Table>
+                                {!read_only &&
+                                <Button
+                                    variant="contained" color="primary"
+                                    onClick={this.handleSubmit} className={classes.submitButton}
+                                >
+                                    Submit
+                                </Button>
+                                }
+                            </Paper>
                         </Grid>
-                        }
+                        <Grid item xs={12} md={3} className={classes.grid_item}>
+                            {!read_only &&
+                                <Paper className={classes.paper}>
+                                    <FormControl margin="normal" className={classes.mark_all_select}>
+                                        <InputLabel>Mark All As</InputLabel>
+                                        <Select
+                                            onChange={this.handleMarkAllChange}
+                                        >
+                                            <MenuItem key={PRESENT} value={PRESENT}>Present</MenuItem>
+                                            <MenuItem key={ABSENT} value={ABSENT}>Absent</MenuItem>
+                                        </Select>
+                                    </FormControl>
+
+                                </Paper>
+                            }
+                            <Paper className={classes.paper}>
+                                <div className={classes.chip_div}>
+                                    <Chip
+                                        label="P"
+                                        className={classes.success_chip}
+                                    />
+                                    <Typography className={classes.chip_description}>Present</Typography>
+                                </div>
+                                <Divider/>
+                                <div className={classes.chip_div}>
+                                    <Chip
+                                        label="A"
+                                        className={classes.danger_chip}
+                                    />
+                                    <Typography className={classes.chip_description}>Absent</Typography>
+                                </div>
+                                <Divider/>
+                                <div className={classes.chip_div}>
+                                    <Chip
+                                        label="L"
+                                        className={classes.warning_chip}
+                                    />
+                                    <Typography className={classes.chip_description}>Leave</Typography>
+                                </div>
+                            </Paper>
+                            <Paper className={classes.paper}>
+                                <Doughnut data={this.getDoughnutData()}/>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                    }
                 </main>
             </Dialog>
         );
