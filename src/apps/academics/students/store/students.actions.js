@@ -101,10 +101,11 @@ export function clearDownloadLink() {
     }
 }
 
-export function deactivateStudent(params) {
+export function deactivateStudent(params, filter_form) {
     return dispatch => {
         UrlService.delete(`users/students`, params) 
         .then(response => {
+            dispatch(fetchDetails(filter_form));
             dispatch(toggleSnackbar({
                 message: 'Student terminated successfully.',
                 variant: SNACKBAR_SUCCESS
