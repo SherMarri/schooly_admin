@@ -95,6 +95,10 @@ class StudentsTab extends React.Component {
         this.props.fetchDownloadLink(this.props.match.params.section_id);
     };
 
+    handleRefresh = () => {
+        this.props.fetchSectionStudents(this.props.match.params.section_id);
+    };
+
     getMappedData = () => {
         const {items} = this.props;
         return items.map(d => {
