@@ -7,7 +7,7 @@ import SummaryTab from './SummaryTab';
 import StudentsTab from "./StudentsTab";
 import AttendanceTab from "./AttendanceTab";
 import SubjectsTab from "./SubjectsTab";
-import ExamsTab from "./ExamsTab";
+import ExamsTab from "./AssessmentsTab";
 import NotificationsTab from "./NotificationsTab";
 
 

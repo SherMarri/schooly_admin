@@ -204,7 +204,7 @@ class AttendanceTab extends React.Component {
             ...this.props.filter_form,
             page: page + 1,
         });
-    }
+    };
 
 
     renderAttendanceTable = () => {

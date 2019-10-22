@@ -5,13 +5,18 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import * as Actions from './store/actions/attendance.actions';
+import * as Actions from './store/actions/assessments.actions';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Utils from "../../../../core/Utils";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import * as SectionSubjectActions from "./store/actions/subjects.actions";
 
 
 const styles = theme => ({
@@ -27,7 +32,7 @@ const styles = theme => ({
     },
 });
 
-class AttendanceFilter extends Component {
+class AssessmentFilter extends Component {
 
     constructor(props) {
         super(props);
@@ -35,9 +40,12 @@ class AttendanceFilter extends Component {
             form: {
                 start_date: null,
                 end_date: null,
-                section_id: props.section_id,
+                graded: null,
+                section_subject_id: null,
+                section_id: props.section_id
             },
         };
+        this.props.fetchSectionSubjects(this.props.section_id);
         this.handleSubmit();
     }
 
@@ -64,7 +72,7 @@ class AttendanceFilter extends Component {
     handleChange = (event) => {
         let form = {
             ...this.state.form,
-            search_term: event.target.value,
+            [event.target.name]: event.target.value
         };
         this.setState({
             form,
@@ -72,13 +80,13 @@ class AttendanceFilter extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, section_subjects } = this.props;
         const { form } = this.state;
 
         return (
             <Paper className={classes.paper}>
                 <Grid container spacing={24}>
-                    <Grid item className={classes.grid_item} xs={12} md={3}>
+                    <Grid item className={classes.grid_item} xs={6} md={2}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <DatePicker
                                 margin="normal"
@@ -92,7 +100,7 @@ class AttendanceFilter extends Component {
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={12} md={3}>
+                    <Grid item className={classes.grid_item} xs={6} md={2}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <DatePicker
                                 margin="normal"
@@ -100,13 +108,55 @@ class AttendanceFilter extends Component {
                                 fullWidth
                                 clearable
                                 minDate={form.start_date ? form.start_date : null}
-                                disableFuture
                                 value={form.end_date}
                                 onChange={(date)=>this.handleDateChange('end_date', date)}
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={12} md={2}>
+                    <Grid item className={classes.grid_item} xs={6} md={2}>
+                        {section_subjects &&
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel htmlFor="section_subject_id">Subject</InputLabel>
+                            <Select
+                                value={form.section_subject_id || ''}
+                                onChange={this.handleChange}
+                                inputProps={{
+                                    name: 'section_subject_id',
+                                    id: 'section_subject_id',
+                                }}
+                            >
+                                <MenuItem value={-1}>
+                                    <em>All</em>
+                                </MenuItem>
+                                {section_subjects &&
+                                section_subjects.map(c =>
+                                    <MenuItem key={c.id} value={c.id}>{c.subject.name}</MenuItem>
+                                )
+                                }
+                            </Select>
+                        </FormControl>
+                        }
+                    </Grid>
+                    <Grid item className={classes.grid_item} xs={6} md={2}>
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel htmlFor="graded">Type</InputLabel>
+                            <Select
+                                value={form.graded}
+                                onChange={this.handleChange}
+                                inputProps={{
+                                    name: 'graded',
+                                    id: 'graded',
+                                }}
+                            >
+                                <MenuItem value={-1}>
+                                    <em>All</em>
+                                </MenuItem>
+                                <MenuItem key={0} value={false}>Ungraded</MenuItem>
+                                <MenuItem key={1} value={true}>Graded</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item className={classes.grid_item} xs={6} md={2}>
                         <Button
                             variant="contained" color="primary"
                             onClick={this.handleSubmit} className={classes.button}
@@ -120,20 +170,22 @@ class AttendanceFilter extends Component {
     }
 }
 
-AttendanceFilter.propTypes = {
+AssessmentFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 function mapStateToProps({ academics }) {
     return {
-        form: academics.grades.section.attendance.filter_form,
+        form: academics.grades.section.assessments.filter_form,
+        section_subjects: academics.grades.section.subjects.items,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateFilters: Actions.updateFilters,
+        fetchSectionSubjects: SectionSubjectActions.fetchSectionSubjects,
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AttendanceFilter)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AssessmentFilter)));
