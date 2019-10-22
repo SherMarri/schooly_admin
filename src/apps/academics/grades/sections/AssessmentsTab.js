@@ -129,6 +129,7 @@ class AssessmentsTab extends React.Component {
             pagination: false,
             serverSide: true,
             download: false,
+            filter: false,
             toolbar: {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
