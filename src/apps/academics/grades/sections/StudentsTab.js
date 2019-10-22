@@ -223,10 +223,10 @@ StudentsTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({academics, hr}) {
+function mapStateToProps({academics}) {
     return {
         items: academics.grades.section.students.items,
-        loading: hr.staff.loading,
+        loading: academics.grades.section.students.loading,
         fetching_download_link: academics.grades.section.students.fetching_download_link,
         download_url: academics.grades.section.students.download_url,
     }
