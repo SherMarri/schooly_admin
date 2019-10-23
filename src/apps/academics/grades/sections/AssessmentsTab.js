@@ -61,7 +61,7 @@ class AssessmentsTab extends React.Component {
 
 
     handleRefresh = () => {
-        this.props.fetchSectionAssessments(this.props.filter_form);
+        this.props.fetchSectionAssessments();
     };
 
 
@@ -213,7 +213,6 @@ function mapStateToProps({academics}) {
     return {
         items: academics.grades.section.assessments.items,
         loading: academics.grades.section.assessments.loading,
-        filter_form: academics.grades.section.assessments.filter_form,
         // fetching_download_link: academics.grades.section.students.fetching_download_link,
         // download_url: academics.grades.section.students.download_url,
     }

@@ -15,11 +15,11 @@ export const CLEAR_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[STAFF] SECTION ASSESSME
 export const SET_FILTERS = '[ACADEMICS] SET SECTION ASSESSMENTS FILTERS';
 
 
-export function createAssessment(data, filter_form) {
+export function createAssessment(data) {
     return (dispatch) => {
         UrlService.post(`academics/sections/${data.section_id}/assessments`, data)
             .then(response => {
-                dispatch(fetchSectionAssessments(filter_form));
+                dispatch(fetchSectionAssessments());
                 return dispatch(toggleSnackbar({
                     message: `Assessment created successfully.`,
                     variant: SNACKBAR_SUCCESS
@@ -35,9 +35,9 @@ export function createAssessment(data, filter_form) {
 }
 
 
-export function fetchSectionAssessments(form) {
-    return dispatch => {
-        dispatch(setFilters(form));
+export function fetchSectionAssessments() {
+    return (dispatch, getState) => {
+        const form = getState().academics.grades.section.assessments.filter_form;
         dispatch({
             type: ACTION_INIT
         });
@@ -109,7 +109,8 @@ export function setFilters(filters) {
 
 export function updateFilters(form) {
     return dispatch => {
-        return dispatch(fetchSectionAssessments(form));
+        dispatch(setFilters(form));
+        return dispatch(fetchSectionAssessments());
     }
 }
 
