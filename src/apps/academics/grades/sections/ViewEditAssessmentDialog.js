@@ -86,7 +86,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 class ViewEditAssessmentDialog extends React.Component {
 
     handleClose = () => {
-        // this.props.resetAssessmentDetails();
+        this.props.resetAssessmentDetails();
         this.props.onClose();
         this.setState({
             items: null
@@ -310,7 +310,7 @@ function mapStateToProps({user, academics}) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchAssessmentDetails: Actions.fetchAssessmentDetails,
-        // resetAssessmentData: Actions.resetAssessmentData,
+        resetAssessmentDetails: Actions.resetAssessmentDetails,
         updateAssessmentDetails: Actions.updateAssessmentDetails,
     }, dispatch);
 }

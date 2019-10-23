@@ -80,8 +80,12 @@ const assessments = function (state = initialState, action) {
                 assessment_details: {...action.payload},
             };
         }
-
-
+        case Actions.RESET_ASSESSMENT_DETAILS: {
+            return {
+                ...state,
+                assessment_details: null,
+            };
+        }
         default: {
             return state;
         }
