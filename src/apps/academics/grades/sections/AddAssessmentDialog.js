@@ -139,7 +139,6 @@ class AddAttendanceDialog extends React.Component {
                             fullWidth
                             required
                             clearable
-                            disableFuture
                             value={form.date}
                             onChange={(date) => this.handleDateChange('date', date)}
                             format="dd/MM/yyyy"

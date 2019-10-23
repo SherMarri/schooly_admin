@@ -19,13 +19,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {Chip, Grid, Divider, TextField, Select, MenuItem} from "@material-ui/core";
+import {Grid, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import {Doughnut} from 'react-chartjs-2';
 import Format from 'date-fns/format';
 import {Utils} from '../../../../core';
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 
 const styles = theme => ({
     appBar: {
@@ -43,6 +40,13 @@ const styles = theme => ({
     },
     grid: {
         margin: theme.spacing(2),
+    },
+    gridUp: {
+        margin: theme.spacing(1),
+    },
+    gridDown: {
+        margin: theme.spacing(1),
+        marginTop: theme.spacing(0),
     },
     grid_item: {
         padding: theme.spacing(1),
@@ -70,6 +74,9 @@ const styles = theme => ({
         marginBottom: '0px',
         width: '100%',
     },
+    titleContent: {
+        fontSize: '14px',
+    }
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -215,7 +222,7 @@ class ViewEditAssessmentDialog extends React.Component {
                     }
                     {assessment_details &&
                     <Grid container className={classes.grid}>
-                        <Grid item xs={12} md={12} className={classes.grid_item}>
+                        <Grid item xs={12} md={8} className={classes.grid_item}>
                             <Paper className={classes.paper}>
                                 <Table className={classes.table}>
                                     <TableHead>
@@ -238,6 +245,46 @@ class ViewEditAssessmentDialog extends React.Component {
                                     Submit
                                 </Button>
                                 }
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={4} className={classes.grid_item}>
+                            <Paper className={classes.paper}>
+                                <Grid container className={classes.gridUp}>
+                                    <Grid item xs={6} md={6} className={classes.grid_item}>
+                                        <Typography variant={"caption"}>Title</Typography>
+                                        <br/>
+                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.name}</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} md={6} className={classes.grid_item}>
+                                        <Typography variant={"caption"}>Date</Typography>
+                                        <br/>
+                                        <Typography className={classes.titleContent} variant={"h6"}>{Format(Utils.getDateFromString(assessment_details.date), 'MMMM do, yyyy')}</Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid container className={classes.gridDown}>
+                                    <Grid item xs={6} md={6} className={classes.grid_item}>
+                                        <Typography variant={"caption"}>Subject</Typography>
+                                        <br/>
+                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.section_subject.subject.name}</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} md={6} className={classes.grid_item}>
+                                        <Typography variant={"caption"}>Teacher</Typography>
+                                        <br/>
+                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.section_subject.teacher.fullname}</Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid container className={classes.gridDown}>
+                                    <Grid item xs={6} md={6} className={classes.grid_item}>
+                                        <Typography variant={"caption"}>Total Marks</Typography>
+                                        <br/>
+                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.total_marks}</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} md={6} className={classes.grid_item}>
+                                        <Typography variant={"caption"}>Type</Typography>
+                                        <br/>
+                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.graded ? 'Graded' : 'Ungraded'}</Typography>
+                                    </Grid>
+                                </Grid>
                             </Paper>
                         </Grid>
                     </Grid>
