@@ -35,9 +35,10 @@ export function createAssessment(data) {
 }
 
 
-export function fetchSectionAssessments() {
+export function fetchSectionAssessments(page=1) {
     return (dispatch, getState) => {
         const form = getState().academics.grades.section.assessments.filter_form;
+        form.page = page;
         dispatch({
             type: ACTION_INIT
         });

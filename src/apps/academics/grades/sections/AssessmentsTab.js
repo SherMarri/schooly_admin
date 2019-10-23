@@ -64,11 +64,14 @@ class AssessmentsTab extends React.Component {
         this.props.fetchSectionAssessments();
     };
 
+    handleChangePage = (page) => {
+        this.props.fetchSectionAssessments(page + 1);
+    };
 
 
     getMappedData = () => {
-        const {items} = this.props;
-        return items.map(d => {
+        const {data} = this.props.items;
+        return data.map(d => {
             return {
                 name: d.name,
                 subject: d.section_subject.subject.name,
@@ -126,7 +129,10 @@ class AssessmentsTab extends React.Component {
             print: false,
             search: false,
             selectableRows: 'none',
-            pagination: false,
+            rowsPerPage: 20,
+            rowsPerPageOptions: [],
+            count: count,
+            page: page,
             serverSide: true,
             download: false,
             filter: false,

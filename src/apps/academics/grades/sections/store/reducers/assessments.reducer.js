@@ -27,7 +27,7 @@ const assessments = function (state = initialState, action) {
         case Actions.SET_SECTION_ASSESSMENTS: {
             return {
                 ...state,
-                items: [...action.payload],
+                items: {...action.payload},
             };
         }
         case Actions.FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK: {

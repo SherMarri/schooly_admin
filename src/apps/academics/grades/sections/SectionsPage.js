@@ -7,7 +7,7 @@ import SummaryTab from './SummaryTab';
 import StudentsTab from "./StudentsTab";
 import AttendanceTab from "./AttendanceTab";
 import SubjectsTab from "./SubjectsTab";
-import ExamsTab from "./AssessmentsTab";
+import AssessmentsTab from "./AssessmentsTab";
 import NotificationsTab from "./NotificationsTab";
 
 
@@ -45,7 +45,7 @@ class SectionsPage extends React.Component {
                 <Tab label="Students" />
                 <Tab label="Attendance" />
                 <Tab label="Subjects" />
-                <Tab label="Exams" />
+                <Tab label="Assessments" />
                 <Tab label="Notifications" />
               </Tabs>
             </AppBar>
@@ -53,7 +53,7 @@ class SectionsPage extends React.Component {
             {value === 1 && <StudentsTab/>}
             {value === 2 && <AttendanceTab/>}
             {value === 3 && <SubjectsTab/>}
-            {value === 4 && <ExamsTab/>}
+            {value === 4 && <AssessmentsTab/>}
             {value === 5 && <NotificationsTab/>}
         </div>
         )
