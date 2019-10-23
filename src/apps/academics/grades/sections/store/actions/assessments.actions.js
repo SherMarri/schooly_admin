@@ -7,10 +7,15 @@ export const ACTION_FAILURE = '[ACADEMICS] SECTION ASSESSMENTS ACTION FAILURE';
 
 
 export const SET_SECTION_ASSESSMENTS = '[ACADEMICS] SET SECTION ASSESSMENTS';
+export const ACTION_FETCH_ASSESSMENT_DETAILS_INIT = '[ACADEMICS] ACTION_FETCH_ASSESSMENT_DETAILS_INIT';
+export const ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS = '[ACADEMICS] ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS';
+export const ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE = '[ACADEMICS] ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE';
+export const SET_SECTION_ASSESSMENT_DETAILS = '[ACADEMICS] SET_SECTION_ASSESSMENT_DETAILS';
 
 export const FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[STAFF] SECTION ASSESSMENTS DOWNLOAD LINK';
 export const SET_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[STAFF] STAFF SET SECTION ASSESSMENTS DOWNLOAD LINK';
 export const CLEAR_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[STAFF] SECTION ASSESSMENTS CLEAR DOWNLOAD LINK';
+
 
 export const SET_FILTERS = '[ACADEMICS] SET SECTION ASSESSMENTS FILTERS';
 
@@ -63,6 +68,53 @@ export function fetchSectionAssessments(page=1) {
             });
     }
 }
+
+export function fetchAssessmentDetails(assessment_id) {
+    return dispatch => {
+        dispatch({
+            type: ACTION_FETCH_ASSESSMENT_DETAILS_INIT
+        });
+        UrlService.get(`academics/assessments/${assessment_id}`)
+            .then(response => {
+                dispatch({
+                    type: SET_SECTION_ASSESSMENT_DETAILS,
+                    payload: response.data
+                });
+                dispatch({
+                    type: ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to retrieve assessment, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
+export function updateAssessmentDetails({ assessment_id, items }) {
+    return dispatch => {
+        UrlService.put(`academics/assessments/${assessment_id}`, { items })
+            .then(response => {
+                dispatch(toggleSnackbar({
+                    message: 'Assessment updated successfully.',
+                    variant: SNACKBAR_SUCCESS
+                }));
+                dispatch(fetchSectionAssessments());
+            })
+            .catch(error => {
+                dispatch(toggleSnackbar({
+                    message: 'Unable to update assessment, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
 
 export function fetchDownloadLink(section_id) {
     return dispatch => {

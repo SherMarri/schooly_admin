@@ -18,8 +18,11 @@ import Format from "date-fns/format";
 import {Utils} from "../../../../core";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import AddAssessmentDialog from "./AddAssessmentDialog";
 import AssessmentFilter from "./AssessmentFilter";
+import ViewEditAssessmentDialog from "./ViewEditAssessmentDialog";
 
 
 const styles = theme => ({
@@ -42,6 +45,9 @@ class AssessmentsTab extends React.Component {
         super(props);
         this.state = {
             add_assessment_dialog_open: false,
+            view_edit_attendance_dialog: false,
+            selected_assessment: null,
+
         };
     }
 
@@ -57,7 +63,7 @@ class AssessmentsTab extends React.Component {
             ...this.state,
             add_assessment_dialog_open: false,
         });
-    }
+    };
 
 
     handleRefresh = () => {
@@ -66,6 +72,55 @@ class AssessmentsTab extends React.Component {
 
     handleChangePage = (page) => {
         this.props.fetchSectionAssessments(page + 1);
+    };
+
+    handleViewEditAssessmentCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            view_edit_assessment_dialog: false,
+            selected_assessment: null,
+            assessment_dialog_read_only: null,
+        });
+    };
+
+
+    handleViewItem = (value) => {
+        this.setState({
+            ...this.state,
+            view_edit_assessment_dialog: true,
+            selected_assessment: value,
+            assessment_dialog_read_only: true,
+        });
+    };
+
+    handleEditItem = (value) => {
+        this.setState({
+            ...this.state,
+            view_edit_assessment_dialog: true,
+            selected_assessment: value,
+            assessment_dialog_read_only: null,
+        });
+    };
+
+
+    renderActionColumn = (value, table_meta, update_value) => {
+        const {classes} = this.props;
+        return (
+            <>
+                <Tooltip title="View">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleViewItem(value)}
+                                aria-label="View">
+                        <RemoveRedEye/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit">
+                    <IconButton className={classes.icon_button} onClick={() => this.handleEditItem(value)}
+                                aria-label="Edit">
+                        <EditIcon/>
+                    </IconButton>
+                </Tooltip>
+            </>
+        );
     };
 
 
@@ -79,6 +134,7 @@ class AssessmentsTab extends React.Component {
                 date: Format(Utils.getDateFromString(d.date), 'MMMM do, yyyy'),
                 total_marks: d.total_marks,
                 graded: d.graded ? 'Yes' : 'No',
+                id: d,
             };
         });
     };
@@ -122,7 +178,18 @@ class AssessmentsTab extends React.Component {
                 options: {
                     filter: false,
                 }
+            },
+            {
+                name: 'id',
+                label: 'Action',
+                options: {
+                    customBodyRender: (value, table_data, update_value) =>
+                        this.renderActionColumn(value, table_data, update_value),
+                    filter: false,
+                    download: false,
+                }
             }
+
         ];
         const options = {
             sort: false,
@@ -183,6 +250,12 @@ class AssessmentsTab extends React.Component {
                                      onClose={this.handleAddAssessmentCloseDialog} section_id={this.props.match.params.section_id}>
                 </AddAssessmentDialog>
                 }
+                <ViewEditAssessmentDialog
+                    open={this.state.view_edit_assessment_dialog}
+                    onClose={this.handleViewEditAssessmentCloseDialog}
+                    assessment={this.state.selected_assessment}
+                    read_only={this.state.assessment_dialog_read_only}
+                />
             </div>
 
         )
