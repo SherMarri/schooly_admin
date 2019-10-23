@@ -88,7 +88,7 @@ class AddAttendanceDialog extends React.Component {
         let {form} = this.state;
         form.section_id = this.props.section_id;
         form.date = Utils.formatDate(form.date);
-        this.props.createAssessment(form, this.props.filter_form);
+        this.props.createAssessment(form);
         this.handleClose();
     };
 
@@ -139,7 +139,6 @@ class AddAttendanceDialog extends React.Component {
                             fullWidth
                             required
                             clearable
-                            disableFuture
                             value={form.date}
                             onChange={(date) => this.handleDateChange('date', date)}
                             format="dd/MM/yyyy"
@@ -202,7 +201,6 @@ AddAttendanceDialog.propTypes = {
 function mapStateToProps({academics}) {
     return {
         section_subjects: academics.grades.section.subjects.items,
-        filter_form: academics.grades.section.assessments.filter_form,
     }
 }
 

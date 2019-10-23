@@ -27,7 +27,7 @@ const assessments = function (state = initialState, action) {
         case Actions.SET_SECTION_ASSESSMENTS: {
             return {
                 ...state,
-                items: [...action.payload],
+                items: {...action.payload},
             };
         }
         case Actions.FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK: {
@@ -56,6 +56,32 @@ const assessments = function (state = initialState, action) {
                 filter_form: action.payload
             };
         }
+        case Actions.ACTION_FETCH_ASSESSMENT_DETAILS_INIT: {
+            return {
+                ...state,
+                loading_assessment_details: true,
+            };
+        }
+        case Actions.ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS: {
+            return {
+                ...state,
+                loading_assessment_details: false,
+            };
+        }
+        case Actions.ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE: {
+            return {
+                ...state,
+                loading_assessment_details: false,
+            };
+        }
+        case Actions.SET_SECTION_ASSESSMENT_DETAILS: {
+            return {
+                ...state,
+                assessment_details: {...action.payload},
+            };
+        }
+
+
         default: {
             return state;
         }
