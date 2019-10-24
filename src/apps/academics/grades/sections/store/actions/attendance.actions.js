@@ -24,6 +24,12 @@ export function createAttendance(data, filter_form) {
                 }));
             })
             .catch(error => {
+                if (error.response && error.response.data && error.response.data.date) {
+                    return dispatch(toggleSnackbar({
+                        message: error.response.data.date[0],
+                        variant: SNACKBAR_FAILURE,
+                    }));
+                }
                 return dispatch(toggleSnackbar({
                     message: 'Unable to create attendance, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
