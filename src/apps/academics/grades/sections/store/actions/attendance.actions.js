@@ -13,6 +13,11 @@ export const SET_ATTENDANCE = '[ACADEMICS] SET ATTENDANCE';
 export const SET_ATTENDANCE_DETAILS = '[ACADEMICS] SET ATTENDANCE DETAILS';
 export const SET_FILTERS = '[ACADEMICS] SET ATTENDANCE FILTERS';
 
+export const FETCHING_DAILY_ATTENDANCE_DOWNLOAD_LINK = '[ACADEMICS] FETCHING DAILY ATTENDANCE DOWNLOAD LINK';
+export const SET_DAILY_ATTENDANCE_DOWNLOAD_LINK = '[ACADEMICS] SET DAILY ATTENDANCE DOWNLOAD LINK';
+export const CLEAR_DAILY_ATTENDANCE_DOWNLOAD_LINK = '[ACADEMICS] DAILY ATTENDANCE CLEAR DOWNLOAD LINK';
+
+
 export function createAttendance(data, filter_form) {
     return (dispatch) => {
         UrlService.post(`attendance/students/daily`, data)
@@ -173,5 +178,40 @@ export function deleteAttendance(attendance_id) {
 export function updateFilters(form) {
     return dispatch => {
         return dispatch(fetchAttendance(form));
+    }
+}
+
+export function fetchDownloadLink(attendance_id) {
+    return dispatch => {
+        dispatch({
+            type: FETCHING_DAILY_ATTENDANCE_DOWNLOAD_LINK,
+            payload: true,
+        });
+        UrlService.get(`attendance/students/daily/${attendance_id}`, {download:true})
+            .then(response => {
+                const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
+                dispatch({
+                    type: SET_DAILY_ATTENDANCE_DOWNLOAD_LINK,
+                    payload: download_url
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: FETCHING_DAILY_ATTENDANCE_DOWNLOAD_LINK,
+                    payload: false,
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to process your request, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
+export function clearDownloadLink() {
+    return dispatch => {
+        return dispatch({
+            type: CLEAR_DAILY_ATTENDANCE_DOWNLOAD_LINK,
+        });
     }
 }

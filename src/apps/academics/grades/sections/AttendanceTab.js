@@ -16,7 +16,7 @@ import {
     IconButton, Grid,
 } from '@material-ui/core';
 import * as Actions from "../sections/store/actions/attendance.actions";
-import {Loading} from "../../../../core/components";
+import {DownloadDialog, Loading} from "../../../../core/components";
 import AddAttendanceDialog from "../sections/AddAttendanceDialog";
 import ViewEditAttendanceDialog from "../sections/ViewEditAttendanceDialog";
 import AttendanceFilter from "../sections/AttendanceFilter";
@@ -124,13 +124,13 @@ class AttendanceTab extends React.Component {
             ...this.state,
             add_attendance_dialog: true
         });
-    }
+    };
 
     handleRefresh = () => {
         this.props.fetchAttendance({
             ...this.props.filter_form,
         });
-    }
+    };
 
 
     handleAddAttendanceCloseDialog = () => {
@@ -138,7 +138,7 @@ class AttendanceTab extends React.Component {
             ...this.state,
             add_attendance_dialog: false,
         });
-    }
+    };
 
     handleViewEditAttendanceCloseDialog = () => {
         this.setState({
@@ -147,7 +147,7 @@ class AttendanceTab extends React.Component {
             selected_attendance: null,
             attendance_dialog_read_only: null,
         });
-    }
+    };
 
     handleViewItem = (value) => {
         this.setState({
@@ -156,7 +156,7 @@ class AttendanceTab extends React.Component {
             selected_attendance: value,
             attendance_dialog_read_only: true,
         });
-    }
+    };
 
     handleEditItem = (value) => {
         this.setState({
@@ -165,7 +165,12 @@ class AttendanceTab extends React.Component {
             selected_attendance: value,
             attendance_dialog_read_only: null,
         });
-    }
+    };
+
+    handleDownload = (attendance_id) => {
+        this.props.fetchDownloadLink(attendance_id);
+    };
+
 
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
@@ -183,9 +188,15 @@ class AttendanceTab extends React.Component {
                         <EditIcon/>
                     </IconButton>
                 </Tooltip>
+                <Tooltip title="Download">
+                    <IconButton aria-label="download" onClick={() => this.handleDownload(value.id)}>
+                        <CloudDownloadIcon/>
+                    </IconButton>
+                </Tooltip>
+
             </>
         );
-    }
+    };
 
 
     getMappedData = () => {
@@ -208,7 +219,7 @@ class AttendanceTab extends React.Component {
 
 
     renderAttendanceTable = () => {
-        const {section_attendance, classes} = this.props;
+        const { section_attendance, classes, fetching_download_link, download_url } = this.props;
         let {page, count} = section_attendance;
         const items = this.getMappedData();
         page -= 1;
@@ -263,13 +274,6 @@ class AttendanceTab extends React.Component {
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
-                        {section_attendance.count > 0 &&
-                        <Tooltip title="Download">
-                            <IconButton aria-label="download">
-                                <CloudDownloadIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        }
                         <Tooltip title="Refresh">
                             <IconButton aria-label="refresh" onClick={this.handleRefresh}>
                                 <RefreshIcon/>
@@ -304,6 +308,13 @@ class AttendanceTab extends React.Component {
                             attendance={this.state.selected_attendance}
                             read_only={this.state.attendance_dialog_read_only}
                         />
+                        {(fetching_download_link || download_url) &&
+                        <DownloadDialog
+                            loading={fetching_download_link}
+                            link={download_url}
+                            onClose={this.props.clearDownloadLink}
+                        />
+                        }
 
                     </div>
 
@@ -341,6 +352,8 @@ function mapStateToProps({academics, user}) {
     return {
         section_attendance: academics.grades.section.attendance.section_attendance,
         filter_form: academics.grades.section.attendance.filter_form,
+        fetching_download_link: academics.grades.section.attendance.fetching_download_link,
+        download_url: academics.grades.section.attendance.download_url,
         loading: academics.grades.section.attendance.loading,
         user: user
     };
@@ -350,6 +363,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchAttendance: Actions.fetchAttendance,
         updateAttendance: Actions.updateAttendance,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
