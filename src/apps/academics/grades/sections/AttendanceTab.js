@@ -183,6 +183,11 @@ class AttendanceTab extends React.Component {
                         <EditIcon/>
                     </IconButton>
                 </Tooltip>
+                <Tooltip title="Download">
+                    <IconButton aria-label="download" onClick={() => this.handleDownload(value.id)}>
+                        <CloudDownloadIcon/>
+                    </IconButton>
+                </Tooltip>
             </>
         );
     }
@@ -261,13 +266,6 @@ class AttendanceTab extends React.Component {
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
-                        {section_attendance.count > 0 &&
-                        <Tooltip title="Download">
-                            <IconButton aria-label="download">
-                                <CloudDownloadIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        }
                         <Tooltip title="Refresh">
                             <IconButton aria-label="refresh" onClick={this.handleRefresh}>
                                 <RefreshIcon/>

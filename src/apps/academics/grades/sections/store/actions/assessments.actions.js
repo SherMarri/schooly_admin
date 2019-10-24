@@ -125,13 +125,13 @@ export function updateAssessmentDetails({ assessment_id, items }) {
 }
 
 
-export function fetchDownloadLink(section_id) {
+export function fetchDownloadLink(assessment_id) {
     return dispatch => {
         dispatch({
             type: FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK,
             payload: true,
         });
-        UrlService.get(`academics/sections/${section_id}/assessments`, {download:true})
+        UrlService.get(`academics/assessments/${assessment_id}`, {download:true})
             .then(response => {
                 const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
                 dispatch({

@@ -13,13 +13,14 @@ import MUIDataTable from "mui-datatables";
 import {bindActionCreators} from "redux";
 import * as Actions from "./store/actions/assessments.actions";
 import {connect} from "react-redux";
-import {Loading} from "../../../../core/components";
+import {DownloadDialog, Loading} from "../../../../core/components";
 import Format from "date-fns/format";
 import {Utils} from "../../../../core";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import AddAssessmentDialog from "./AddAssessmentDialog";
 import AssessmentFilter from "./AssessmentFilter";
 import ViewEditAssessmentDialog from "./ViewEditAssessmentDialog";
@@ -102,6 +103,11 @@ class AssessmentsTab extends React.Component {
         });
     };
 
+    handleDownload = (assessment_id) => {
+        this.props.fetchDownloadLink(assessment_id);
+    };
+
+
 
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
@@ -119,6 +125,12 @@ class AssessmentsTab extends React.Component {
                         <EditIcon/>
                     </IconButton>
                 </Tooltip>
+                <Tooltip title="Download">
+                    <IconButton aria-label="download" onClick={() => this.handleDownload(value.id)}>
+                        <CloudDownloadIcon/>
+                    </IconButton>
+                </Tooltip>
+
             </>
         );
     };
@@ -140,7 +152,7 @@ class AssessmentsTab extends React.Component {
     };
 
     renderAssessmentTable = () => {
-        const { items, classes } = this.props;
+        const { items, classes, fetching_download_link, download_url } = this.props;
         let {page, count} = items;
         page -= 1;
         const columns = [{
@@ -216,15 +228,6 @@ class AssessmentsTab extends React.Component {
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
-                        {/*
-                        {items.count > 0 &&
-                        <Tooltip title="Download">
-                            <IconButton aria-label="download">
-                                <CloudDownloadIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        }
-*/}
                         <Tooltip title="Refresh">
                             <IconButton aria-label="refresh" onClick={this.handleRefresh}>
                                 <RefreshIcon/>
@@ -256,6 +259,14 @@ class AssessmentsTab extends React.Component {
                     assessment={this.state.selected_assessment}
                     read_only={this.state.assessment_dialog_read_only}
                 />
+                {(fetching_download_link || download_url) &&
+                <DownloadDialog
+                    loading={fetching_download_link}
+                    link={download_url}
+                    onClose={this.props.clearDownloadLink}
+                />
+                }
+
             </div>
 
         )
@@ -292,16 +303,16 @@ function mapStateToProps({academics}) {
     return {
         items: academics.grades.section.assessments.items,
         loading: academics.grades.section.assessments.loading,
-        // fetching_download_link: academics.grades.section.students.fetching_download_link,
-        // download_url: academics.grades.section.students.download_url,
+        fetching_download_link: academics.grades.section.assessments.fetching_download_link,
+        download_url: academics.grades.section.assessments.download_url,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchSectionAssessments: Actions.fetchSectionAssessments
-        // fetchDownloadLink: Actions.fetchDownloadLink,
-        // clearDownloadLink: Actions.clearDownloadLink,
+        fetchSectionAssessments: Actions.fetchSectionAssessments,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
