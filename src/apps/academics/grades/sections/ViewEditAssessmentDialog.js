@@ -123,10 +123,18 @@ class ViewEditAssessmentDialog extends React.Component {
         const {items} = this.state;
         const updated_items = items.map((item) => {
             if (item.id !== id) return {...item};
-            else return {
-                ...item,
-                obtained_marks: obtained_marks !== item.obtained_marks ? obtained_marks : null,
-            };
+            else {
+                if (obtained_marks > this.props.assessment_details.total_marks || isNaN(obtained_marks) || obtained_marks < 0) {
+                    return {
+                        ...item,
+                        obtained_marks: null,
+                    };
+                }
+                return {
+                    ...item,
+                    obtained_marks: obtained_marks !== item.obtained_marks ? obtained_marks : null,
+                };
+            }
         });
         this.setState({
             items: updated_items,
@@ -165,7 +173,7 @@ class ViewEditAssessmentDialog extends React.Component {
                     <TableCell>
                         <TextField
                             className={classes.obtainedMarksField}
-                            defaultValue={row.obtained_marks || ''}
+                            value={null}
                             onChange={(event) => this.handleObtainedMarksChange(row.id, event.target.value)}
                         />
                     </TableCell>
@@ -253,36 +261,42 @@ class ViewEditAssessmentDialog extends React.Component {
                                     <Grid item xs={6} md={6} className={classes.grid_item}>
                                         <Typography variant={"caption"}>Title</Typography>
                                         <br/>
-                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.name}</Typography>
+                                        <Typography className={classes.titleContent}
+                                                    variant={"h6"}>{assessment_details.name}</Typography>
                                     </Grid>
                                     <Grid item xs={6} md={6} className={classes.grid_item}>
                                         <Typography variant={"caption"}>Date</Typography>
                                         <br/>
-                                        <Typography className={classes.titleContent} variant={"h6"}>{Format(Utils.getDateFromString(assessment_details.date), 'MMMM do, yyyy')}</Typography>
+                                        <Typography className={classes.titleContent}
+                                                    variant={"h6"}>{Format(Utils.getDateFromString(assessment_details.date), 'MMMM do, yyyy')}</Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container className={classes.gridDown}>
                                     <Grid item xs={6} md={6} className={classes.grid_item}>
                                         <Typography variant={"caption"}>Subject</Typography>
                                         <br/>
-                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.section_subject.subject.name}</Typography>
+                                        <Typography className={classes.titleContent}
+                                                    variant={"h6"}>{assessment_details.section_subject.subject.name}</Typography>
                                     </Grid>
                                     <Grid item xs={6} md={6} className={classes.grid_item}>
                                         <Typography variant={"caption"}>Teacher</Typography>
                                         <br/>
-                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.section_subject.teacher.fullname}</Typography>
+                                        <Typography className={classes.titleContent}
+                                                    variant={"h6"}>{assessment_details.section_subject.teacher.fullname}</Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container className={classes.gridDown}>
                                     <Grid item xs={6} md={6} className={classes.grid_item}>
                                         <Typography variant={"caption"}>Total Marks</Typography>
                                         <br/>
-                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.total_marks}</Typography>
+                                        <Typography className={classes.titleContent}
+                                                    variant={"h6"}>{assessment_details.total_marks}</Typography>
                                     </Grid>
                                     <Grid item xs={6} md={6} className={classes.grid_item}>
                                         <Typography variant={"caption"}>Type</Typography>
                                         <br/>
-                                        <Typography className={classes.titleContent} variant={"h6"}>{assessment_details.graded ? 'Graded' : 'Ungraded'}</Typography>
+                                        <Typography className={classes.titleContent}
+                                                    variant={"h6"}>{assessment_details.graded ? 'Graded' : 'Ungraded'}</Typography>
                                     </Grid>
                                 </Grid>
                             </Paper>
