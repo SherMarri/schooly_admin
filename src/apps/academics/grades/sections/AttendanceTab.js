@@ -183,14 +183,9 @@ class AttendanceTab extends React.Component {
                         <EditIcon/>
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Download">
-                    <IconButton aria-label="download" onClick={() => this.handleDownload(value.id)}>
-                        <CloudDownloadIcon/>
-                    </IconButton>
-                </Tooltip>
             </>
         );
-    }
+    };
 
 
     getMappedData = () => {
