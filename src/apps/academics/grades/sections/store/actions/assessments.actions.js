@@ -50,6 +50,7 @@ export function fetchSectionAssessments(page=1) {
         });
         UrlService.get(`academics/sections/${form.section_id}/assessments`, form)
             .then(response => {
+                dispatch(resetAssessmentDetails());
                 dispatch({
                     type: SET_SECTION_ASSESSMENTS,
                     payload: response.data
