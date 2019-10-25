@@ -17,7 +17,7 @@ export const SET_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[ACADEMICS] SET SECTION AS
 export const CLEAR_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[ACADEMICS] SECTION ASSESSMENTS CLEAR DOWNLOAD LINK';
 
 export const RESET_ASSESSMENT_DETAILS = '[ACADEMICS] RESET ASSESSMENT DETAILS';
-export const CLEAR_TABLE_DATA = '[STAFF] ASSESSMENT CLEAR TABLE DATA';
+export const CLEAR_TABLE_DATA = '[ACADEMICS] ASSESSMENT CLEAR TABLE DATA';
 
 export const SET_FILTERS = '[ACADEMICS] SET SECTION ASSESSMENTS FILTERS';
 
@@ -49,7 +49,7 @@ export function fetchSectionAssessments(page=1) {
         dispatch({
             type: ACTION_INIT
         });
-        dispatch(resetAssessmentDetails());
+        dispatch(resetAssessmentsData());
         UrlService.get(`academics/sections/${form.section_id}/assessments`, form)
             .then(response => {
                 dispatch({
@@ -76,6 +76,14 @@ export function resetAssessmentDetails() {
     return dispatch => {
         return dispatch({
             type: RESET_ASSESSMENT_DETAILS,
+        });
+    };
+}
+
+export function resetAssessmentsData() {
+    return dispatch => {
+        return dispatch({
+            type: CLEAR_TABLE_DATA,
         });
     };
 }
