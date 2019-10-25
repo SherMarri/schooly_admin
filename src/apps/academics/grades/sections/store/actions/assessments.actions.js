@@ -17,6 +17,7 @@ export const SET_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[ACADEMICS] SET SECTION AS
 export const CLEAR_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[ACADEMICS] SECTION ASSESSMENTS CLEAR DOWNLOAD LINK';
 
 export const RESET_ASSESSMENT_DETAILS = '[ACADEMICS] RESET ASSESSMENT DETAILS';
+export const CLEAR_TABLE_DATA = '[STAFF] ASSESSMENT CLEAR TABLE DATA';
 
 export const SET_FILTERS = '[ACADEMICS] SET SECTION ASSESSMENTS FILTERS';
 
@@ -173,6 +174,9 @@ export function setFilters(filters) {
 export function updateFilters(form) {
     return dispatch => {
         dispatch(setFilters(form));
+        dispatch({
+            type: CLEAR_TABLE_DATA,
+        });
         return dispatch(fetchSectionAssessments());
     }
 }
