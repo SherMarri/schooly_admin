@@ -158,6 +158,13 @@ class AttendanceTab extends React.Component {
         });
     };
 
+    handleDownloadMultipleDatesAttendance = () => {
+        this.props.fetchMultipleDatesDownloadLink({
+            ...this.props.filter_form,
+            download: true,
+        });
+    };
+
     handleEditItem = (value) => {
         this.setState({
             ...this.state,
@@ -219,7 +226,7 @@ class AttendanceTab extends React.Component {
 
 
     renderAttendanceTable = () => {
-        const { section_attendance, classes, fetching_download_link, download_url } = this.props;
+        const { section_attendance, classes, fetching_download_link, download_url} = this.props;
         let {page, count} = section_attendance;
         const items = this.getMappedData();
         page -= 1;
@@ -280,6 +287,12 @@ class AttendanceTab extends React.Component {
                                 <RefreshIcon/>
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download" onClick={this.handleDownloadMultipleDatesAttendance}>
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+
                     </>
                 )
             }
@@ -316,7 +329,6 @@ class AttendanceTab extends React.Component {
                             onClose={this.props.clearDownloadLink}
                         />
                         }
-
                     </div>
 
                 </Grid>
@@ -366,6 +378,7 @@ function mapDispatchToProps(dispatch) {
         updateAttendance: Actions.updateAttendance,
         fetchDownloadLink: Actions.fetchDownloadLink,
         clearDownloadLink: Actions.clearDownloadLink,
+        fetchMultipleDatesDownloadLink: Actions.fetchMultipleDatesDownloadLink,
     }, dispatch);
 }
 
