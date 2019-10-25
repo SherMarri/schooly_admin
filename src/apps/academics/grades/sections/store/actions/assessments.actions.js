@@ -49,9 +49,9 @@ export function fetchSectionAssessments(page=1) {
         dispatch({
             type: ACTION_INIT
         });
+        dispatch(resetAssessmentDetails());
         UrlService.get(`academics/sections/${form.section_id}/assessments`, form)
             .then(response => {
-                dispatch(resetAssessmentDetails());
                 dispatch({
                     type: SET_SECTION_ASSESSMENTS,
                     payload: response.data
