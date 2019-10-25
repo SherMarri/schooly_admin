@@ -127,7 +127,7 @@ class ViewEditAssessmentDialog extends React.Component {
                 if (obtained_marks > this.props.assessment_details.total_marks || isNaN(obtained_marks) || obtained_marks < 0) {
                     return {
                         ...item,
-                        obtained_marks: null,
+                        obtained_marks: '',
                     };
                 }
                 return {
@@ -173,7 +173,7 @@ class ViewEditAssessmentDialog extends React.Component {
                     <TableCell>
                         <TextField
                             className={classes.obtainedMarksField}
-                            value={null}
+                            value={row.obtained_marks}
                             onChange={(event) => this.handleObtainedMarksChange(row.id, event.target.value)}
                         />
                     </TableCell>
@@ -198,8 +198,19 @@ class ViewEditAssessmentDialog extends React.Component {
     handleSubmit = () => {
         const {assessment_details} = this.props;
         const {items} = this.state;
+        const updated_items = items.map((item) => {
+            if (item.obtained_marks === '') {
+                return {
+                    ...item,
+                    obtained_marks: null,
+                };
+
+            }
+            else return { ...item,}
+        });
+
         const data = {
-            items,
+            items: updated_items,
             assessment_id: assessment_details.id,
         };
         this.handleClose();
