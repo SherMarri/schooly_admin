@@ -53,9 +53,12 @@ const styles = theme => ({
     button: {
         float: 'right'
     },
-    backButton: {},
+    backButton: {
+        minWidth: '15px',
+        width: '35px'
+    },
     leftIcon: {
-        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
     card: {
         margin: '10px',
@@ -246,6 +249,10 @@ class GradeDetailPage extends React.Component {
         history.push(`/academics/classes/${this.props.item.id}/notifications`);
     };
 
+    handleBackButton = () => {
+        history.push(`/academics/classes`);
+    };
+
 
     getAttendanceOptions = () => {
         const title = `Attendance - ${Format(new Date(), 'MMM yyyy')}`;
@@ -375,7 +382,7 @@ class GradeDetailPage extends React.Component {
                             <div className={classes.actionsDiv}>
                                 <Button onClick={this.handleGradeDialogOpen} variant="contained"
                                         className={classes.backButton}>
-                                    <ArrowBackIosIcon className={classes.leftIcon}/>
+                                    <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
                                 </Button>
                             </div>
                             <Grid item xs={12} md={8}>
