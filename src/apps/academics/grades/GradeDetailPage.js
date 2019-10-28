@@ -37,6 +37,10 @@ const styles = theme => ({
         marginLeft: '20px',
         marginTop: '12px',
     },
+    gradeTitle: {
+        color: 'white',
+        marginTop: '6px',
+    },
     titleCard: {
         fontSize: 14,
     },
@@ -44,6 +48,9 @@ const styles = theme => ({
         float: 'left',
     },
     titleDiv: {
+        width: '100%',
+    },
+    gradeTitleDiv: {
         width: '100%',
     },
     actionsDiv: {
@@ -59,6 +66,8 @@ const styles = theme => ({
     },
     leftIcon: {
         marginLeft: theme.spacing(1),
+        color: 'white',
+        cursor: 'pointer'
     },
     card: {
         margin: '10px',
@@ -380,14 +389,11 @@ class GradeDetailPage extends React.Component {
                     <Paper className={classes.toolbar}>
                         <Grid container>
                             <div className={classes.actionsDiv}>
-                                <Button onClick={this.handleGradeDialogOpen} variant="contained"
-                                        className={classes.backButton}>
                                     <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
-                                </Button>
                             </div>
                             <Grid item xs={12} md={8}>
-                                <div className={classes.titleDiv}>
-                                    <Typography className={classes.title} variant={"h6"}>{item.name}</Typography>
+                                <div className={classes.gradeTitleDiv}>
+                                    <Typography className={classes.gradeTitle} variant={"h6"}>{item.name}</Typography>
                                 </div>
                             </Grid>
                         </Grid>
