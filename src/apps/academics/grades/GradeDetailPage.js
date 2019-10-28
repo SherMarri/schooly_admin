@@ -200,7 +200,6 @@ class GradeDetailPage extends React.Component {
         super(props);
         const grade_id = this.props.match.params.grade_id;
         props.fetchGradeDetails(grade_id);
-        // const { item } = this.props;
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
@@ -233,13 +232,10 @@ class GradeDetailPage extends React.Component {
         return this.props.item.sections.map((section) => {
             return {
                 ...section,
-                strength: Math.floor(Math.random() * (100 - 30)) + 30,
-                attendance: Math.floor(Math.random() * (100 - 60)) + 60,
-                subjects: Math.floor(Math.random() * (10 - 3)) + 3,
                 value: section,
             };
         });
-    }
+    };
 
     handleViewItem = (item) => {
         history.push(`/academics/classes/${this.props.item.id}/sections/${item.id}`);
@@ -323,7 +319,7 @@ class GradeDetailPage extends React.Component {
                 filter: false,
             }
         }, {
-            name: 'strength',
+            name: 'students',
             label: "Strength",
             options: {
                 filter: false,
@@ -407,7 +403,7 @@ class GradeDetailPage extends React.Component {
                                             Strength
                                         </Typography>
                                         <Typography variant="h6">
-                                            400
+                                            {item.students}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -424,7 +420,7 @@ class GradeDetailPage extends React.Component {
                                             Subjects
                                         </Typography>
                                         <Typography variant="h6">
-                                            25
+                                            {item.subjects}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -441,7 +437,7 @@ class GradeDetailPage extends React.Component {
                                             Teachers
                                         </Typography>
                                         <Typography variant="h6">
-                                            40
+                                            {item.teachers}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -458,7 +454,7 @@ class GradeDetailPage extends React.Component {
                                             Attendance
                                         </Typography>
                                         <Typography variant="h6">
-                                            80%
+                                            {item.attendance}
                                         </Typography>
                                     </div>
                                 </CardContent>

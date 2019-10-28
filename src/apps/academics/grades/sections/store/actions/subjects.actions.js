@@ -37,7 +37,6 @@ export function createSectionSubject(data) {
 }
 
 export function updateSectionSubject(data) {
-    debugger;
     return (dispatch) => {
         UrlService.put(`academics/sections/${data.section_id}/subjects`, data)
             .then(response => {

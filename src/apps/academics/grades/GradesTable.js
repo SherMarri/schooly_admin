@@ -70,7 +70,6 @@ class GradesTable extends React.Component {
 
     getMappedData = () => {
         const {items} = this.props;
-        debugger;
         return items.map((item) => {
             return {
                 ...item,

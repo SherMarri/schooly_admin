@@ -78,7 +78,7 @@ export function fetchGradeDetails(grade_id) {
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get('academics/grades/' + grade_id)
+        UrlService.get(`academics/grades/${grade_id}`, {summary: true})
         .then(response => {
             dispatch({
                 type: SET_GRADE_DETAILS,
