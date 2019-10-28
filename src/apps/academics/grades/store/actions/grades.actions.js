@@ -51,7 +51,7 @@ export function fetchGrades() {
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get('academics/grades')
+        UrlService.get('academics/grades', {summary: true})
         .then(response => {
             dispatch({
                 type: SET_GRADES,

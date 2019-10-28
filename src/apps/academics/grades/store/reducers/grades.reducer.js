@@ -28,7 +28,7 @@ const items = function (state = initialState, action) {
         case Actions.SET_GRADES: {
             return {
                 ...state,
-                items: [...action.payload],
+                details: {...action.payload},
             };
         }
         case Actions.SET_GRADE_DETAILS: {

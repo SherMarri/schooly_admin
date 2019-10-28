@@ -21,6 +21,8 @@ import {
     Button,
 } from '@material-ui/core';
 import {Line} from "react-chartjs-2";
+import * as Actions from "./store/actions/grades.actions";
+import {Loading} from "../../../core/components";
 
 
 const styles = theme => ({
@@ -81,9 +83,17 @@ const styles = theme => ({
 });
 
 class GradesPage extends React.Component {
-    state = {
-        open_add_grade_dialog: false
+    constructor(props) {
+        super(props);
+        this.state = {};
+        this.setState(
+            {
+                open_add_grade_dialog: false
+            }
+        );
+        props.fetchGrades();
     }
+
 
     handleGradeDialogOpen = () => {
         this.setState({
@@ -115,7 +125,17 @@ class GradesPage extends React.Component {
     };
 
     render() {
-        const {classes} = this.props;
+        const {classes, details, loading} = this.props;
+        if (loading) {
+            return (
+                <div className={classes.table_div}>
+                    <Paper className={classes.paper_div}>
+                        <Loading/>
+                    </Paper>
+                </div>
+            );
+        }
+        if (!details) return null;
         return (
             <Grid container>
                 <Grid item xs={12}>
@@ -154,7 +174,7 @@ class GradesPage extends React.Component {
                                             Strength
                                         </Typography>
                                         <Typography variant="h6">
-                                            400
+                                            {details.students}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -171,7 +191,7 @@ class GradesPage extends React.Component {
                                             Subjects
                                         </Typography>
                                         <Typography variant="h6">
-                                            25
+                                            {details.subjects}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -188,7 +208,7 @@ class GradesPage extends React.Component {
                                             Teachers
                                         </Typography>
                                         <Typography variant="h6">
-                                            40
+                                            {details.teachers}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -205,7 +225,7 @@ class GradesPage extends React.Component {
                                             Attendance
                                         </Typography>
                                         <Typography variant="h6">
-                                            80%
+                                            {details.attendance}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -217,7 +237,7 @@ class GradesPage extends React.Component {
                 <Grid item xs={12}>
                     <Grid container>
                         <Grid item xs={12} md={6}>
-                            <GradesTable/>
+                            <GradesTable items={details.items}/>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <Card className={classes.cardLocationRight}>
@@ -225,7 +245,7 @@ class GradesPage extends React.Component {
                                     data={this.getAttendanceChartData()}
                                     width={50}
                                     height={337}
-                                    options={{ maintainAspectRatio: false }}
+                                    options={{maintainAspectRatio: false}}
                                 />
                             </Card>
                         </Grid>
@@ -240,12 +260,18 @@ GradesPage.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({academics}) {
-    return {}
+function mapStateToProps({academics, user}) {
+    return {
+        details: academics.grades.items.details,
+        loading: academics.grades.items.loading,
+        user: user
+    };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({
+        fetchGrades: Actions.fetchGrades,
+    }, dispatch);
 }
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(GradesPage)));
