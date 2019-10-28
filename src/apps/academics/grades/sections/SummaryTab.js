@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import People from '@material-ui/icons/People';
@@ -12,7 +11,7 @@ import {
     Grid,
     Card,
     CardContent,
-    Typography,
+    Typography, Paper,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import List from "@material-ui/core/List";
@@ -21,6 +20,11 @@ import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Line} from "react-chartjs-2";
 import Fab from "@material-ui/core/Fab";
+import {bindActionCreators} from "redux";
+import * as Actions from "../sections/store/actions/section-details.actions";
+import {connect} from "react-redux";
+import {Loading} from "../../../../core/components";
+import {withRouter} from "react-router-dom";
 
 
 const styles = theme => ({
@@ -141,24 +145,12 @@ const chart_options = ({title, data_points}) => {
 
 
 class SummaryTab extends React.Component {
-    state = {
-        open_add_grade_dialog: false
+    constructor(props) {
+        super(props);
+        const section_id = this.props.match.params.section_id;
+        props.fetchSectionDetails(section_id);
     }
-
-    handleGradeDialogOpen = () => {
-        this.setState({
-            ...this.state,
-            open_add_grade_dialog: true
-        });
-    }
-
-
-    handleCloseDialog = () => {
-        this.setState({
-            ...this.state,
-            open_add_grade_dialog: false,
-        });
-    }
+    
 
     getAttendanceChartData = () => {
         const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
@@ -188,8 +180,17 @@ class SummaryTab extends React.Component {
     };
 
     render()  {
-        const {classes} = this.props;
-
+        const {classes, loading, item} = this.props;
+        if (loading) {
+            return (
+                <div className={classes.table_div}>
+                    <Paper className={classes.paper_div}>
+                        <Loading/>
+                    </Paper>
+                </div>
+            );
+        }
+        if (!item) return null;
         const topPerformersTableColumns = [{
             name: 'name',
             label: "Name",
@@ -265,7 +266,7 @@ class SummaryTab extends React.Component {
                                             Strength
                                         </Typography>
                                         <Typography variant="h6">
-                                            400
+                                            {item.students}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -282,7 +283,7 @@ class SummaryTab extends React.Component {
                                             Subjects
                                         </Typography>
                                         <Typography variant="h6">
-                                            25
+                                            {item.subjects}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -299,7 +300,7 @@ class SummaryTab extends React.Component {
                                             Teachers
                                         </Typography>
                                         <Typography variant="h6">
-                                            40
+                                            {item.teachers}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -316,7 +317,7 @@ class SummaryTab extends React.Component {
                                             Attendance
                                         </Typography>
                                         <Typography variant="h6">
-                                            80%
+                                            {item.attendance}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -469,4 +470,19 @@ class SummaryTab extends React.Component {
 SummaryTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withRouter(withStyles(styles)(SummaryTab));
+
+function mapStateToProps({academics, user}) {
+    return {
+        item: academics.grades.section.items.item,
+        loading: academics.grades.section.items.loading,
+        user: user
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        fetchSectionDetails: Actions.fetchSectionDetails,
+    }, dispatch);
+}
+
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SummaryTab)));

@@ -238,11 +238,11 @@ class GradeDetailPage extends React.Component {
     };
 
     handleViewItem = (item) => {
-        history.push(`/academics/classes/${this.props.item.id}/sections/${item.id}`);
+        history.push(`/academics/classes/${this.props.match.params.grade_id}/sections/${item.id}`);
     };
 
     handleViewAllNotifs = (item) => {
-        history.push(`/academics/classes/${this.props.item.id}/notifications`);
+        history.push(`/academics/classes/${this.props.match.params.grade_id}/notifications`);
     };
 
     handleBackButton = () => {
