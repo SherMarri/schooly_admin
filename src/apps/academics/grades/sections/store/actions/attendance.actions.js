@@ -13,6 +13,10 @@ export const SET_ATTENDANCE = '[ACADEMICS] SET ATTENDANCE';
 export const SET_ATTENDANCE_DETAILS = '[ACADEMICS] SET ATTENDANCE DETAILS';
 export const SET_FILTERS = '[ACADEMICS] SET ATTENDANCE FILTERS';
 
+export const FETCHING_ATTENDANCE_DOWNLOAD_LINK = '[ACADEMICS] FETCHING ATTENDANCE DOWNLOAD LINK';
+export const SET_ATTENDANCE_DOWNLOAD_LINK = '[ACADEMICS] SET ATTENDANCE DOWNLOAD LINK';
+export const CLEAR_ATTENDANCE_DOWNLOAD_LINK = '[ACADEMICS] ATTENDANCE CLEAR DOWNLOAD LINK';
+
 export function createAttendance(data, filter_form) {
     return (dispatch) => {
         UrlService.post(`attendance/students/daily`, data)
@@ -24,6 +28,12 @@ export function createAttendance(data, filter_form) {
                 }));
             })
             .catch(error => {
+                if (error.response && error.response.data && error.response.data.date) {
+                    return dispatch(toggleSnackbar({
+                        message: error.response.data.date[0],
+                        variant: SNACKBAR_FAILURE,
+                    }));
+                }
                 return dispatch(toggleSnackbar({
                     message: 'Unable to create attendance, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
@@ -167,5 +177,67 @@ export function deleteAttendance(attendance_id) {
 export function updateFilters(form) {
     return dispatch => {
         return dispatch(fetchAttendance(form));
+    }
+}
+
+export function fetchDownloadLink(attendance_id) {
+    return dispatch => {
+        dispatch({
+            type: FETCHING_ATTENDANCE_DOWNLOAD_LINK,
+            payload: true,
+        });
+        UrlService.get(`attendance/students/daily/${attendance_id}`, {download:true})
+            .then(response => {
+                const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
+                dispatch({
+                    type: SET_ATTENDANCE_DOWNLOAD_LINK,
+                    payload: download_url
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: FETCHING_ATTENDANCE_DOWNLOAD_LINK,
+                    payload: false,
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to process your request, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
+export function clearDownloadLink() {
+    return dispatch => {
+        return dispatch({
+            type: CLEAR_ATTENDANCE_DOWNLOAD_LINK,
+        });
+    }
+}
+
+export function fetchMultipleDatesDownloadLink(form) {
+    return dispatch => {
+        dispatch({
+            type: FETCHING_ATTENDANCE_DOWNLOAD_LINK,
+            payload: true,
+        });
+        UrlService.get(`academics/sections/${form.section_id}/attendance`, form)
+            .then(response => {
+                const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
+                dispatch({
+                    type: SET_ATTENDANCE_DOWNLOAD_LINK,
+                    payload: download_url
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: FETCHING_ATTENDANCE_DOWNLOAD_LINK,
+                    payload: false,
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to process your request, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
     }
 }

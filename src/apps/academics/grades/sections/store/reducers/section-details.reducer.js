@@ -1,4 +1,4 @@
-import * as Actions from '../actions/grades.actions';
+import * as Actions from '../actions/section-details.actions';
 
 const initialState = {
     loading: false,
@@ -25,13 +25,7 @@ const items = function (state = initialState, action) {
                 loading: false,
             };
         }
-        case Actions.SET_GRADES: {
-            return {
-                ...state,
-                details: {...action.payload},
-            };
-        }
-        case Actions.SET_GRADE_DETAILS: {
+        case Actions.SET_SECTION_DETAILS: {
             return {
                 ...state,
                 item: {...action.payload},

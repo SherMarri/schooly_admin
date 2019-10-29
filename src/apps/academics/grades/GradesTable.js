@@ -36,7 +36,6 @@ class GradesTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        props.fetchGrades();
     }
 
     handleEditItem = (item) => {
@@ -45,11 +44,11 @@ class GradesTable extends React.Component {
             selected_item: item,
             edit: true
         });
-    }
+    };
 
     handleViewItem = (item) => {
         history.push(`/academics/classes/${item.id}`);
-    }
+    };
 
 
     handleDeleteItem = (item) => {
@@ -58,7 +57,7 @@ class GradesTable extends React.Component {
             selected_item: item,
             dialog_message: "You won't be able to undo this operation, are you sure you want to delete this class?"
         });
-    }
+    };
 
 
     handleCloseDialog = () => {
@@ -67,20 +66,18 @@ class GradesTable extends React.Component {
             selected_item: null,
             open: false,
         });
-    }
+    };
 
     getMappedData = () => {
-        const { items } = this.props;
+        const {items} = this.props;
         return items.map((item) => {
             return {
                 ...item,
-                strength: Math.floor(Math.random() * (100 - 30)) + 30,
                 attendance: Math.floor(Math.random() * (100 - 60)) + 60,
-                subjects: Math.floor(Math.random() * (10 - 3)) + 3,
                 value: item,
             };
         });
-    }
+    };
 
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
@@ -106,11 +103,11 @@ class GradesTable extends React.Component {
                 </Tooltip>
             </>
         );
-    }
+    };
 
     handleRefresh = () => {
         this.props.fetchGrades();
-    }
+    };
 
     handleCloseDeleteDialog = () => {
         this.setState({
@@ -118,7 +115,7 @@ class GradesTable extends React.Component {
             selected_item: null,
             dialog_message: null,
         });
-    }
+    };
 
     handleConfirmDelete = () => {
         const {selected_item} = this.state;
@@ -128,11 +125,11 @@ class GradesTable extends React.Component {
             selected_item: null,
             dialog_message: null,
         });
-    }
+    };
 
 
     render() {
-        const {items, loading, classes } = this.props;
+        const {items, loading, classes} = this.props;
         const {open_delete_dialog, dialog_message} = this.state;
         if (loading) {
             return (
@@ -151,33 +148,34 @@ class GradesTable extends React.Component {
                 filter: false,
             }
         }, {
-            name: 'strength',
+            name: 'students',
             label: "Strength",
             options: {
                 filter: false,
             }
-        }, {
-            name: 'subjects',
-            label: "Subjects",
-            options: {
-                filter: false,
-            }
-        }, {
-            name: 'attendance',
-            label: "Attendance",
-            options: {
-                filter: false,
-            }
-        }, {
-            name: 'value',
-            label: 'Action',
-            options: {
-                customBodyRender: (value, table_data, update_value) =>
-                    this.renderActionColumn(value, table_data, update_value),
-                filter: false,
-                download: false,
-            }
         },
+            {
+                name: 'subjects',
+                label: "Subjects",
+                options: {
+                    filter: false,
+                }
+            }, {
+                name: 'attendance',
+                label: "Attendance",
+                options: {
+                    filter: false,
+                }
+            }, {
+                name: 'value',
+                label: 'Action',
+                options: {
+                    customBodyRender: (value, table_data, update_value) =>
+                        this.renderActionColumn(value, table_data, update_value),
+                    filter: false,
+                    download: false,
+                }
+            },
         ];
         const options = {
             sort: false,
@@ -187,6 +185,7 @@ class GradesTable extends React.Component {
             selectableRows: 'none',
             download: false,
             viewColumns: false,
+            pagination: false,
             toolbar: {
                 viewColumns: "View Columns",
             },
@@ -210,7 +209,7 @@ class GradesTable extends React.Component {
                     data={this.getMappedData()}
                     columns={columns}
                     options={options}/>
-{/*
+                {/*
                 {this.state.open &&
                 <AddEditGradeDialog
                     open={this.state.open}
@@ -248,16 +247,14 @@ GradesTable.propTypes = {
 
 function mapStateToProps({academics, user}) {
     return {
-        items: academics.grades.items.items,
         loading: academics.grades.items.loading,
-        user: user
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchGrades: Actions.fetchGrades,
-        deleteGrade: Actions.deleteGrade
+        deleteGrade: Actions.deleteGrade,
+        fetchGrades: Actions.fetchGrades
     }, dispatch);
 }
 

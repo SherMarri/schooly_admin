@@ -7,10 +7,6 @@ const academics = combineReducers({
     students,
     subjects,
     grades,
-    // gradeNotifications,
-    // sectionNotifications,
-    // sectionSubjects,
-    // attendance,
 });
 
 export default academics;

@@ -69,6 +69,26 @@ const common = function (state = initialState, action) {
                 filter_form: action.payload
             };
         }
+        case Actions.FETCHING_ATTENDANCE_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: action.payload
+            };
+        }
+        case Actions.SET_ATTENDANCE_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: action.payload
+            };
+        }
+        case Actions.CLEAR_ATTENDANCE_DOWNLOAD_LINK: {
+            return {
+                ...state,
+                fetching_download_link: false,
+                download_url: null,
+            };
+        }
         default:
         {
             return state;

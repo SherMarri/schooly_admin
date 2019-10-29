@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
-import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {withStyles, MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
@@ -16,7 +16,7 @@ import {
     IconButton, Grid,
 } from '@material-ui/core';
 import * as Actions from "../sections/store/actions/attendance.actions";
-import {Loading} from "../../../../core/components";
+import {DownloadDialog, Loading} from "../../../../core/components";
 import AddAttendanceDialog from "../sections/AddAttendanceDialog";
 import ViewEditAttendanceDialog from "../sections/ViewEditAttendanceDialog";
 import AttendanceFilter from "../sections/AttendanceFilter";
@@ -24,14 +24,14 @@ import Utils from "../../../../core/Utils";
 
 const getMuiTheme = () => (
     createMuiTheme({
-      overrides: {
-        MUIDataTableBodyCell: {
-          root: {
-            paddingTop: '0px',
-            paddingBottom: '0px',
-          }
+        overrides: {
+            MUIDataTableBodyCell: {
+                root: {
+                    paddingTop: '0px',
+                    paddingBottom: '0px',
+                }
+            }
         }
-      }
     })
 );
 
@@ -110,7 +110,7 @@ const styles = theme => ({
 class AttendanceTab extends React.Component {
     constructor(props) {
         super(props);
-        const { section_id } = this.props.match.params;
+        const {section_id} = this.props.match.params;
         this.state = {
             section_id,
             add_attendance_dialog: false,
@@ -124,13 +124,13 @@ class AttendanceTab extends React.Component {
             ...this.state,
             add_attendance_dialog: true
         });
-    }
+    };
 
     handleRefresh = () => {
         this.props.fetchAttendance({
             ...this.props.filter_form,
         });
-    }
+    };
 
 
     handleAddAttendanceCloseDialog = () => {
@@ -138,7 +138,7 @@ class AttendanceTab extends React.Component {
             ...this.state,
             add_attendance_dialog: false,
         });
-    }
+    };
 
     handleViewEditAttendanceCloseDialog = () => {
         this.setState({
@@ -147,7 +147,7 @@ class AttendanceTab extends React.Component {
             selected_attendance: null,
             attendance_dialog_read_only: null,
         });
-    }
+    };
 
     handleViewItem = (value) => {
         this.setState({
@@ -156,7 +156,14 @@ class AttendanceTab extends React.Component {
             selected_attendance: value,
             attendance_dialog_read_only: true,
         });
-    }
+    };
+
+    handleDownloadMultipleDatesAttendance = () => {
+        this.props.fetchMultipleDatesDownloadLink({
+            ...this.props.filter_form,
+            download: true,
+        });
+    };
 
     handleEditItem = (value) => {
         this.setState({
@@ -165,7 +172,12 @@ class AttendanceTab extends React.Component {
             selected_attendance: value,
             attendance_dialog_read_only: null,
         });
-    }
+    };
+
+    handleDownload = (attendance_id) => {
+        this.props.fetchDownloadLink(attendance_id);
+    };
+
 
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
@@ -183,9 +195,15 @@ class AttendanceTab extends React.Component {
                         <EditIcon/>
                     </IconButton>
                 </Tooltip>
+                <Tooltip title="Download">
+                    <IconButton aria-label="download" onClick={() => this.handleDownload(value.id)}>
+                        <CloudDownloadIcon/>
+                    </IconButton>
+                </Tooltip>
+
             </>
         );
-    }
+    };
 
 
     getMappedData = () => {
@@ -208,7 +226,7 @@ class AttendanceTab extends React.Component {
 
 
     renderAttendanceTable = () => {
-        const { section_attendance, classes } = this.props;
+        const { section_attendance, classes, fetching_download_link, download_url} = this.props;
         let {page, count} = section_attendance;
         const items = this.getMappedData();
         page -= 1;
@@ -241,6 +259,7 @@ class AttendanceTab extends React.Component {
             sort: false,
             print: false,
             search: false,
+            filter: false,
             selectableRows: 'none',
             rowsPerPage: 30,
             rowsPerPageOptions: [30],
@@ -252,7 +271,9 @@ class AttendanceTab extends React.Component {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
             },
-            onChangePage: (page) => {this.handleChangePage(page)},
+            onChangePage: (page) => {
+                this.handleChangePage(page)
+            },
             customToolbar: () => {
                 return (
                     <>
@@ -261,18 +282,17 @@ class AttendanceTab extends React.Component {
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
-                        {section_attendance.count > 0 &&
-                        <Tooltip title="Download">
-                            <IconButton aria-label="download">
-                                <CloudDownloadIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        }
                         <Tooltip title="Refresh">
                             <IconButton aria-label="refresh" onClick={this.handleRefresh}>
                                 <RefreshIcon/>
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title="Download">
+                            <IconButton aria-label="download" onClick={this.handleDownloadMultipleDatesAttendance}>
+                                <CloudDownloadIcon/>
+                            </IconButton>
+                        </Tooltip>
+
                     </>
                 )
             }
@@ -293,14 +313,22 @@ class AttendanceTab extends React.Component {
                                 options={options}
                             />
                         </MuiThemeProvider>
-                        <AddAttendanceDialog open={this.state.add_attendance_dialog} onClose={this.handleAddAttendanceCloseDialog} section_id={this.state.section_id}/>
+                        <AddAttendanceDialog open={this.state.add_attendance_dialog}
+                                             onClose={this.handleAddAttendanceCloseDialog}
+                                             section_id={this.state.section_id}/>
                         <ViewEditAttendanceDialog
                             open={this.state.view_edit_attendance_dialog}
                             onClose={this.handleViewEditAttendanceCloseDialog}
                             attendance={this.state.selected_attendance}
                             read_only={this.state.attendance_dialog_read_only}
                         />
-
+                        {(fetching_download_link || download_url) &&
+                        <DownloadDialog
+                            loading={fetching_download_link}
+                            link={download_url}
+                            onClose={this.props.clearDownloadLink}
+                        />
+                        }
                     </div>
 
                 </Grid>
@@ -312,16 +340,16 @@ class AttendanceTab extends React.Component {
         const {classes, section_attendance, loading} = this.props;
         return (
             <React.Fragment>
-                <Grid container  className={classes.grid}>
+                <Grid container className={classes.grid}>
                     <Grid item xs={12} md={12} className={classes.grid_item}>
                         <AttendanceFilter section_id={this.state.section_id}></AttendanceFilter>
                     </Grid>
                 </Grid>
                 {loading &&
-                    <Loading/>
+                <Loading/>
                 }
                 {section_attendance &&
-                    this.renderAttendanceTable()
+                this.renderAttendanceTable()
                 }
 
             </React.Fragment>
@@ -337,6 +365,8 @@ function mapStateToProps({academics, user}) {
     return {
         section_attendance: academics.grades.section.attendance.section_attendance,
         filter_form: academics.grades.section.attendance.filter_form,
+        fetching_download_link: academics.grades.section.attendance.fetching_download_link,
+        download_url: academics.grades.section.attendance.download_url,
         loading: academics.grades.section.attendance.loading,
         user: user
     };
@@ -346,6 +376,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchAttendance: Actions.fetchAttendance,
         updateAttendance: Actions.updateAttendance,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
+        fetchMultipleDatesDownloadLink: Actions.fetchMultipleDatesDownloadLink,
     }, dispatch);
 }
 

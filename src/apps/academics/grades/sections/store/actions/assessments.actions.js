@@ -17,6 +17,7 @@ export const SET_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[ACADEMICS] SET SECTION AS
 export const CLEAR_SECTION_ASSESSMENTS_DOWNLOAD_LINK = '[ACADEMICS] SECTION ASSESSMENTS CLEAR DOWNLOAD LINK';
 
 export const RESET_ASSESSMENT_DETAILS = '[ACADEMICS] RESET ASSESSMENT DETAILS';
+export const CLEAR_TABLE_DATA = '[ACADEMICS] ASSESSMENT CLEAR TABLE DATA';
 
 export const SET_FILTERS = '[ACADEMICS] SET SECTION ASSESSMENTS FILTERS';
 
@@ -48,6 +49,7 @@ export function fetchSectionAssessments(page=1) {
         dispatch({
             type: ACTION_INIT
         });
+        dispatch(resetAssessmentsData());
         UrlService.get(`academics/sections/${form.section_id}/assessments`, form)
             .then(response => {
                 dispatch({
@@ -74,6 +76,14 @@ export function resetAssessmentDetails() {
     return dispatch => {
         return dispatch({
             type: RESET_ASSESSMENT_DETAILS,
+        });
+    };
+}
+
+export function resetAssessmentsData() {
+    return dispatch => {
+        return dispatch({
+            type: CLEAR_TABLE_DATA,
         });
     };
 }
@@ -125,13 +135,13 @@ export function updateAssessmentDetails({ assessment_id, items }) {
 }
 
 
-export function fetchDownloadLink(section_id) {
+export function fetchDownloadLink(assessment_id) {
     return dispatch => {
         dispatch({
             type: FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK,
             payload: true,
         });
-        UrlService.get(`academics/sections/${section_id}/assessments`, {download:true})
+        UrlService.get(`academics/assessments/${assessment_id}`, {download:true})
             .then(response => {
                 const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
                 dispatch({
@@ -172,6 +182,9 @@ export function setFilters(filters) {
 export function updateFilters(form) {
     return dispatch => {
         dispatch(setFilters(form));
+        dispatch({
+            type: CLEAR_TABLE_DATA,
+        });
         return dispatch(fetchSectionAssessments());
     }
 }

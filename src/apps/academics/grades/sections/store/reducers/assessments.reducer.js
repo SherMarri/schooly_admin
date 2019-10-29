@@ -86,6 +86,12 @@ const assessments = function (state = initialState, action) {
                 assessment_details: null,
             };
         }
+        case Actions.CLEAR_TABLE_DATA: {
+            return {
+                ...state,
+                items: null,
+            };
+        }
         default: {
             return state;
         }

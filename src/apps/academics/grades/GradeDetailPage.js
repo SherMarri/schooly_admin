@@ -37,6 +37,10 @@ const styles = theme => ({
         marginLeft: '20px',
         marginTop: '12px',
     },
+    gradeTitle: {
+        color: 'white',
+        marginTop: '6px',
+    },
     titleCard: {
         fontSize: 14,
     },
@@ -46,6 +50,9 @@ const styles = theme => ({
     titleDiv: {
         width: '100%',
     },
+    gradeTitleDiv: {
+        width: '100%',
+    },
     actionsDiv: {
         margin: theme.spacing(1),
         marginTop: '10px',
@@ -53,9 +60,14 @@ const styles = theme => ({
     button: {
         float: 'right'
     },
-    backButton: {},
+    backButton: {
+        minWidth: '15px',
+        width: '35px'
+    },
     leftIcon: {
-        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
+        color: 'white',
+        cursor: 'pointer'
     },
     card: {
         margin: '10px',
@@ -197,7 +209,6 @@ class GradeDetailPage extends React.Component {
         super(props);
         const grade_id = this.props.match.params.grade_id;
         props.fetchGradeDetails(grade_id);
-        // const { item } = this.props;
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
@@ -230,20 +241,21 @@ class GradeDetailPage extends React.Component {
         return this.props.item.sections.map((section) => {
             return {
                 ...section,
-                strength: Math.floor(Math.random() * (100 - 30)) + 30,
-                attendance: Math.floor(Math.random() * (100 - 60)) + 60,
-                subjects: Math.floor(Math.random() * (10 - 3)) + 3,
                 value: section,
             };
         });
-    }
+    };
 
     handleViewItem = (item) => {
-        history.push(`/academics/classes/${this.props.item.id}/sections/${item.id}`);
+        history.push(`/academics/classes/${this.props.match.params.grade_id}/sections/${item.id}`);
     };
 
     handleViewAllNotifs = (item) => {
-        history.push(`/academics/classes/${this.props.item.id}/notifications`);
+        history.push(`/academics/classes/${this.props.match.params.grade_id}/notifications`);
+    };
+
+    handleBackButton = () => {
+        history.push(`/academics/classes`);
     };
 
 
@@ -316,7 +328,7 @@ class GradeDetailPage extends React.Component {
                 filter: false,
             }
         }, {
-            name: 'strength',
+            name: 'students',
             label: "Strength",
             options: {
                 filter: false,
@@ -373,14 +385,11 @@ class GradeDetailPage extends React.Component {
                     <Paper className={classes.toolbar}>
                         <Grid container>
                             <div className={classes.actionsDiv}>
-                                <Button onClick={this.handleGradeDialogOpen} variant="contained"
-                                        className={classes.backButton}>
-                                    <ArrowBackIosIcon className={classes.leftIcon}/>
-                                </Button>
+                                    <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
                             </div>
                             <Grid item xs={12} md={8}>
-                                <div className={classes.titleDiv}>
-                                    <Typography className={classes.title} variant={"h6"}>{item.name}</Typography>
+                                <div className={classes.gradeTitleDiv}>
+                                    <Typography className={classes.gradeTitle} variant={"h6"}>{item.name}</Typography>
                                 </div>
                             </Grid>
                         </Grid>
@@ -400,7 +409,7 @@ class GradeDetailPage extends React.Component {
                                             Strength
                                         </Typography>
                                         <Typography variant="h6">
-                                            400
+                                            {item.students}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -417,7 +426,7 @@ class GradeDetailPage extends React.Component {
                                             Subjects
                                         </Typography>
                                         <Typography variant="h6">
-                                            25
+                                            {item.subjects}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -434,7 +443,7 @@ class GradeDetailPage extends React.Component {
                                             Teachers
                                         </Typography>
                                         <Typography variant="h6">
-                                            40
+                                            {item.teachers}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -451,7 +460,7 @@ class GradeDetailPage extends React.Component {
                                             Attendance
                                         </Typography>
                                         <Typography variant="h6">
-                                            80%
+                                            {item.attendance}
                                         </Typography>
                                     </div>
                                 </CardContent>
