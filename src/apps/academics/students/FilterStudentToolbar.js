@@ -154,7 +154,7 @@ class FilterStudentToolbar extends Component {
                             />
                         </FormControl>   
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={12} md={3}>
+                    <Grid item className={classes.grid_item} xs={12} md={2}>
                         <Button 
                             variant="contained" color="primary"
                             onClick={this.handleSubmit} className={classes.button}

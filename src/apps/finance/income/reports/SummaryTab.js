@@ -157,7 +157,7 @@ class SummaryTab extends React.Component {
 
     renderQuickFacts = () => {
 
-        const { classes, summary } = this.props;
+        const { classes } = this.props;
 
         return (
             <Paper className={classes.paper}>

@@ -32,8 +32,6 @@ class FilterStaffToolbar extends Component {
         super(props);
         this.state = {
             form: {
-                grade_id: -1,
-                section_id: null,
                 search_term: '',
             }
         };

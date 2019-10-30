@@ -32,12 +32,20 @@ const staff = function (state = initialState, action) {
                 details: null,
             };
         }
+        case Actions.SET_TEACHERS: {
+            return {
+                ...state,
+                teachers: [
+                    ...action.payload
+                ]
+            };
+        }
         case Actions.SET_DETAILS: {
             return {
                 ...state,
                 details: {
-                    ...action.payload
-                }
+                    ...action.payload,
+                },
             };
         }
         case Actions.FETCHING_STAFF_DOWNLOAD_LINK: {

@@ -1,10 +1,7 @@
 import React from 'react';
 import { Paper, Typography, Button, Grid } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AddEditStaffDialog from './AddEditStaffDialog';
@@ -102,15 +99,4 @@ StaffToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({}) {
-	return {
-	}
-}
-
-function mapDispatchToProps(dispatch)
-{
-    return bindActionCreators({
-    }, dispatch);
-}
-
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(StaffToolbar)));
+export default withRouter(withStyles(styles)(StaffToolbar));

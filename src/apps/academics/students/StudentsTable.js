@@ -92,6 +92,8 @@ class StudentTable extends React.Component {
             selected_item: null,
             open: false,
         });
+        if(this.state.edit)
+            this.handleRefresh();
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
@@ -143,7 +145,7 @@ class StudentTable extends React.Component {
 
     handleConfirmDeactivate = () => {
         const {selected_item} = this.state;
-        this.props.deactivateStudent({id: selected_item.id});
+        this.props.deactivateStudent({id: selected_item.id}, this.props.filter_form);
         this.setState({
             open_deactivate_dialog: false,
             selected_item: null,

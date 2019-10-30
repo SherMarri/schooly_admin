@@ -1,5 +1,6 @@
 import { UrlService, Utils } from "../../../../core";
 import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
+import { PROFILE_TYPES } from "../../../../core/constants";
 
 export const ACTION_INIT = '[STAFF] STAFF ACTION INIT';
 export const ACTION_SUCCESS = '[STAFF] STAFF ACTION SUCCESS';
@@ -8,6 +9,8 @@ export const CLEAR_TABLE_DATA = '[STAFF] STAFF CLEAR TABLE DATA';
 
 export const SET_FILTERS = '[STAFF] STAFF SET FILTERS';
 export const SET_DETAILS = '[STAFF] STAFF SET DETAILS';
+
+export const SET_TEACHERS = '[STAFF] STAFF SET TEACHERS';
 
 export const FETCHING_STAFF_DOWNLOAD_LINK = '[STAFF] STAFF FETCHING DOWNLOAD LINK';
 export const SET_STAFF_DOWNLOAD_LINK = '[STAFF] STAFF SET DOWNLOAD LINK';
@@ -64,18 +67,39 @@ export function fetchDetails(params) {
         dispatch({
             type: ACTION_INIT
         });
-        let filters = params;
-        dispatch(setFilters(filters));
-        if (params.start_date) {
-            filters.start_date = Utils.formatDate(params.start_date); 
-        }
-        if (params.end_date) {
-            filters.end_date = Utils.formatDate(params.end_date); 
-        }
-        UrlService.get('users/staff', filters)
+        dispatch(setFilters(params));
+        UrlService.get('users/staff', params)
         .then(response => {
             dispatch({
                 type: SET_DETAILS,
+                payload: response.data
+            });
+            dispatch({
+                type: ACTION_SUCCESS
+            });
+        })
+        .catch(error => {
+            dispatch({
+                type: ACTION_FAILURE
+            });
+            dispatch(toggleSnackbar({
+                message: 'Unable to process your request, please contact Schooli support.',
+                variant: SNACKBAR_FAILURE
+            }));
+        });
+    }
+}
+
+export function fetchTeachers() {
+    return dispatch => {
+        dispatch({
+            type: ACTION_INIT
+        });
+        let filters = {dropdown: true, profile_type: PROFILE_TYPES.TEACHER};
+        UrlService.get('users/staff', filters)
+        .then(response => {
+            dispatch({
+                type: SET_TEACHERS,
                 payload: response.data
             });
             dispatch({

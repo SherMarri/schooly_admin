@@ -1,5 +1,4 @@
 import React from 'react';
-import TrendingUp from '@material-ui/icons/TrendingUp';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import Receipt from '@material-ui/icons/Receipt';
 import Payment from '@material-ui/icons/Payment';
@@ -7,11 +6,8 @@ import Dashboard from '@material-ui/icons/Dashboard';
 import AccountBalance from '@material-ui/icons/AccountBalance'
 import School from '@material-ui/icons/School';
 import People from '@material-ui/icons/People';
-import PermContactCalendar from '@material-ui/icons/PermContactCalendar';
-import Settings from '@material-ui/icons/Settings';
 import Library from '@material-ui/icons/LocalLibrary';
 import StudentsIcon from '../assets/students_icon.png';
-import RecordVoiceOver from '@material-ui/icons/RecordVoiceOver';
 
 const getMenuItems = () => [
     // DEPTH OF A SECTION SHOULD NOT EXCEED 2
@@ -31,12 +27,12 @@ const getMenuItems = () => [
                 icon: <img src={StudentsIcon} alt="StudentsIcon" style={{opacity:0.6}}/>,
                 link: '/academics/students'
             },
-//             {
-//                 text: 'Classes',
-//                 code: 'academics>classes',
-//                 icon: <People/>,
-//                 link: '/academics/classes'
-//             },
+            {
+                text: 'Classes',
+                code: 'academics>classes',
+                icon: <People/>,
+                link: '/academics/classes'
+            },
             {
                 text: 'Subjects',
                 code: 'academics>subjects',
