@@ -40,7 +40,6 @@ class AssessmentFilter extends Component {
             form: {
                 start_date: null,
                 end_date: null,
-                graded: null,
                 section_subject_id: null,
                 section_id: props.section_id
             },
@@ -137,6 +136,7 @@ class AssessmentFilter extends Component {
                         </FormControl>
                         }
                     </Grid>
+{/*
                     <Grid item className={classes.grid_item} xs={6} md={2}>
                         <FormControl fullWidth margin="normal">
                             <InputLabel htmlFor="graded">Type</InputLabel>
@@ -156,6 +156,7 @@ class AssessmentFilter extends Component {
                             </Select>
                         </FormControl>
                     </Grid>
+*/}
                     <Grid item className={classes.grid_item} xs={6} md={2}>
                         <Button
                             variant="contained" color="primary"

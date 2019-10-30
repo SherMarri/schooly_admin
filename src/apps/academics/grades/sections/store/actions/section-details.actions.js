@@ -14,7 +14,6 @@ export function fetchSectionDetails(section_id) {
         });
         UrlService.get(`academics/sections/${section_id}`, {summary: true})
             .then(response => {
-                debugger;
                 dispatch({
                     type: SET_SECTION_DETAILS,
                     payload: response.data

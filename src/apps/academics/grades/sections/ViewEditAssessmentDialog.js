@@ -304,10 +304,10 @@ class ViewEditAssessmentDialog extends React.Component {
                                                     variant={"h6"}>{assessment_details.total_marks}</Typography>
                                     </Grid>
                                     <Grid item xs={6} md={6} className={classes.grid_item}>
-                                        <Typography variant={"caption"}>Type</Typography>
+                                        <Typography variant={"caption"}>Consolidated</Typography>
                                         <br/>
                                         <Typography className={classes.titleContent}
-                                                    variant={"h6"}>{assessment_details.graded ? 'Graded' : 'Ungraded'}</Typography>
+                                                    variant={"h6"}>{assessment_details.exam ? 'Yes' : 'No'}</Typography>
                                     </Grid>
                                 </Grid>
                             </Paper>

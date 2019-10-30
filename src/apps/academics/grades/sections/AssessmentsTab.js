@@ -145,7 +145,6 @@ class AssessmentsTab extends React.Component {
                 teacher: d.section_subject.teacher.fullname,
                 date: Format(Utils.getDateFromString(d.date), 'MMMM do, yyyy'),
                 total_marks: d.total_marks,
-                graded: d.graded ? 'Yes' : 'No',
                 id: d,
             };
         });
@@ -180,13 +179,6 @@ class AssessmentsTab extends React.Component {
             {
                 name: 'total_marks',
                 label: "Total Marks",
-                options: {
-                    filter: false,
-                }
-            },
-            {
-                name: 'graded',
-                label: "Graded",
                 options: {
                     filter: false,
                 }
