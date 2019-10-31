@@ -155,6 +155,7 @@ class ViewEditAssessmentDialog extends React.Component {
         });
     };
 
+
     getMappedData = () => {
         const {read_only, classes} = this.props;
         const studentAssessmentDetails =

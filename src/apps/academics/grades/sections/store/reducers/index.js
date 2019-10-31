@@ -5,6 +5,7 @@ import notifications from './notifications.reducer';
 import subjects from './subjects.reducer';
 import students from './students.reducer';
 import assessments from './assessments.reducer';
+import exams from './exams.reducer';
 
 const section = combineReducers({
     items,
@@ -13,6 +14,7 @@ const section = combineReducers({
     notifications,
     students,
     assessments,
+    exams,
 });
 
 export default section;
