@@ -48,7 +48,7 @@ export function fetchDownloadLink(section_id) {
         });
         UrlService.get(`academics/sections/${section_id}/students`, {download:true})
             .then(response => {
-                const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
+                const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
                 dispatch({
                     type: SET_SECTION_STUDENTS_DOWNLOAD_LINK,
                     payload: download_url

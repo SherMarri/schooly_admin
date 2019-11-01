@@ -160,7 +160,7 @@ export function fetchDownloadLink(params) {
         });
         UrlService.get('users/staff', filters)
         .then(response => {
-            const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
+            const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
             dispatch({
                 type: SET_STAFF_DOWNLOAD_LINK,
                 payload: download_url
