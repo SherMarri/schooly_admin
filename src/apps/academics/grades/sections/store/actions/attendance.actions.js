@@ -188,7 +188,7 @@ export function fetchDownloadLink(attendance_id) {
         });
         UrlService.get(`attendance/students/daily/${attendance_id}`, {download:true})
             .then(response => {
-                const download_url = `${UrlService.getUrl('downloadcsv')}?file_name=${response.data}`;
+                const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
                 dispatch({
                     type: SET_ATTENDANCE_DOWNLOAD_LINK,
                     payload: download_url
@@ -223,7 +223,7 @@ export function fetchMultipleDatesDownloadLink(form) {
         });
         UrlService.get(`academics/sections/${form.section_id}/attendance`, form)
             .then(response => {
-                const download_url = `${UrlService.getUrl('downloadcsv')}?file_name=${response.data}`;
+                const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
                 dispatch({
                     type: SET_ATTENDANCE_DOWNLOAD_LINK,
                     payload: download_url

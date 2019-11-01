@@ -143,7 +143,7 @@ export function fetchDownloadLink(assessment_id) {
         });
         UrlService.get(`academics/assessments/${assessment_id}`, {download:true})
             .then(response => {
-                const download_url = `${UrlService.getUrl('downloadcsv')}?file_name=${response.data}`;
+                const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
                 dispatch({
                     type: SET_SECTION_ASSESSMENTS_DOWNLOAD_LINK,
                     payload: download_url

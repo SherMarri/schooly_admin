@@ -113,7 +113,7 @@ export function fetchDownloadLink(params) {
         });
         UrlService.get('finance/expenses/details', filters)
             .then(response => {
-                const download_url = `${UrlService.getUrl('downloadcsv')}?file_name=${response.data}`;
+                const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
                 dispatch({
                     type: SET_EXPENSE_DOWNLOAD_LINK,
                     payload: download_url
