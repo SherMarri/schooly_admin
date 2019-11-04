@@ -6,6 +6,7 @@ export const ACTION_SUCCESS = '[ACADEMICS] SECTION NOTIFICATIONS ACTION SUCCESS'
 export const ACTION_FAILURE = '[ACADEMICS] SECTION NOTIFICATIONS ACTION FAILURE';
 
 export const SET_NOTIFICATIONS = '[ACADEMICS] SET SECTION NOTIFICATIONS';
+export const SET_RECENT_NOTIFICATIONS = '[ACADEMICS] SET SECTION RECENT NOTIFICATIONS';
 export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET SECTION NOTIFICATIONS DETAILS';
 export const SET_FILTERS = '[ACADEMICS] SET SECTION NOTIFICATIONS FILTERS';
 
@@ -87,6 +88,34 @@ export function fetchNotifications(form) {
             });
     }
 }
+
+export function fetchRecentNotifications(form) {
+    return dispatch => {
+        dispatch({
+            type: ACTION_INIT
+        });
+        UrlService.get(`academics/sections/${form.target_id}/notifications`, form)
+            .then(response => {
+                dispatch({
+                    type: SET_RECENT_NOTIFICATIONS,
+                    payload: response.data
+                });
+                dispatch({
+                    type: ACTION_SUCCESS
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: ACTION_FAILURE
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to retrieve recent notifications, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
 
 export function fetchNotificationDetails(section_id, notification_id) {
     return dispatch => {
