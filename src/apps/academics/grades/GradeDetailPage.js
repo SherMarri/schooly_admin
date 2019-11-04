@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import * as Actions from './store/actions/grades.actions';
+import * as GradeNotificationActions from './store/actions/notifications.actions';
 import {Card, CardContent, Grid, IconButton, Paper, Tooltip, Typography} from "@material-ui/core";
 import {Loading} from "../../../core/components";
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -25,6 +26,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import {Line} from 'react-chartjs-2';
 import ListIcon from '@material-ui/icons/List';
+import Utils from "../../../core/Utils";
 
 const styles = theme => ({
     toolbar: {
@@ -118,90 +120,6 @@ const styles = theme => ({
     },
 });
 
-/*
-const chart_options = ({title, data_points}) => {
-
-    return {
-        animationEnabled: true,
-        title: {
-            text: title
-        },
-        axisX: {
-            valueFormatString: "DD"
-        },
-        axisY: {
-            title: "Count",
-            includeZero: false,
-        },
-        legend: {
-            cursor: "pointer",
-            fontSize: 16,
-        },
-        toolTip: {
-            shared: true
-        },
-        data: [{
-            name: "Section A",
-            type: "spline",
-            yValueFormatString: "#",
-            showInLegend: true,
-            dataPoints: [
-                {x: new Date(2017, 6, 1), y: 72},
-                {x: new Date(2017, 6, 2), y: 80},
-                {x: new Date(2017, 6, 3), y: 74},
-                {x: new Date(2017, 6, 4), y: 85},
-                {x: new Date(2017, 6, 5), y: 92},
-                {x: new Date(2017, 6, 6), y: 65},
-                {x: new Date(2017, 6, 7), y: 95}
-            ]
-        }, {
-            name: "Section B",
-            type: "spline",
-            yValueFormatString: "#",
-            showInLegend: true,
-            dataPoints: [
-                {x: new Date(2017, 6, 1), y: 56},
-                {x: new Date(2017, 6, 2), y: 83},
-                {x: new Date(2017, 6, 3), y: 74},
-                {x: new Date(2017, 6, 4), y: 91},
-                {x: new Date(2017, 6, 5), y: 62},
-                {x: new Date(2017, 6, 6), y: 82},
-                {x: new Date(2017, 6, 7), y: 94}
-            ]
-        }, {
-            name: "Section C",
-            type: "spline",
-            yValueFormatString: "#",
-            showInLegend: true,
-            dataPoints: [
-                {x: new Date(2017, 6, 1), y: 73},
-                {x: new Date(2017, 6, 2), y: 85},
-                {x: new Date(2017, 6, 3), y: 83},
-                {x: new Date(2017, 6, 4), y: 76},
-                {x: new Date(2017, 6, 5), y: 90},
-                {x: new Date(2017, 6, 6), y: 80},
-                {x: new Date(2017, 6, 7), y: 84}
-            ]
-        }, {
-            name: "Section D",
-            type: "spline",
-            yValueFormatString: "#",
-            showInLegend: true,
-            dataPoints: [
-                {x: new Date(2017, 6, 1), y: 74},
-                {x: new Date(2017, 6, 2), y: 86},
-                {x: new Date(2017, 6, 3), y: 91},
-                {x: new Date(2017, 6, 4), y: 55},
-                {x: new Date(2017, 6, 5), y: 79},
-                {x: new Date(2017, 6, 6), y: 89},
-                {x: new Date(2017, 6, 7), y: 98}
-            ]
-        },
-        ]
-    };
-};
-*/
-
 
 class GradeDetailPage extends React.Component {
 
@@ -209,6 +127,7 @@ class GradeDetailPage extends React.Component {
         super(props);
         const grade_id = this.props.match.params.grade_id;
         props.fetchGradeDetails(grade_id);
+        props.fetchRecentNotifications({target_id: grade_id, recent: true})
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
@@ -257,6 +176,62 @@ class GradeDetailPage extends React.Component {
     handleBackButton = () => {
         history.push(`/academics/classes`);
     };
+
+    renderRecentNotifications = () => {
+        const { classes, recent_notifications } = this.props;
+        const data = recent_notifications.data;
+        return(
+            <>
+                <Card className={classes.cardTable}>
+                    <List className={classes.root}>
+                        <ListItem alignItems="flex-start">
+                            <div className={classes.titleDiv}>
+                                <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
+                                <Button onClick={this.handleViewAllNotifs} variant="contained" color="secondary" className={classes.button}>
+                                    <ListIcon className={classes.leftIcon} />
+                                    View All
+                                </Button>
+                            </div>
+                        </ListItem>
+                        <Divider component="li" />
+                        {data.map(item=>(
+                            <>
+                            <ListItem alignItems="flex-start">
+                                <ListItemText
+                                    primary={item.title}
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                component="span"
+                                                variant="body1"
+                                                className={classes.inline}
+                                                color="primary"
+                                            >
+                                                {/*{item.creator.fullname ? item.creator.fullname : ''}*/}
+                                            </Typography>
+                                            {item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content}
+                                            <br/>
+                                            <Typography
+                                                component="span"
+                                                variant="body2"
+                                                className={classes.inline}
+                                                color="secondary"
+                                            >
+                                                {Utils.formatDateLocal(item.created_at)}
+                                            </Typography>
+                                        </React.Fragment>
+                                    }
+                                />
+                            </ListItem>
+                                <Divider component="li" />
+                            </>
+                        ))}
+
+                    </List>
+                </Card>
+            </>
+            )
+    }
 
 
     getAttendanceOptions = () => {
@@ -310,7 +285,7 @@ class GradeDetailPage extends React.Component {
 
 
     render() {
-        const {loading, classes, item} = this.props;
+        const {loading, classes, item, recent_notifications} = this.props;
         if (loading) {
             return (
                 <div className={classes.table_div}>
@@ -481,104 +456,9 @@ class GradeDetailPage extends React.Component {
                                     columns={columns}
                                     options={options}/>
                             </Card>
-                            <Card className={classes.cardTable}>
-                                <List className={classes.root}>
-                                    <ListItem alignItems="flex-start">
-                                        <div className={classes.titleDiv}>
-                                            <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
-                                            <Button onClick={this.handleViewAllNotifs} variant="contained" color="secondary" className={classes.button}>
-                                                <ListIcon className={classes.leftIcon} />
-                                                View All
-                                            </Button>
-                                        </div>
-                                    </ListItem>
-                                    <Divider component="li" />
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemText
-                                            primary="Happy Independence Day"
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        className={classes.inline}
-                                                        color="primary"
-                                                    >
-                                                        Principal -
-                                                    </Typography>
-                                                    {" Wishing everyone a happy independence day… I'll be in your neighborhood doing errands this..."}
-                                                    <br/>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body2"
-                                                        className={classes.inline}
-                                                        color="secondary"
-                                                    >
-                                                        {"August 14, 2019"}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                        />
-                                    </ListItem>
-                                    <Divider component="li" />
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemText
-                                            primary="Brunch this weekend?"
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        className={classes.inline}
-                                                        color="primary"
-                                                    >
-                                                        HR -
-                                                    </Typography>
-                                                    {" I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… "}
-                                                    <br/>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body2"
-                                                        className={classes.inline}
-                                                        color="secondary"
-                                                    >
-                                                        {"July 20, 2014"}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                        />
-                                    </ListItem>
-                                    <Divider component="li" />
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemText
-                                            primary="Brunch this weekend?"
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        className={classes.inline}
-                                                        color="primary"
-                                                    >
-                                                        Principal -
-                                                    </Typography>
-                                                    {" I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… "}
-                                                    <br/>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body2"
-                                                        className={classes.inline}
-                                                        color="secondary"
-                                                    >
-                                                        {"July 20, 2014"}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                        />
-                                    </ListItem>
-
-                                </List>
-                                 </Card>
+                            {recent_notifications &&
+                                this.renderRecentNotifications()
+                            }
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <Card className={classes.cardGraph}>
@@ -605,6 +485,7 @@ GradeDetailPage.propTypes = {
 function mapStateToProps({academics, user}) {
     return {
         item: academics.grades.items.item,
+        recent_notifications: academics.grades.notifications.recent_notifications,
         loading: academics.grades.items.loading,
         user: user
     }
@@ -613,6 +494,7 @@ function mapStateToProps({academics, user}) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchGradeDetails: Actions.fetchGradeDetails,
+        fetchRecentNotifications: GradeNotificationActions.fetchRecentNotifications,
     }, dispatch);
 }
 

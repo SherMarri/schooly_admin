@@ -31,6 +31,12 @@ const notifications = function (state = initialState, action) {
                 items: {...action.payload},
             };
         }
+        case Actions.SET_RECENT_NOTIFICATIONS: {
+            return {
+                ...state,
+                recent_notifications: {...action.payload},
+            };
+        }
         case Actions.SET_NOTIFICATION_DETAILS: {
             return {
                 ...state,
