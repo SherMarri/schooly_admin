@@ -14,6 +14,7 @@ import * as Actions from "./store/actions/section-details.actions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {Loading} from "../../../../core/components";
+import ExamsTab from "./ExamsTab";
 
 
 const styles = theme => ({
@@ -36,8 +37,6 @@ class SectionsPage extends React.Component {
             value: 0,
         };
     }
-
-
     handleChange =  (event, newValue) => {
         this.setState({
             value: newValue
@@ -66,6 +65,7 @@ class SectionsPage extends React.Component {
                 <Tab label="Attendance" />
                 <Tab label="Subjects" />
                 <Tab label="Assessments" />
+                <Tab label="Exams" />
                 <Tab label="Notifications" />
               </Tabs>
             </AppBar>
@@ -74,7 +74,8 @@ class SectionsPage extends React.Component {
             {value === 2 && <AttendanceTab/>}
             {value === 3 && <SubjectsTab/>}
             {value === 4 && <AssessmentsTab/>}
-            {value === 5 && <NotificationsTab/>}
+            {value === 5 && <ExamsTab/>}
+            {value === 6 && <NotificationsTab/>}
         </div>
         )
     }

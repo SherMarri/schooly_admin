@@ -99,6 +99,19 @@ class StudentsTab extends React.Component {
         this.props.fetchSectionStudents(this.props.match.params.section_id);
     };
 
+    getGenderCount = () => {
+        const {items} = this.props;
+        let male_count = 0;
+        let female_count = 0;
+        items.forEach((item) => {
+            if (item.profile.gender === 1)
+                male_count++;
+            else if (item.profile.gender === 2)
+                female_count++;
+        });
+        return [male_count, female_count];
+    };
+
     getMappedData = () => {
         const {items} = this.props;
         return items.map(d => {
@@ -116,7 +129,7 @@ class StudentsTab extends React.Component {
             'Female',
         ];
         const datasets = [{
-            data: [310, 244],
+            data: this.getGenderCount(),
             backgroundColor: [
                 '#FF6384',
                 '#36A2EB',
