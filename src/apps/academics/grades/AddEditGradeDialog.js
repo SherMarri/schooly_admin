@@ -46,18 +46,18 @@ class AddEditGradeDialog extends React.Component {
 
     handleClose = () => {
         this.props.onClose();
-    }
+    };
 
     handleChange = (event) => {
         let form = {
             ...this.state.form,
             [event.target.name]: event.target.value
-        }
+        };
         this.setState({
             ...this.state,
             form: form,
         });
-    }
+    };
 
     isFormValid = () => {
         const keys = Object.keys(this.state.form);
@@ -67,7 +67,7 @@ class AddEditGradeDialog extends React.Component {
             }
         }
         return true;
-    }
+    };
 
     handleSubmit = (event) => {
         event.preventDefault();
