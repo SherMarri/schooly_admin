@@ -11,7 +11,7 @@ import {
     Grid,
     Card,
     CardContent,
-    Typography, Paper,
+    Typography,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import List from "@material-ui/core/List";
@@ -20,10 +20,6 @@ import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Line} from "react-chartjs-2";
 import Fab from "@material-ui/core/Fab";
-import {bindActionCreators} from "redux";
-import * as Actions from "../sections/store/actions/section-details.actions";
-import {connect} from "react-redux";
-import {Loading} from "../../../../core/components";
 import {withRouter} from "react-router-dom";
 
 
@@ -148,7 +144,6 @@ class SummaryTab extends React.Component {
     constructor(props) {
         super(props);
         const section_id = this.props.match.params.section_id;
-        props.fetchSectionDetails(section_id);
     }
     
 
@@ -180,17 +175,8 @@ class SummaryTab extends React.Component {
     };
 
     render()  {
-        const {classes, loading, item} = this.props;
-        if (loading) {
-            return (
-                <div className={classes.table_div}>
-                    <Paper className={classes.paper_div}>
-                        <Loading/>
-                    </Paper>
-                </div>
-            );
-        }
-        if (!item) return null;
+        const {classes, overview} = this.props;
+        if (!overview) return null;
         const topPerformersTableColumns = [{
             name: 'name',
             label: "Name",
@@ -266,7 +252,7 @@ class SummaryTab extends React.Component {
                                             Strength
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.students}
+                                            {overview.students}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -283,7 +269,7 @@ class SummaryTab extends React.Component {
                                             Subjects
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.subjects}
+                                            {overview.subjects}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -300,7 +286,7 @@ class SummaryTab extends React.Component {
                                             Teachers
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.teachers}
+                                            {overview.teachers}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -317,7 +303,7 @@ class SummaryTab extends React.Component {
                                             Attendance
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.attendance}
+                                            {overview.attendance}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -471,18 +457,4 @@ SummaryTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({academics, user}) {
-    return {
-        item: academics.grades.section.items.item,
-        loading: academics.grades.section.items.loading,
-        user: user
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        fetchSectionDetails: Actions.fetchSectionDetails,
-    }, dispatch);
-}
-
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SummaryTab)));
+export default withRouter(withStyles(styles)(SummaryTab));
