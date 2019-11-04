@@ -161,7 +161,6 @@ class AddRegularExamDialog extends React.Component {
     };
 
     static getDerivedStateFromProps(props, state) {
-        console.log(props);
         const exams = props.items;
         if (!(exams)) return null;
         else if (state && state.items) return null;
