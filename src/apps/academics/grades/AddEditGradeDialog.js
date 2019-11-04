@@ -80,7 +80,7 @@ class AddEditGradeDialog extends React.Component {
             this.props.addGrade(form);
         }
         this.handleClose();
-    }
+    };
 
 
     render() {

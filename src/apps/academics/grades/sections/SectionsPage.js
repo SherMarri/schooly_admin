@@ -9,6 +9,7 @@ import AttendanceTab from "./AttendanceTab";
 import SubjectsTab from "./SubjectsTab";
 import AssessmentsTab from "./AssessmentsTab";
 import NotificationsTab from "./NotificationsTab";
+import ExamsTab from "./ExamsTab";
 
 
 const styles = theme => ({
@@ -26,13 +27,13 @@ class SectionsPage extends React.Component {
 
     state = {
         value: 0,
-    }
+    };
     
     handleChange =  (event, newValue) => {
         this.setState({
             value: newValue
         });
-    }
+    };
     render() {
         const { classes } = this.props;
         const { value } = this.state;
@@ -46,6 +47,7 @@ class SectionsPage extends React.Component {
                 <Tab label="Attendance" />
                 <Tab label="Subjects" />
                 <Tab label="Assessments" />
+                <Tab label="Exams" />
                 <Tab label="Notifications" />
               </Tabs>
             </AppBar>
@@ -54,7 +56,8 @@ class SectionsPage extends React.Component {
             {value === 2 && <AttendanceTab/>}
             {value === 3 && <SubjectsTab/>}
             {value === 4 && <AssessmentsTab/>}
-            {value === 5 && <NotificationsTab/>}
+            {value === 5 && <ExamsTab/>}
+            {value === 6 && <NotificationsTab/>}
         </div>
         )
     }
