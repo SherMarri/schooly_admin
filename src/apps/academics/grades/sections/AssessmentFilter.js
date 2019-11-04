@@ -136,27 +136,6 @@ class AssessmentFilter extends Component {
                         </FormControl>
                         }
                     </Grid>
-{/*
-                    <Grid item className={classes.grid_item} xs={6} md={2}>
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel htmlFor="graded">Type</InputLabel>
-                            <Select
-                                value={form.graded}
-                                onChange={this.handleChange}
-                                inputProps={{
-                                    name: 'graded',
-                                    id: 'graded',
-                                }}
-                            >
-                                <MenuItem value={-1}>
-                                    <em>All</em>
-                                </MenuItem>
-                                <MenuItem key={0} value={false}>Ungraded</MenuItem>
-                                <MenuItem key={1} value={true}>Graded</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-*/}
                     <Grid item className={classes.grid_item} xs={6} md={2}>
                         <Button
                             variant="contained" color="primary"

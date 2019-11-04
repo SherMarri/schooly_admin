@@ -115,7 +115,7 @@ export function fetchDownloadLink(params) {
         });
         UrlService.get('finance/income/details', filters)
             .then(response => {
-                const download_url = `${UrlService.getUrl('finance/income/download_csv')}?file_name=${response.data}`;
+                const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
                 dispatch({
                     type: SET_INCOME_DOWNLOAD_LINK,
                     payload: download_url
