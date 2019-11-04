@@ -12,7 +12,7 @@ import {
 import MUIDataTable from "mui-datatables";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {DownloadDialog, Loading} from "../../../../core/components";
+import {Loading} from "../../../../core/components";
 import Format from "date-fns/format";
 import {Utils} from "../../../../core";
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -183,7 +183,7 @@ class ExamsTab extends React.Component {
     };
 
     renderExamTable = () => {
-        const { items, classes, fetching_download_link, download_url } = this.props;
+        const { items, classes } = this.props;
         const { anchor_element } = this.state;
         let {page, count} = items;
         page -= 1;

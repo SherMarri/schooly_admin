@@ -11,6 +11,7 @@ import {
     Card,
     CardContent,
     Typography,
+    Paper,
 } from '@material-ui/core';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -18,13 +19,10 @@ import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Line} from "react-chartjs-2";
 import {bindActionCreators} from "redux";
-import * as Actions from "../sections/store/actions/section-details.actions";
 import * as NotificationsActions from "../sections/store/actions/notifications.actions";
 import {connect} from "react-redux";
 import {Loading} from "../../../../core/components";
 import {withRouter} from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import ListIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import Utils from "../../../../core/Utils";
 
 
@@ -112,7 +110,6 @@ class SummaryTab extends React.Component {
     constructor(props) {
         super(props);
         const section_id = this.props.match.params.section_id;
-        props.fetchSectionDetails(section_id);
         props.fetchRecentNotifications({target_id: section_id, target_type: 3, recent: true})
     }
     
@@ -195,6 +192,7 @@ class SummaryTab extends React.Component {
             );
         }
         if (!item) return null;
+        const overview = item;
         return (
             <Grid container>
                 <Grid item xs={12}>
@@ -313,7 +311,6 @@ function mapStateToProps({academics, user}) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchSectionDetails: Actions.fetchSectionDetails,
         fetchRecentNotifications: NotificationsActions.fetchRecentNotifications,
     }, dispatch);
 }

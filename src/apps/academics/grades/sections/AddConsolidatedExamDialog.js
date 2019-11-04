@@ -16,8 +16,6 @@ import Paper from '@material-ui/core/Paper';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import DateFnsUtils from '@date-io/date-fns';
-import {MuiPickersUtilsProvider, DatePicker} from '@material-ui/pickers';
 import {Grid,} from '@material-ui/core';
 import * as Actions from "./store/actions/exams.actions";
 import Table from "@material-ui/core/Table";
@@ -180,7 +178,7 @@ class AddRegularExamDialog extends React.Component {
     getCheckedExams = () => {
         const {items} = this.state;
         let exams = [];
-        items.map((item) => {
+        items.forEach((item) => {
             if (item.checked) exams.push(item.id);
         });
         return exams;

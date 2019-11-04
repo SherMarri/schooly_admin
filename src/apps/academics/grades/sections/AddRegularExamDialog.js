@@ -204,7 +204,7 @@ class AddRegularExamDialog extends React.Component {
     getCheckedSectionSubjects = () => {
         const {items} = this.state;
         let section_subjects = [];
-        items.map((item) => {
+        items.forEach((item) => {
             if (item.checked) section_subjects.push({id: item.id, total_marks: item.total_marks});
         });
         return section_subjects;

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Tabs, Tab, Typography, Paper} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
@@ -69,7 +68,7 @@ class SectionsPage extends React.Component {
                 <Tab label="Notifications" />
               </Tabs>
             </AppBar>
-            {value === 0 && <SummaryTab overview={item}/>}
+            {value === 0 && <SummaryTab/>}
             {value === 1 && <StudentsTab/>}
             {value === 2 && <AttendanceTab/>}
             {value === 3 && <SubjectsTab/>}
