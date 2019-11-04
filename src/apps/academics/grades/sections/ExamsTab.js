@@ -2,16 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
-
 import {
     Grid,
-    IconButton,
+    IconButton, Menu,
     Tooltip,
     Typography,
+    MenuItem,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
 import {bindActionCreators} from "redux";
-import * as Actions from "./store/actions/assessments.actions";
 import {connect} from "react-redux";
 import {DownloadDialog, Loading} from "../../../../core/components";
 import Format from "date-fns/format";
@@ -21,9 +20,11 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import AddAssessmentDialog from "./AddAssessmentDialog";
-import AssessmentFilter from "./AssessmentFilter";
-import ViewEditAssessmentDialog from "./ViewEditAssessmentDialog";
+import ExamFilter from "./ExamFilter";
+import * as Actions from "./store/actions/exams.actions";
+import AddRegularExamDialog from "./AddRegularExamDialog";
+import AddConsolidatedExamDialog from "./AddConsolidatedExamDialog";
+
 
 
 const styles = theme => ({
@@ -41,41 +42,70 @@ const styles = theme => ({
     },
 });
 
-class AssessmentsTab extends React.Component {
+class ExamsTab extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            add_assessment_dialog_open: false,
-            view_edit_attendance_dialog: false,
-            selected_assessment: null,
-
+            add_regular_exam_dialog_open: false,
+            add_consolidated_exam_dialog_open: false,
+            view_edit_exam_dialog: false,
+            selected_exam: null,
+            anchor_element: null,
         };
     }
 
-    handleNewAssessmentDialogOpen = () => {
+    handleAddIconClick = (event) => {
         this.setState({
-            ...this.state,
-            add_assessment_dialog_open: true
+            anchor_element: event.currentTarget,
         });
     };
 
-    handleAddAssessmentCloseDialog = () => {
+    handleAddIconClose = () => {
+        this.setState({
+            anchor_element: null,
+        });
+    };
+
+
+    handleNewRegularExamDialogOpen = () => {
         this.setState({
             ...this.state,
-            add_assessment_dialog_open: false,
+            add_regular_exam_dialog_open: true
+        });
+    };
+    handleNewConsolidatedExamDialogOpen = () => {
+        this.setState({
+            ...this.state,
+            add_consolidated_exam_dialog_open: true
+        });
+    };
+
+    handleNewRegularExamCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            add_regular_exam_dialog_open: false,
+        });
+    };
+
+    handleNewConsolidatedExamCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            add_consolidated_exam_dialog_open: false,
         });
     };
 
 
     handleRefresh = () => {
-        this.props.fetchSectionAssessments();
+        this.props.fetchSectionExams();
     };
 
     handleChangePage = (page) => {
-        this.props.fetchSectionAssessments(page + 1);
+        this.props.fetchSectionExams(page + 1);
     };
 
-    handleViewEditAssessmentCloseDialog = () => {
+/*
+    handleViewEditExamCloseDialog = () => {
         this.setState({
             ...this.state,
             view_edit_assessment_dialog: false,
@@ -83,6 +113,7 @@ class AssessmentsTab extends React.Component {
             assessment_dialog_read_only: null,
         });
     };
+*/
 
 
     handleViewItem = (value) => {
@@ -94,6 +125,7 @@ class AssessmentsTab extends React.Component {
         });
     };
 
+/*
     handleEditItem = (value) => {
         this.setState({
             ...this.state,
@@ -102,10 +134,13 @@ class AssessmentsTab extends React.Component {
             assessment_dialog_read_only: null,
         });
     };
+*/
 
+/*
     handleDownload = (assessment_id) => {
         this.props.fetchDownloadLink(assessment_id);
     };
+*/
 
 
 
@@ -141,17 +176,15 @@ class AssessmentsTab extends React.Component {
         return data.map(d => {
             return {
                 name: d.name,
-                subject: d.section_subject.subject.name,
-                teacher: d.section_subject.teacher.fullname,
                 date: Format(Utils.getDateFromString(d.date), 'MMMM do, yyyy'),
-                total_marks: d.total_marks,
                 id: d,
             };
         });
     };
 
-    renderAssessmentTable = () => {
+    renderExamTable = () => {
         const { items, classes, fetching_download_link, download_url } = this.props;
+        const { anchor_element } = this.state;
         let {page, count} = items;
         page -= 1;
         const columns = [{
@@ -161,28 +194,12 @@ class AssessmentsTab extends React.Component {
                 filter: false,
             }
         }, {
-            name: 'subject',
-            label: "Subject",
-            options: {
-                filter: false,
-            }
-        }, {
-            name: 'teacher',
-            label: "Teacher",
-        }, {
             name: 'date',
             label: "Date",
             options: {
                 filter: false,
             }
         },
-            {
-                name: 'total_marks',
-                label: "Total Marks",
-                options: {
-                    filter: false,
-                }
-            },
             {
                 name: 'id',
                 label: 'Action',
@@ -216,7 +233,7 @@ class AssessmentsTab extends React.Component {
                 return (
                     <>
                         <Tooltip title="Add">
-                            <IconButton aria-label="add" onClick={this.handleNewAssessmentDialogOpen}>
+                            <IconButton aria-label="add" onClick={this.handleAddIconClick}>
                                 <AddIcon/>
                             </IconButton>
                         </Tooltip>
@@ -225,6 +242,16 @@ class AssessmentsTab extends React.Component {
                                 <RefreshIcon/>
                             </IconButton>
                         </Tooltip>
+                        <Menu
+                            id="add_exam_menu"
+                            anchorEl={anchor_element}
+                            keepMounted
+                            open={Boolean(anchor_element)}
+                            onClose={this.handleAddIconClose}
+                        >
+                            <MenuItem onClick={this.handleNewRegularExamDialogOpen}>Regular</MenuItem>
+                            <MenuItem onClick={this.handleNewConsolidatedExamDialogOpen}>Consolidated</MenuItem>
+                        </Menu>
                     </>
                 )
             }
@@ -234,23 +261,33 @@ class AssessmentsTab extends React.Component {
             <div className={classes.table_div}>
                 <MUIDataTable
                     title={<Typography variant="h5">
-                        Assessments
+                        Exams
                     </Typography>
                     }
                     data={this.getMappedData()}
                     columns={columns}
                     options={options}/>
-                {this.state.add_assessment_dialog_open &&
-                <AddAssessmentDialog open={this.state.add_assessment_dialog_open}
-                                     onClose={this.handleAddAssessmentCloseDialog} section_id={this.props.match.params.section_id}>
-                </AddAssessmentDialog>
+                {this.state.add_regular_exam_dialog_open &&
+                <AddRegularExamDialog open={this.state.add_regular_exam_dialog_open}
+                                     onClose={this.handleNewRegularExamCloseDialog} section_id={this.props.match.params.section_id}>
+                </AddRegularExamDialog>
+
                 }
+                {this.state.add_consolidated_exam_dialog_open &&
+                <AddConsolidatedExamDialog open={this.state.add_consolidated_exam_dialog_open}
+                                     onClose={this.handleNewConsolidatedExamCloseDialog} section_id={this.props.match.params.section_id}>
+                </AddConsolidatedExamDialog>
+
+                }
+{/*
                 <ViewEditAssessmentDialog
                     open={this.state.view_edit_assessment_dialog}
                     onClose={this.handleViewEditAssessmentCloseDialog}
                     assessment={this.state.selected_assessment}
                     read_only={this.state.assessment_dialog_read_only}
                 />
+*/}
+{/*
                 {(fetching_download_link || download_url) &&
                 <DownloadDialog
                     loading={fetching_download_link}
@@ -258,6 +295,7 @@ class AssessmentsTab extends React.Component {
                     onClose={this.props.clearDownloadLink}
                 />
                 }
+*/}
 
             </div>
 
@@ -271,14 +309,14 @@ class AssessmentsTab extends React.Component {
             <React.Fragment>
                 <Grid container  className={classes.grid}>
                     <Grid item xs={12} md={12} className={classes.grid_item}>
-                        <AssessmentFilter section_id={this.props.match.params.section_id}></AssessmentFilter>
+                        <ExamFilter section_id={this.props.match.params.section_id}></ExamFilter>
                     </Grid>
                 </Grid>
                 {loading &&
                 <Loading/>
                 }
                 {items &&
-                this.renderAssessmentTable()
+                this.renderExamTable()
                 }
 
             </React.Fragment>
@@ -286,26 +324,26 @@ class AssessmentsTab extends React.Component {
     }
 }
 
-AssessmentsTab.propTypes = {
+ExamsTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 
 function mapStateToProps({academics}) {
     return {
-        items: academics.grades.section.assessments.items,
-        loading: academics.grades.section.assessments.loading,
-        fetching_download_link: academics.grades.section.assessments.fetching_download_link,
-        download_url: academics.grades.section.assessments.download_url,
+        items: academics.grades.section.exams.items,
+        loading: academics.grades.section.exams.loading,
+        // fetching_download_link: academics.grades.section.assessments.fetching_download_link,
+        // download_url: academics.grades.section.assessments.download_url,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchSectionAssessments: Actions.fetchSectionAssessments,
-        fetchDownloadLink: Actions.fetchDownloadLink,
-        clearDownloadLink: Actions.clearDownloadLink,
+        fetchSectionExams: Actions.fetchSectionExams,
+        // fetchDownloadLink: Actions.fetchDownloadLink,
+        // clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AssessmentsTab)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ExamsTab)));

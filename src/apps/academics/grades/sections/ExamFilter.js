@@ -4,19 +4,13 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
-import * as Actions from './store/actions/assessments.actions';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Utils from "../../../../core/Utils";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import * as SectionSubjectActions from "./store/actions/subjects.actions";
+import * as Actions from "./store/actions/exams.actions";
 
 
 const styles = theme => ({
@@ -32,7 +26,7 @@ const styles = theme => ({
     },
 });
 
-class AssessmentFilter extends Component {
+class ExamFilter extends Component {
 
     constructor(props) {
         super(props);
@@ -40,11 +34,9 @@ class AssessmentFilter extends Component {
             form: {
                 start_date: null,
                 end_date: null,
-                section_subject_id: null,
                 section_id: props.section_id
             },
         };
-        this.props.fetchSectionSubjects(this.props.section_id);
         this.handleSubmit();
     }
 
@@ -79,7 +71,7 @@ class AssessmentFilter extends Component {
     };
 
     render() {
-        const { classes, section_subjects } = this.props;
+        const { classes, } = this.props;
         const { form } = this.state;
 
         return (
@@ -113,30 +105,6 @@ class AssessmentFilter extends Component {
                         </MuiPickersUtilsProvider>
                     </Grid>
                     <Grid item className={classes.grid_item} xs={6} md={2}>
-                        {section_subjects &&
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel htmlFor="section_subject_id">Subject</InputLabel>
-                            <Select
-                                value={form.section_subject_id || ''}
-                                onChange={this.handleChange}
-                                inputProps={{
-                                    name: 'section_subject_id',
-                                    id: 'section_subject_id',
-                                }}
-                            >
-                                <MenuItem value={-1}>
-                                    <em>All</em>
-                                </MenuItem>
-                                {section_subjects &&
-                                section_subjects.map(c =>
-                                    <MenuItem key={c.id} value={c.id}>{c.subject.name}</MenuItem>
-                                )
-                                }
-                            </Select>
-                        </FormControl>
-                        }
-                    </Grid>
-                    <Grid item className={classes.grid_item} xs={6} md={2}>
                         <Button
                             variant="contained" color="primary"
                             onClick={this.handleSubmit} className={classes.button}
@@ -150,22 +118,22 @@ class AssessmentFilter extends Component {
     }
 }
 
-AssessmentFilter.propTypes = {
+ExamFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 function mapStateToProps({ academics }) {
     return {
-        form: academics.grades.section.assessments.filter_form,
-        section_subjects: academics.grades.section.subjects.items,
+        form: academics.grades.section.exams.filter_form,
+        section_subjects: academics.grades.section.exams.items,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateFilters: Actions.updateFilters,
-        fetchSectionSubjects: SectionSubjectActions.fetchSectionSubjects,
+        // fetchSectionSubjects: SectionSubjectActions.fetchSectionSubjects,
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AssessmentFilter)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ExamFilter)));

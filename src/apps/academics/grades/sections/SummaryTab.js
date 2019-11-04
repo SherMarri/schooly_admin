@@ -10,7 +10,7 @@ import {
     Grid,
     Card,
     CardContent,
-    Typography, Paper,
+    Typography,
 } from '@material-ui/core';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -114,7 +114,6 @@ class SummaryTab extends React.Component {
         const section_id = this.props.match.params.section_id;
         props.fetchSectionDetails(section_id);
         props.fetchRecentNotifications({target_id: section_id, target_type: 3, recent: true})
-
     }
     
 
@@ -196,8 +195,6 @@ class SummaryTab extends React.Component {
             );
         }
         if (!item) return null;
-
-
         return (
             <Grid container>
                 <Grid item xs={12}>
@@ -213,7 +210,7 @@ class SummaryTab extends React.Component {
                                             Strength
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.students}
+                                            {overview.students}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -230,7 +227,7 @@ class SummaryTab extends React.Component {
                                             Subjects
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.subjects}
+                                            {overview.subjects}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -247,7 +244,7 @@ class SummaryTab extends React.Component {
                                             Teachers
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.teachers}
+                                            {overview.teachers}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -264,7 +261,7 @@ class SummaryTab extends React.Component {
                                             Attendance
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.attendance}
+                                            {overview.attendance}
                                         </Typography>
                                     </div>
                                 </CardContent>

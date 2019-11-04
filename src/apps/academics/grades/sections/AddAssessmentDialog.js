@@ -39,7 +39,6 @@ class AddAttendanceDialog extends React.Component {
             date: null,
             total_marks: null,
             section_subject_id: null,
-            graded: null,
         };
         this.state = {form};
         this.props.fetchSectionSubjects(this.props.section_id);
@@ -153,6 +152,7 @@ class AddAttendanceDialog extends React.Component {
                         />
                     </FormControl>
 
+{/*
                     <FormControl required fullWidth margin="normal">
                         <InputLabel htmlFor="graded">Graded</InputLabel>
                         <Select
@@ -167,6 +167,7 @@ class AddAttendanceDialog extends React.Component {
                             <MenuItem key={1} value={true}>Graded</MenuItem>
                         </Select>
                     </FormControl>
+*/}
 
                 </DialogContent>
                 <DialogActions>
