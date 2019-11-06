@@ -131,6 +131,7 @@ class SummaryTab extends React.Component {
     renderRecentNotifications = () => {
         const { classes, recent_notifications } = this.props;
         const data = recent_notifications.data;
+        if (!data.length > 0) return null;
         return(
             <>
                     <List className={classes.root}>
