@@ -27,6 +27,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Checkbox from "@material-ui/core/Checkbox";
+import Utils from "../../../../core/Utils";
 
 
 const styles = theme => ({
@@ -184,7 +185,6 @@ class AddRegularExamDialog extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
         const section_subjects = props.items;
-        console.log(section_subjects);
         if (!(section_subjects)) return null;
         else if (state && state.items) return null;
         const items = section_subjects.map((item) => {
@@ -217,6 +217,7 @@ class AddRegularExamDialog extends React.Component {
         form.name = this.state.form.name;
         form.section = {};
         form.section.id = this.props.section_id;
+        form.date = Utils.formatDate(form.date);
         form.section_subjects = this.getCheckedSectionSubjects();
         this.props.createExam(form);
         this.handleClose();

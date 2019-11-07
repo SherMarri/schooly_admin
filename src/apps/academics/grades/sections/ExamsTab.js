@@ -136,12 +136,6 @@ class ExamsTab extends React.Component {
     };
 */
 
-/*
-    handleDownload = (assessment_id) => {
-        this.props.fetchDownloadLink(assessment_id);
-    };
-*/
-
 
 
     renderActionColumn = (value, table_meta, update_value) => {
@@ -287,16 +281,6 @@ class ExamsTab extends React.Component {
                     read_only={this.state.assessment_dialog_read_only}
                 />
 */}
-{/*
-                {(fetching_download_link || download_url) &&
-                <DownloadDialog
-                    loading={fetching_download_link}
-                    link={download_url}
-                    onClose={this.props.clearDownloadLink}
-                />
-                }
-*/}
-
             </div>
 
         )
@@ -333,16 +317,12 @@ function mapStateToProps({academics}) {
     return {
         items: academics.grades.section.exams.items,
         loading: academics.grades.section.exams.loading,
-        // fetching_download_link: academics.grades.section.assessments.fetching_download_link,
-        // download_url: academics.grades.section.assessments.download_url,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchSectionExams: Actions.fetchSectionExams,
-        // fetchDownloadLink: Actions.fetchDownloadLink,
-        // clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
