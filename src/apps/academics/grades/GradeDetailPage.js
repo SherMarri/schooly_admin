@@ -127,7 +127,7 @@ class GradeDetailPage extends React.Component {
         super(props);
         const grade_id = this.props.match.params.grade_id;
         props.fetchGradeDetails(grade_id);
-        props.fetchRecentNotifications({target_id: grade_id, recent: true})
+        props.fetchRecentNotifications({target_id: grade_id, target_type: 2, recent: true})
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
@@ -180,6 +180,7 @@ class GradeDetailPage extends React.Component {
     renderRecentNotifications = () => {
         const { classes, recent_notifications } = this.props;
         const data = recent_notifications.data;
+        if (!data.length > 0) return null;
         return(
             <>
                 <Card className={classes.cardTable}>
@@ -187,6 +188,7 @@ class GradeDetailPage extends React.Component {
                         <ListItem alignItems="flex-start">
                             <div className={classes.titleDiv}>
                                 <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
+
                                 <Button onClick={this.handleViewAllNotifs} variant="contained" color="secondary" className={classes.button}>
                                     <ListIcon className={classes.leftIcon} />
                                     View All
