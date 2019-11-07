@@ -86,6 +86,7 @@ class ExamsTab extends React.Component {
             ...this.state,
             add_regular_exam_dialog_open: false,
         });
+        this.handleAddIconClose();
     };
 
     handleNewConsolidatedExamCloseDialog = () => {
@@ -93,6 +94,7 @@ class ExamsTab extends React.Component {
             ...this.state,
             add_consolidated_exam_dialog_open: false,
         });
+        this.handleAddIconClose();
     };
 
 
