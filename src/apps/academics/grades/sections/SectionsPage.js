@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import {Tabs, Tab, Typography, Paper} from '@material-ui/core';
+import {Tabs, Tab, Typography, Paper, Grid} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import SummaryTab from './SummaryTab';
 import StudentsTab from "./StudentsTab";
@@ -14,6 +14,8 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {Loading} from "../../../../core/components";
 import ExamsTab from "./ExamsTab";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import history from "../../../../core/history";
 
 
 const styles = theme => ({
@@ -23,6 +25,22 @@ const styles = theme => ({
     },
     header: {
         margin: '8px',
+    },
+    gradeTitleDiv: {
+        width: '100%',
+    },
+    actionsDiv: {
+        margin: theme.spacing(1),
+        marginTop: '10px',
+    },
+    backButton: {
+        minWidth: '15px',
+        width: '35px'
+    },
+    leftIcon: {
+        marginLeft: theme.spacing(1),
+        color: 'white',
+        cursor: 'pointer'
     }
 });
 
@@ -41,6 +59,12 @@ class SectionsPage extends React.Component {
             value: newValue
         });
     };
+
+    handleBackButton = () => {
+        const grade_id = this.props.match.params.grade_id;
+        history.push(`/academics/classes/${grade_id}`);
+    };
+
     render() {
         const {classes, loading, item} = this.props;
         if (loading) {
@@ -57,7 +81,17 @@ class SectionsPage extends React.Component {
         return (
         <div className={classes.root}>
             <AppBar position="static">
-              <Typography className={classes.header} variant="h5">{item.grade_name + " - " + item.section_name}</Typography>
+                <Grid container>
+                    <div className={classes.actionsDiv}>
+                        <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
+                    </div>
+                    <Grid item xs={12} md={8}>
+                        <div className={classes.sectionTitleDiv}>
+                            <Typography className={classes.header} variant="h5">{item.grade_name + " - " + item.section_name}</Typography>
+                        </div>
+                    </Grid>
+                </Grid>
+
               <Tabs value={value} onChange={this.handleChange}>
                 <Tab label="Summary" />
                 <Tab label="Students" />
