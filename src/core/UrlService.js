@@ -8,7 +8,7 @@ const API_VERSION = 'v1';
 class UrlService {
     
     static getUrl(path) {
-        return `${BASE_URL}/${API_VERSION}/${path}`;
+        return `${BASE_URL}/${API_VERSION}/${path}/`;
     }
 
     static get(path, params=null) {
