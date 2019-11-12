@@ -97,6 +97,26 @@ export function resetExamsData() {
     };
 }
 
+export function updateExamName(form) {
+    return dispatch => {
+        UrlService.put(`academics/exams/${form.exam_id}`, { name: form.name })
+            .then(response => {
+                dispatch(toggleSnackbar({
+                    message: 'Exam name updated successfully.',
+                    variant: SNACKBAR_SUCCESS
+                }));
+                dispatch(fetchSectionExams());
+            })
+            .catch(error => {
+                dispatch(toggleSnackbar({
+                    message: 'Unable to update exam name, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
+
 /*
 export function fetchAssessmentDetails(assessment_id) {
     return dispatch => {
@@ -125,28 +145,6 @@ export function fetchAssessmentDetails(assessment_id) {
     }
 }
 */
-
-/*
-export function updateAssessmentDetails({ assessment_id, items }) {
-    return dispatch => {
-        UrlService.put(`academics/assessments/${assessment_id}`, { items })
-            .then(response => {
-                dispatch(toggleSnackbar({
-                    message: 'Assessment updated successfully.',
-                    variant: SNACKBAR_SUCCESS
-                }));
-                dispatch(fetchSectionAssessments());
-            })
-            .catch(error => {
-                dispatch(toggleSnackbar({
-                    message: 'Unable to update assessment, please contact Schooli support.',
-                    variant: SNACKBAR_FAILURE
-                }));
-            });
-    }
-}
-*/
-
 
 /*
 export function fetchDownloadLink(assessment_id) {
