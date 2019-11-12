@@ -70,12 +70,14 @@ class ExamsPage extends React.Component {
                         <RemoveRedEye/>
                     </IconButton>
                 </Tooltip>
+                {!value.exam.consolidated &&
                 <Tooltip title="Edit">
                     <IconButton className={classes.icon_button} onClick={() => this.handleEditItem(value)}
                                 aria-label="Edit">
                         <EditIcon/>
                     </IconButton>
                 </Tooltip>
+                }
             </>
         );
     };
@@ -182,6 +184,7 @@ class ExamsPage extends React.Component {
             serverSide: true,
             download: false,
             filter: false,
+            pagination: false,
             toolbar: {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",
@@ -192,7 +195,7 @@ class ExamsPage extends React.Component {
             <div className={classes.table_div}>
                 <MUIDataTable
                     title={<Typography variant="h5">
-                        Exams
+                        Subjects
                     </Typography>
                     }
                     data={this.getMappedData()}
