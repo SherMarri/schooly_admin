@@ -24,6 +24,7 @@ import ExamFilter from "./ExamFilter";
 import * as Actions from "./store/actions/exams.actions";
 import AddRegularExamDialog from "./AddRegularExamDialog";
 import AddConsolidatedExamDialog from "./AddConsolidatedExamDialog";
+import history from "../../../../core/history";
 
 
 
@@ -106,25 +107,8 @@ class ExamsTab extends React.Component {
         this.props.fetchSectionExams(page + 1);
     };
 
-/*
-    handleViewEditExamCloseDialog = () => {
-        this.setState({
-            ...this.state,
-            view_edit_assessment_dialog: false,
-            selected_assessment: null,
-            assessment_dialog_read_only: null,
-        });
-    };
-*/
-
-
     handleViewItem = (value) => {
-        this.setState({
-            ...this.state,
-            view_edit_assessment_dialog: true,
-            selected_assessment: value,
-            assessment_dialog_read_only: true,
-        });
+        history.push(`/academics/exams/${value.id}`);
     };
 
 /*

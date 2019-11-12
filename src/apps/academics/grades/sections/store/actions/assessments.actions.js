@@ -7,6 +7,7 @@ export const ACTION_FAILURE = '[ACADEMICS] SECTION ASSESSMENTS ACTION FAILURE';
 
 
 export const SET_SECTION_ASSESSMENTS = '[ACADEMICS] SET SECTION ASSESSMENTS';
+export const SET_EXAM_ASSESSMENTS = '[ACADEMICS] SET EXAM ASSESSMENTS';
 export const ACTION_FETCH_ASSESSMENT_DETAILS_INIT = '[ACADEMICS] ACTION_FETCH_ASSESSMENT_DETAILS_INIT';
 export const ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS = '[ACADEMICS] ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS';
 export const ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE = '[ACADEMICS] ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE';
@@ -39,6 +40,35 @@ export function createAssessment(data) {
                 }));
             });
     };
+}
+
+export function fetchExamAssessments(exam_id) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ACTION_INIT
+        });
+        UrlService.get(`academics/assessments`, {exam_id: exam_id})
+            .then(response => {
+                dispatch({
+                    type: SET_EXAM_ASSESSMENTS,
+                    payload: response.data
+                });
+                dispatch({
+                    type: ACTION_SUCCESS
+                });
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: ACTION_FAILURE,
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to retrieve assessments, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+
+            })
+    }
 }
 
 
