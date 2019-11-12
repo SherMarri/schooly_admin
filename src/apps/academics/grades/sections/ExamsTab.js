@@ -24,6 +24,8 @@ import ExamFilter from "./ExamFilter";
 import * as Actions from "./store/actions/exams.actions";
 import AddRegularExamDialog from "./AddRegularExamDialog";
 import AddConsolidatedExamDialog from "./AddConsolidatedExamDialog";
+import history from "../../../../core/history";
+import EditExamNameDialog from "./EditExamNameDialog";
 
 
 
@@ -106,40 +108,25 @@ class ExamsTab extends React.Component {
         this.props.fetchSectionExams(page + 1);
     };
 
-/*
-    handleViewEditExamCloseDialog = () => {
-        this.setState({
-            ...this.state,
-            view_edit_assessment_dialog: false,
-            selected_assessment: null,
-            assessment_dialog_read_only: null,
-        });
-    };
-*/
-
-
     handleViewItem = (value) => {
-        this.setState({
-            ...this.state,
-            view_edit_assessment_dialog: true,
-            selected_assessment: value,
-            assessment_dialog_read_only: true,
-        });
+        const section_id = this.props.match.params.section_id;
+        history.push(`/academics/sections/${section_id}/exams/${value.id}`);
     };
 
-/*
     handleEditItem = (value) => {
         this.setState({
             ...this.state,
-            view_edit_assessment_dialog: true,
-            selected_assessment: value,
-            assessment_dialog_read_only: null,
+            edit_exam_name_dialog: true,
+            selected_exam: value,
         });
     };
-*/
 
-
-
+    handleEditExamNameCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            edit_exam_name_dialog: false,
+        })
+    };
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
         return (
@@ -275,14 +262,14 @@ class ExamsTab extends React.Component {
                 </AddConsolidatedExamDialog>
 
                 }
-{/*
-                <ViewEditAssessmentDialog
-                    open={this.state.view_edit_assessment_dialog}
-                    onClose={this.handleViewEditAssessmentCloseDialog}
-                    assessment={this.state.selected_assessment}
-                    read_only={this.state.assessment_dialog_read_only}
-                />
-*/}
+                {this.state.edit_exam_name_dialog &&
+                    <EditExamNameDialog
+                        open={this.state.edit_exam_name_dialog}
+                        onClose={this.handleEditExamNameCloseDialog}
+                        exam={this.state.selected_exam}
+                    />
+                }
+
             </div>
 
         )
