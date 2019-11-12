@@ -45,7 +45,9 @@ class ExamsPage extends React.Component {
     constructor(props) {
         super(props);
         const exam_id = this.props.match.params.exam_id;
+        const section_id = this.props.match.params.section_id;
         props.fetchExamAssessments(exam_id);
+        props.fetchStudents(section_id);
         this.state = {
             add_assessment_dialog_open: false,
             view_edit_attendance_dialog: false,
@@ -78,6 +80,20 @@ class ExamsPage extends React.Component {
                     </IconButton>
                 </Tooltip>
                 }
+            </>
+        );
+    };
+
+    renderStudentsActionColumn = (value, table_meta, update_value) => {
+        const {classes} = this.props;
+        return (
+            <>
+                <Tooltip title="View">
+                    <IconButton className={classes.icon_button}
+                                aria-label="View">
+                        <RemoveRedEye/>
+                    </IconButton>
+                </Tooltip>
             </>
         );
     };
@@ -131,10 +147,6 @@ class ExamsPage extends React.Component {
                 fullname: d.profile.fullname
             };
         });
-    };
-
-    getStudents = (section_id) => {
-        this.props.fetchStudents(section_id);
     };
 
 
@@ -232,7 +244,7 @@ class ExamsPage extends React.Component {
                 label: 'Action',
                 options: {
                     customBodyRender: (value, table_data, update_value) =>
-                        this.renderActionColumn(value, table_data, update_value),
+                        this.renderStudentsActionColumn(value, table_data, update_value),
                     filter: false,
                     download: false,
                 }
@@ -273,9 +285,7 @@ class ExamsPage extends React.Component {
 
 
     render() {
-        const {exam_assessments, classes, loading} = this.props;
-        // if (exam_assessments)
-        //     this.getStudents(exam_assessments[0].section_subject.section.id);
+        const {exam_assessments, classes, students, loading} = this.props;
         const {value} = this.state;
         return (
             <Grid container>
@@ -294,7 +304,7 @@ class ExamsPage extends React.Component {
                             </Tabs>
                         </AppBar>
                         {value === 0 && this.renderExamSubjects()}
-                        {value === 1 && this.renderStudents()}
+                        {value === 1 && students && this.renderStudents()}
 
                     </Grid>
                 </>
