@@ -164,6 +164,25 @@ export function updateAssessmentDetails({ assessment_id, items }) {
     }
 }
 
+export function updateExamAssessmentDetails({ assessment_id, exam_id, items }) {
+    return dispatch => {
+        UrlService.put(`academics/assessments/${assessment_id}`, { items })
+            .then(response => {
+                dispatch(toggleSnackbar({
+                    message: 'Assessment updated successfully.',
+                    variant: SNACKBAR_SUCCESS
+                }));
+                dispatch(fetchExamAssessments(exam_id));
+            })
+            .catch(error => {
+                dispatch(toggleSnackbar({
+                    message: 'Unable to update assessment, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
 
 export function fetchDownloadLink(assessment_id) {
     return dispatch => {

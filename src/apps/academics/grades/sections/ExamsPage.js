@@ -218,6 +218,7 @@ class ExamsPage extends React.Component {
                     onClose={this.handleViewEditAssessmentCloseDialog}
                     assessment={this.state.selected_assessment}
                     read_only={this.state.assessment_dialog_read_only}
+                    exam_id={this.props.match.params.exam_id | null}
                 />
 
             </div>
