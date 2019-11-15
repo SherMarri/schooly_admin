@@ -36,12 +36,12 @@ const students = function (state = initialState, action) {
                 fetching_download_link: action.payload
             };
         }
-        case Actions.SET_SECTION_STUDENTS_DOWNLOAD_LINK: {
+        case Actions.SET_SECTION_STUDENTS_DOWNLOAD_LINK : {
             return {
                 ...state,
                 fetching_download_link: false,
                 download_url: action.payload
-            };
+            }
         }
         case Actions.CLEAR_SECTION_STUDENTS_DOWNLOAD_LINK: {
             return {
