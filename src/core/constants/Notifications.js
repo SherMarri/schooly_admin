@@ -5,4 +5,4 @@ export const NOTIFICATION_TYPES = {
     STUDENT: 4,
     TEACHER: 5,
     PARENT: 6,
-}
+};
