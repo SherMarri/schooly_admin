@@ -6,6 +6,7 @@ import Dashboard from '@material-ui/icons/Dashboard';
 import AccountBalance from '@material-ui/icons/AccountBalance'
 import School from '@material-ui/icons/School';
 import People from '@material-ui/icons/People';
+import RecordVoiceOver from '@material-ui/icons/RecordVoiceOver';
 import Library from '@material-ui/icons/LocalLibrary';
 import StudentsIcon from '../assets/students_icon.png';
 
@@ -127,12 +128,12 @@ const getMenuItems = () => [
 
         ]
     },
-//     {
-//         text: 'Announcements',
-//         icon: <RecordVoiceOver/>,
-//         code: 'announcements',
-//         link: '/announcements',
-//     },
+    {
+        text: 'Notifications',
+        icon: <RecordVoiceOver/>,
+        code: 'notifications',
+        link: '/notifications',
+    },
     {
         text: 'Staff',
         icon: <People />,

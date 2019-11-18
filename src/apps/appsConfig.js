@@ -3,6 +3,7 @@ import { AcademicsConfig } from './academics/AcademicsConfig';
 import {StaffConfig} from "./staff/StaffConfig";
 import LoginPage from "../core/components/LoginPage";
 import AuthRoles from "../core/AuthRoles";
+import {NotificationsConfig} from "./notifications/NotificationsConfig";
 
 export const appsConfig = [
     {
@@ -17,5 +18,6 @@ export const appsConfig = [
     },
     FinanceConfig,
     AcademicsConfig,
-    StaffConfig
+    StaffConfig,
+    NotificationsConfig,
 ];
