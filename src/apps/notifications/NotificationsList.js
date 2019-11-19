@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {Typography, Grid, Card, Tooltip, IconButton, Chip} from '@material-ui/core';
-import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from '@material-ui/icons/Add';
 import Divider from "@material-ui/core/Divider";
 import TablePagination from "@material-ui/core/TablePagination";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -43,6 +40,11 @@ const styles = theme => ({
     },
     notification: {
         float: 'left',
+    },
+    chip: {
+        fontSize: '8px',
+        marginBottom: '0px',
+        float: 'right',
     }
 });
 
@@ -97,7 +99,7 @@ class NotificationsList extends React.Component {
                 <React.Fragment>
                     <ListItem alignItems="flex-start">
                         <ListItemText
-                            primary={<><p>{item.title} <Chip label={TARGETS[item.target_type]} color='primary'/></p></>}
+                            primary={<><p>{item.title} <Chip label={TARGETS[item.target_type]} color='primary' className={classes.chip}/></p></>}
                             secondary={
                                 <React.Fragment>
                                     <div className={classes.notification}>
