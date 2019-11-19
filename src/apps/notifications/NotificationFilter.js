@@ -33,6 +33,7 @@ const styles = theme => ({
 const TARGET_TYPES = {
     ORGANIZATION: 1,
     STAFF: 4,
+    TEACHER: 5,
 };
 
 class NotificationFilter extends Component {
@@ -148,6 +149,7 @@ class NotificationFilter extends Component {
                                 <MenuItem key={TARGET_TYPES.ORGANIZATION}
                                           value={TARGET_TYPES.ORGANIZATION}>Organization</MenuItem>
                                 <MenuItem key={TARGET_TYPES.STAFF} value={TARGET_TYPES.STAFF}>Staff</MenuItem>
+                                <MenuItem key={TARGET_TYPES.TEACHER} value={TARGET_TYPES.TEACHER}>Teacher</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>

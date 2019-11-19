@@ -12,7 +12,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {MenuItem, Select, Typography} from "@material-ui/core";
 import Utils from "../../core/Utils";
-import Grid from "@material-ui/core/Grid";
 
 const styles = theme => ({
     dialog_content: {
@@ -27,6 +26,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const TARGET_TYPES = {
     ORGANIZATION: 1,
     STAFF: 4,
+    TEACHER: 5,
 };
 
 class AddNotificationDialog extends React.Component {
@@ -49,7 +49,7 @@ class AddNotificationDialog extends React.Component {
             form = {
                 title: '',
                 content: '',
-                target_type: -1,
+                target_type: 1,
             };
         }
         this.state = { form };
@@ -139,12 +139,10 @@ class AddNotificationDialog extends React.Component {
                                 id: 'target_type',
                             }}
                         >
-                            <MenuItem value={-1}>
-                                All
-                            </MenuItem>
                             <MenuItem key={TARGET_TYPES.ORGANIZATION}
                                       value={TARGET_TYPES.ORGANIZATION}>Organization</MenuItem>
                             <MenuItem key={TARGET_TYPES.STAFF} value={TARGET_TYPES.STAFF}>Staff</MenuItem>
+                            <MenuItem key={TARGET_TYPES.TEACHER} value={TARGET_TYPES.TEACHER}>Teacher</MenuItem>
                         </Select>
                     </FormControl>
 
