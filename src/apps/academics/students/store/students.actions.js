@@ -135,7 +135,7 @@ export function fetchDownloadLink(params) {
         });
         UrlService.get('users/students', filters)
         .then(response => {
-            const download_url = `${UrlService.getUrl('users/students/downloadcsv')}?file_name=${response.data}`;
+            const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
             dispatch({
                 type: SET_STUDENTS_DOWNLOAD_LINK,
                 payload: download_url

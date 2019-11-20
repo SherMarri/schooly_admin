@@ -225,6 +225,7 @@ class AttendanceTab extends React.Component {
     };
 
 
+
     renderAttendanceTable = () => {
         const { section_attendance, classes, fetching_download_link, download_url} = this.props;
         let {page, count} = section_attendance;

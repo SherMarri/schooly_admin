@@ -1,16 +1,16 @@
-import { UrlService } from "../../../../../../core";
-import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../../../core/store/actions/common.actions";
+import { UrlService } from "../../../../core";
+import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
+import {deleteGrade} from "../../../academics/grades/store/actions/grades.actions";
 
-export const ACTION_INIT = '[ACADEMICS] SECTION NOTIFICATIONS ACTION INIT';
-export const ACTION_SUCCESS = '[ACADEMICS] SECTION NOTIFICATIONS ACTION SUCCESS';
-export const ACTION_FAILURE = '[ACADEMICS] SECTION NOTIFICATIONS ACTION FAILURE';
+export const ACTION_INIT = '[NOTIFICATIONS] NOTIFICATIONS ACTION INIT';
+export const ACTION_SUCCESS = '[NOTIFICATIONS] NOTIFICATIONS ACTION SUCCESS';
+export const ACTION_FAILURE = '[NOTIFICATIONS] NOTIFICATIONS ACTION FAILURE';
 
-export const SET_NOTIFICATIONS = '[ACADEMICS] SET SECTION NOTIFICATIONS';
-export const SET_RECENT_NOTIFICATIONS = '[ACADEMICS] SET SECTION RECENT NOTIFICATIONS';
-export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET SECTION NOTIFICATIONS DETAILS';
-export const SET_FILTERS = '[ACADEMICS] SET SECTION NOTIFICATIONS FILTERS';
+export const SET_NOTIFICATIONS = '[NOTIFICATIONS] SET NOTIFICATIONS';
+export const SET_NOTIFICATION_DETAILS = '[NOTIFICATIONS] SET NOTIFICATIONS DETAILS';
+export const SET_FILTERS = '[NOTIFICATIONS] SET NOTIFICATIONS FILTERS';
 
-export const CLEAR_TABLE_DATA = '[ACADEMICS] SECTIONS NOTIFICATIONS CLEAR TABLE DATA';
+export const CLEAR_TABLE_DATA = '[NOTIFICATIONS] NOTIFICATIONS CLEAR TABLE DATA';
 
 
 export function createNotification(data, filter_form) {
@@ -67,7 +67,7 @@ export function fetchNotifications(form) {
         dispatch({
             type: ACTION_INIT
         });
-        UrlService.get(`academics/sections/${form.target_id}/notifications`, form)
+        UrlService.get(`notifications`, form)
             .then(response => {
                 dispatch({
                     type: SET_NOTIFICATIONS,
@@ -89,35 +89,8 @@ export function fetchNotifications(form) {
     }
 }
 
-export function fetchRecentNotifications(form) {
-    return dispatch => {
-        dispatch({
-            type: ACTION_INIT
-        });
-        UrlService.get(`academics/sections/${form.target_id}/notifications`, form)
-            .then(response => {
-                dispatch({
-                    type: SET_RECENT_NOTIFICATIONS,
-                    payload: response.data
-                });
-                dispatch({
-                    type: ACTION_SUCCESS
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: ACTION_FAILURE
-                });
-                dispatch(toggleSnackbar({
-                    message: 'Unable to retrieve recent notifications, please contact Schooli support.',
-                    variant: SNACKBAR_FAILURE
-                }));
-            });
-    }
-}
 
-
-export function fetchNotificationDetails(section_id, notification_id) {
+export function fetchNotificationDetails(notification_id) {
     return dispatch => {
         dispatch({
             type: ACTION_INIT

@@ -3,20 +3,19 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import * as Actions from './store/actions/grades.actions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import {MenuItem, Select, Typography} from "@material-ui/core";
+import Utils from "../../core/Utils";
 
 const styles = theme => ({
     dialog_content: {
-      width: '400px',
+        width: '600px',
     },
 });
 
@@ -24,7 +23,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-class AddEditGradeDialog extends React.Component {
+const TARGET_TYPES = {
+    ORGANIZATION: 1,
+    STAFF: 4,
+    TEACHER: 5,
+};
+
+class AddNotificationDialog extends React.Component {
 
     constructor(props) {
         super(props);
@@ -33,12 +38,18 @@ class AddEditGradeDialog extends React.Component {
         if (item) {
             form = {
                 id: item.id,
-                name: item.name,
+                title: item.title,
+                target_type: item.target_type,
+                content: item.content,
+                created_at: item.created_at,
+                creator: item.creator,
             };
         }
         else {
             form = {
-                name: '',
+                title: '',
+                content: '',
+                target_type: 1,
             };
         }
         this.state = { form };
@@ -73,12 +84,7 @@ class AddEditGradeDialog extends React.Component {
         event.preventDefault();
         if (!this.isFormValid()) return;
         let { form } = this.state;
-        if (this.props.item && this.props.edit) {
-            this.props.updateGrade(form.id, form);
-        }
-        else {
-            this.props.addGrade(form);
-        }
+        this.props.onSubmit(form);
         this.handleClose();
     };
 
@@ -94,33 +100,63 @@ class AddEditGradeDialog extends React.Component {
                 aria-labelledby="form-dialog-title"
             >
                 {!item &&
-                <DialogTitle id="form-dialog-title">Add Class</DialogTitle>
+                <DialogTitle id="form-dialog-title">Add Notification</DialogTitle>
                 }
                 {item && !edit &&
-                <DialogTitle id="form-dialog-title">Class Details</DialogTitle>
+                <DialogTitle id="form-dialog-title">{form.title}</DialogTitle>
                 }
-                {item && edit &&
-                <DialogTitle id="form-dialog-title">Update Class</DialogTitle>
+                {item &&
+                <DialogContent className={classes.dialog_content}>
+                    <Typography variant="body1"><strong>{form.creator && `${form.creator.fullname}, `}{Utils.formatDateLocal(form.created_at)}</strong></Typography>
+                    <Typography variant="body1">{form.content}</Typography>
+                </DialogContent>
                 }
+                {!item &&
                 <DialogContent className={classes.dialog_content}>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="name">Name</InputLabel>
-                        <Input id="name" name="name"
+                        <InputLabel htmlFor="name">Title</InputLabel>
+                        <Input id="name" name="title"
                                onChange={this.handleChange}
-                               value={form.name || ''}
+                               value={form.title || ''}
                                readOnly={item && !edit}
                         />
                     </FormControl>
-                </DialogContent>
-                <DialogActions>
-                        <Button
-                            variant="contained"
-                            color="default"
-                            className={classes.cancelButton}
-                            onClick={this.handleClose}
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="content">Content</InputLabel>
+                        <Input id="content" name="content"
+                               onChange={this.handleChange}
+                               value={form.content || ''}
+                               readOnly={item && !edit}
+                        />
+                    </FormControl>
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel htmlFor="gender">Type</InputLabel>
+                        <Select
+                            value={form.target_type}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'target_type',
+                                id: 'target_type',
+                            }}
                         >
-                            Cancel
-                        </Button>
+                            <MenuItem key={TARGET_TYPES.ORGANIZATION}
+                                      value={TARGET_TYPES.ORGANIZATION}>Organization</MenuItem>
+                            <MenuItem key={TARGET_TYPES.STAFF} value={TARGET_TYPES.STAFF}>Staff</MenuItem>
+                            <MenuItem key={TARGET_TYPES.TEACHER} value={TARGET_TYPES.TEACHER}>Teacher</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                </DialogContent>
+                }
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="default"
+                        className={classes.cancelButton}
+                        onClick={this.handleClose}
+                    >
+                        {item ? 'Close' : 'Cancel'}
+                    </Button>
                     {((item && edit) || (!item)) &&
                     <Button
                         variant="contained"
@@ -139,20 +175,8 @@ class AddEditGradeDialog extends React.Component {
     }
 }
 
-AddEditGradeDialog.propTypes = {
+AddNotificationDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ common, academics }) {
-    return {
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addGrade: Actions.createGrade,
-        updateGrade: Actions.updateGrade,
-    }, dispatch);
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AddEditGradeDialog));
+export default withStyles(styles)(AddNotificationDialog);

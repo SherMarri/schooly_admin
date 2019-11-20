@@ -1,4 +1,4 @@
-import * as Actions from '../actions/assessments.actions';
+import * as Actions from '../actions/exams.actions';
 
 const initialState = {
     loading: false,
@@ -24,32 +24,26 @@ const assessments = function (state = initialState, action) {
                 loading: false,
             };
         }
-        case Actions.SET_SECTION_ASSESSMENTS: {
+        case Actions.SET_SECTION_EXAMS: {
             return {
                 ...state,
                 items: {...action.payload},
             };
         }
-        case Actions.SET_EXAM_ASSESSMENTS: {
-            return {
-                ...state,
-                exam_assessments: [...action.payload],
-            };
-        }
-        case Actions.FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK: {
+        case Actions.FETCHING_SECTION_EXAMS_DOWNLOAD_LINK: {
             return {
                 ...state,
                 fetching_download_link: action.payload
             };
         }
-        case Actions.SET_SECTION_ASSESSMENTS_DOWNLOAD_LINK: {
+        case Actions.SET_SECTION_EXAMS_DOWNLOAD_LINK: {
             return {
                 ...state,
                 fetching_download_link: false,
                 download_url: action.payload
             };
         }
-        case Actions.CLEAR_SECTION_ASSESSMENTS_DOWNLOAD_LINK: {
+        case Actions.CLEAR_SECTION_EXAMS_DOWNLOAD_LINK: {
             return {
                 ...state,
                 fetching_download_link: false,
@@ -62,31 +56,31 @@ const assessments = function (state = initialState, action) {
                 filter_form: action.payload
             };
         }
-        case Actions.ACTION_FETCH_ASSESSMENT_DETAILS_INIT: {
+        case Actions.ACTION_FETCH_EXAMS_DETAILS_INIT: {
             return {
                 ...state,
                 loading_assessment_details: true,
             };
         }
-        case Actions.ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS: {
+        case Actions.ACTION_FETCH_EXAMS_DETAILS_SUCCESS: {
             return {
                 ...state,
                 loading_assessment_details: false,
             };
         }
-        case Actions.ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE: {
+        case Actions.ACTION_FETCH_EXAMS_DETAILS_FAILURE: {
             return {
                 ...state,
                 loading_assessment_details: false,
             };
         }
-        case Actions.SET_SECTION_ASSESSMENT_DETAILS: {
+        case Actions.SET_SECTION_EXAM_DETAILS: {
             return {
                 ...state,
                 assessment_details: {...action.payload},
             };
         }
-        case Actions.RESET_ASSESSMENT_DETAILS: {
+        case Actions.RESET_EXAM_DETAILS: {
             return {
                 ...state,
                 assessment_details: null,

@@ -12,8 +12,8 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {ConfirmDialog, Loading} from '../../../core/components';
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
-import GradeDetailPage from "./GradeDetailPage";
 import history from "../../../core/history";
+import AddEditGradeDialog from "./AddEditGradeDialog";
 
 
 const styles = theme => ({
@@ -65,6 +65,7 @@ class GradesTable extends React.Component {
             ...this.state,
             selected_item: null,
             open: false,
+            edit: false,
         });
     };
 
@@ -209,18 +210,8 @@ class GradesTable extends React.Component {
                     data={this.getMappedData()}
                     columns={columns}
                     options={options}/>
-                {/*
-                {this.state.open &&
+                {this.state.edit &&
                 <AddEditGradeDialog
-                    open={this.state.open}
-                    item={this.state.selected_item}
-                    onClose={this.handleCloseDialog}
-                    edit={this.state.edit}
-                />
-                }
-*/}
-                {this.state.open &&
-                <GradeDetailPage
                     open={this.state.open}
                     item={this.state.selected_item}
                     onClose={this.handleCloseDialog}

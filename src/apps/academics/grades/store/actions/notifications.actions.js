@@ -6,6 +6,7 @@ export const ACTION_SUCCESS = '[ACADEMICS] GRADES NOTIFICATIONS ACTION SUCCESS';
 export const ACTION_FAILURE = '[ACADEMICS] GRADES NOTIFICATIONS ACTION FAILURE';
 
 export const SET_NOTIFICATIONS = '[ACADEMICS] SET GRADE NOTIFICATIONS';
+export const SET_RECENT_NOTIFICATIONS = '[ACADEMICS] SET GRADE RECENT NOTIFICATIONS';
 export const SET_NOTIFICATION_DETAILS = '[ACADEMICS] SET GRADE NOTIFICATIONS DETAILS';
 export const SET_FILTERS = '[ACADEMICS] SET GRADE NOTIFICATIONS FILTERS';
 
@@ -81,6 +82,33 @@ export function fetchNotifications(form) {
                 });
                 dispatch(toggleSnackbar({
                     message: 'Unable to retrieve notifications, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    }
+}
+
+export function fetchRecentNotifications(form) {
+    return dispatch => {
+        dispatch({
+            type: ACTION_INIT
+        });
+        UrlService.get(`academics/grades/${form.target_id}/notifications`, form)
+            .then(response => {
+                dispatch({
+                    type: SET_RECENT_NOTIFICATIONS,
+                    payload: response.data
+                });
+                dispatch({
+                    type: ACTION_SUCCESS
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: ACTION_FAILURE
+                });
+                dispatch(toggleSnackbar({
+                    message: 'Unable to retrieve recent notifications, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
             });

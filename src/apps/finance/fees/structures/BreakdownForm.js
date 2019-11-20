@@ -52,7 +52,7 @@ class BreakdownForm extends React.Component {
     }
 
     validate(form) {
-        return form.break_down.findIndex(b=>b.title==='' || b.value==='' || b.value===null) === -1;
+        return form.break_down.findIndex(b=>b.title==='' || b.value==='' || b.value===null) === -1 && form.break_down.length > 0;
     }
 
     handleNext = () => {
@@ -68,7 +68,7 @@ class BreakdownForm extends React.Component {
         const item = {
             'id': this.counter,
             'title': '',
-            'value': 0
+            'value': null
         };
         let items = [...this.state.form.break_down, item];
         this.setState({
@@ -88,7 +88,7 @@ class BreakdownForm extends React.Component {
                 ...this.state.form,
                 break_down: items,
             },
-            valid: items.findIndex(b=>b.title==='' || b.value==='' || b.value===null) === -1            
+            valid: items.findIndex(b=>b.title==='' || b.value==='' || b.value===null) === -1 && items.length > 0
         });
     }
 

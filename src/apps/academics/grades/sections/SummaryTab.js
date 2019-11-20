@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import People from '@material-ui/icons/People';
 import Library from '@material-ui/icons/LocalLibrary';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
@@ -11,20 +10,20 @@ import {
     Grid,
     Card,
     CardContent,
-    Typography, Paper,
+    Typography,
+    Paper,
 } from '@material-ui/core';
-import MUIDataTable from "mui-datatables";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Line} from "react-chartjs-2";
-import Fab from "@material-ui/core/Fab";
 import {bindActionCreators} from "redux";
-import * as Actions from "../sections/store/actions/section-details.actions";
+import * as NotificationsActions from "../sections/store/actions/notifications.actions";
 import {connect} from "react-redux";
 import {Loading} from "../../../../core/components";
 import {withRouter} from "react-router-dom";
+import Utils from "../../../../core/Utils";
 
 
 const styles = theme => ({
@@ -98,57 +97,20 @@ const styles = theme => ({
         float: 'right',
         width: '40px',
         height: '40px',
-    }
+    },
+    cardTable: {
+        marginTop: '10px',
+        marginBottom: '10px',
+    },
+
 });
-
-/*
-const chart_options = ({title, data_points}) => {
-
-    return {
-        animationEnabled: true,
-        title: {
-            text: title
-        },
-        axisX: {
-            valueFormatString: "DD"
-        },
-        axisY: {
-            title: "Count",
-            includeZero: false,
-        },
-        legend: {
-            cursor: "pointer",
-            fontSize: 16,
-        },
-        toolTip: {
-            shared: true
-        },
-        data: [{
-            name: "Attendance",
-            type: "spline",
-            yValueFormatString: "#",
-            showInLegend: true,
-            dataPoints: [
-                {x: new Date(2017, 6, 1), y: 72},
-                {x: new Date(2017, 6, 2), y: 80},
-                {x: new Date(2017, 6, 3), y: 74},
-                {x: new Date(2017, 6, 4), y: 85},
-                {x: new Date(2017, 6, 5), y: 92},
-                {x: new Date(2017, 6, 6), y: 65},
-                {x: new Date(2017, 6, 7), y: 95}
-            ]
-        },
-        ]
-    };
-};
-*/
 
 
 class SummaryTab extends React.Component {
     constructor(props) {
         super(props);
         const section_id = this.props.match.params.section_id;
-        props.fetchSectionDetails(section_id);
+        props.fetchRecentNotifications({target_id: section_id, target_type: 3, recent: true})
     }
     
 
@@ -166,21 +128,61 @@ class SummaryTab extends React.Component {
         return {labels, datasets};
     };
 
-    getTopPerformersMappedData = () => {
-            return [{
-                name: 'Test',
-                percentage: Math.floor(Math.random() * (100 - 60)) + 60,
-            }];
-    };
-    getSubjectsMappedData = () => {
-            return [{
-                name: 'Test',
-                percentage: Math.floor(Math.random() * (100 - 60)) + 60,
-            }];
+    renderRecentNotifications = () => {
+        const { classes, recent_notifications } = this.props;
+        const data = recent_notifications.data;
+        if (!data.length > 0) return null;
+        return(
+            <>
+                    <List className={classes.root}>
+                        <ListItem alignItems="flex-start">
+                            <div className={classes.titleDiv}>
+                                <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
+                            </div>
+                        </ListItem>
+                        <Divider component="li" />
+                        {data.map(item=>(
+                            <>
+                                <ListItem alignItems="flex-start">
+                                    <ListItemText
+                                        primary={item.title}
+                                        secondary={
+                                            <React.Fragment>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body1"
+                                                    className={classes.inline}
+                                                    color="primary"
+                                                >
+                                                    {/*{item.creator.fullname ? item.creator.fullname : ''}*/}
+                                                </Typography>
+                                                {item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content}
+                                                <br/>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body2"
+                                                    className={classes.inline}
+                                                    color="secondary"
+                                                >
+                                                    {Utils.formatDateLocal(item.created_at)}
+                                                </Typography>
+                                            </React.Fragment>
+                                        }
+                                    />
+                                </ListItem>
+                                <Divider component="li" />
+                            </>
+                        ))}
+
+                    </List>
+            </>
+        )
     };
 
+
+
     render()  {
-        const {classes, loading, item} = this.props;
+        const {classes, loading, item, recent_notifications} = this.props;
         if (loading) {
             return (
                 <div className={classes.table_div}>
@@ -191,66 +193,7 @@ class SummaryTab extends React.Component {
             );
         }
         if (!item) return null;
-        const topPerformersTableColumns = [{
-            name: 'name',
-            label: "Name",
-            options: {
-                filter: false,
-            }
-        }, {
-            name: 'percentage',
-            label: "Percentage",
-            options: {
-                filter: false,
-            }
-        },
-        ];
-        const subjectsTableColumns = [{
-            name: 'name',
-            label: "Name",
-            options: {
-                filter: false,
-            }
-        }, {
-            name: 'percentage',
-            label: "Percentage",
-            options: {
-                filter: false,
-            }
-        },
-        ];
-/*
-        const needImprovementTableColumns = [{
-            name: 'name',
-            label: "Name",
-            options: {
-                filter: false,
-            }
-        }, {
-            name: 'percentage',
-            label: "Percentage",
-            options: {
-                filter: false,
-            }
-        },
-        ];
-*/
-        const options = {
-            pagination: false,
-            sort: false,
-            print: false,
-            search: false,
-            filter: false,
-            selectableRows: 'none',
-            download: false,
-            viewColumns: false,
-            toolbar: {
-                viewColumns: "View Columns",
-            },
-        };
-
-
-
+        const overview = item;
         return (
             <Grid container>
                 <Grid item xs={12}>
@@ -266,7 +209,7 @@ class SummaryTab extends React.Component {
                                             Strength
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.students}
+                                            {overview.students}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -283,7 +226,7 @@ class SummaryTab extends React.Component {
                                             Subjects
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.subjects}
+                                            {overview.subjects}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -300,7 +243,7 @@ class SummaryTab extends React.Component {
                                             Teachers
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.teachers}
+                                            {overview.teachers}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -317,7 +260,7 @@ class SummaryTab extends React.Component {
                                             Attendance
                                         </Typography>
                                         <Typography variant="h6">
-                                            {item.attendance}
+                                            {overview.attendance}
                                         </Typography>
                                     </div>
                                 </CardContent>
@@ -337,127 +280,14 @@ class SummaryTab extends React.Component {
                                     options={{ maintainAspectRatio: false }}
                                 />
                             </Card>
-                            <Card className={classes.cardTable}>
-                                <List className={classes.root}>
-                                    <ListItem alignItems="flex-start">
-                                        <div className={classes.titleDiv}>
-                                        <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
-                                        <Fab color="primary" aria-label="add" className={classes.fab}>
-                                            <AddIcon />
-                                        </Fab>
-                                        </div>
-                                    </ListItem>
-                                    <Divider component="li" />
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemText
-                                            primary="Happy Independence Day"
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        className={classes.inline}
-                                                        color="primary"
-                                                    >
-                                                        Principal -
-                                                    </Typography>
-                                                    {" Wishing everyone a happy independence day… I'll be in your neighborhood doing errands this..."}
-                                                    <br/>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body2"
-                                                        className={classes.inline}
-                                                        color="secondary"
-                                                    >
-                                                        {"August 14, 2019"}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                        />
-                                    </ListItem>
-                                    <Divider component="li" />
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemText
-                                            primary="Brunch this weekend?"
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        className={classes.inline}
-                                                        color="primary"
-                                                    >
-                                                        HR -
-                                                    </Typography>
-                                                    {" I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… "}
-                                                    <br/>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body2"
-                                                        className={classes.inline}
-                                                        color="secondary"
-                                                    >
-                                                        {"July 20, 2014"}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                        />
-                                    </ListItem>
-                                    <Divider component="li" />
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemText
-                                            primary="Brunch this weekend?"
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        className={classes.inline}
-                                                        color="primary"
-                                                    >
-                                                        Principal -
-                                                    </Typography>
-                                                    {" I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… I'll be in your neighborhood doing errands this… "}
-                                                    <br/>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body2"
-                                                        className={classes.inline}
-                                                        color="secondary"
-                                                    >
-                                                        {"July 20, 2014"}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                        />
-                                    </ListItem>
-
-                                </List>
-                            </Card>
                         </Grid>
 
                         <Grid item xs={12} md={6}>
                             <Card className={classes.gridRight}>
-                                <MUIDataTable
-                                    title={<Typography variant="h5">
-                                        Top Performers
-                                    </Typography>
-                                    }
-                                    data={this.getTopPerformersMappedData()}
-                                    columns={topPerformersTableColumns}
-                                    options={options}/>
+                                {recent_notifications &&
+                                this.renderRecentNotifications()
+                                }
                             </Card>
-                            <Card className={classes.gridRight}>
-                                <MUIDataTable
-                                    title={<Typography variant="h5">
-                                        Subjects
-                                    </Typography>
-                                    }
-                                    data={this.getSubjectsMappedData()}
-                                    columns={subjectsTableColumns}
-                                    options={options}/>
-                            </Card>
-
                         </Grid>
                     </Grid>
                 </Grid>
@@ -474,6 +304,7 @@ SummaryTab.propTypes = {
 function mapStateToProps({academics, user}) {
     return {
         item: academics.grades.section.items.item,
+        recent_notifications: academics.grades.section.notifications.recent_notifications,
         loading: academics.grades.section.items.loading,
         user: user
     }
@@ -481,7 +312,7 @@ function mapStateToProps({academics, user}) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchSectionDetails: Actions.fetchSectionDetails,
+        fetchRecentNotifications: NotificationsActions.fetchRecentNotifications,
     }, dispatch);
 }
 

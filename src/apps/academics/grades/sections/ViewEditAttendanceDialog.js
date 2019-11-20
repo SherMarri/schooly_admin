@@ -130,7 +130,8 @@ class ViewEditAttendanceDialog extends React.Component {
         this.props.resetDailyAttendanceData();
         this.props.onClose();
         this.setState({
-            items: null
+            items: null,
+            mark_all_as_status: null,
         });
     };
 
@@ -277,6 +278,7 @@ class ViewEditAttendanceDialog extends React.Component {
         });
         this.setState({
             items: updated_items,
+            mark_all_as_status: value
         });
     };
 
@@ -380,6 +382,7 @@ class ViewEditAttendanceDialog extends React.Component {
                                         <InputLabel>Mark All As</InputLabel>
                                         <Select
                                             onChange={this.handleMarkAllChange}
+                                            value={this.state.mark_all_as_status}
                                         >
                                             <MenuItem key={PRESENT} value={PRESENT}>Present</MenuItem>
                                             <MenuItem key={ABSENT} value={ABSENT}>Absent</MenuItem>

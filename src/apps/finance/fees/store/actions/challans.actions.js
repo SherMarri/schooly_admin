@@ -147,7 +147,7 @@ export function fetchDownloadLink(params) {
         });
         UrlService.get('finance/fees/challans', filters)
         .then(response => {
-            const download_url = `${UrlService.getUrl('finance/fees/challans/download_csv')}?file_name=${response.data}`;
+            const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
             dispatch({
                 type: SET_DOWNLOAD_LINK,
                 payload: download_url

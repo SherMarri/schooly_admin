@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router-dom';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 
-import * as Actions from './store/actions/assessments.actions';
+import * as Actions from './store/actions/notifications.actions';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import {Loading} from '../../core/components';
+import {Input, MenuItem, Select} from '@material-ui/core';
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import Utils from "../../../../core/Utils";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import * as SectionSubjectActions from "./store/actions/subjects.actions";
+import Utils from "../../core/Utils";
+import {NOTIFICATION_TYPES} from '../../core/constants';
 
 
 const styles = theme => ({
@@ -28,30 +28,39 @@ const styles = theme => ({
         marginTop: theme.spacing(3),
         float: 'right',
     },
-    paper: {
-    },
 });
 
-class AssessmentFilter extends Component {
+const TARGET_TYPES = {
+    ORGANIZATION: 1,
+    STAFF: 4,
+    TEACHER: 5,
+};
+
+class NotificationFilter extends Component {
 
     constructor(props) {
         super(props);
+        const form = props.form;
         this.state = {
             form: {
+                search_term: '',
                 start_date: null,
                 end_date: null,
-                section_subject_id: null,
-                section_id: props.section_id
-            },
+                target_type: -1,
+            }
         };
-        this.props.fetchSectionSubjects(this.props.section_id);
         this.handleSubmit();
     }
+
+    // componentDidMount() {
+    //     this.handleSubmit();
+    // }
 
     handleSubmit = () => {
         const form = {
             ...this.state.form,
         };
+        console.log(form);
         this.props.updateFilters(form);
     };
 
@@ -67,7 +76,6 @@ class AssessmentFilter extends Component {
     };
 
 
-
     handleChange = (event) => {
         let form = {
             ...this.state.form,
@@ -79,13 +87,15 @@ class AssessmentFilter extends Component {
     };
 
     render() {
-        const { classes, section_subjects } = this.props;
-        const { form } = this.state;
+        const {classes, loading} = this.props;
+        const {form} = this.state;
+
+        if (loading) return <Loading/>;
 
         return (
             <Paper className={classes.paper}>
                 <Grid container spacing={24}>
-                    <Grid item className={classes.grid_item} xs={6} md={2}>
+                    <Grid item className={classes.grid_item} xs={12} md={2}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <DatePicker
                                 margin="normal"
@@ -95,11 +105,11 @@ class AssessmentFilter extends Component {
                                 disableFuture
                                 maxDate={form.end_date ? form.end_date : null}
                                 value={form.start_date}
-                                onChange={(date)=>this.handleDateChange('start_date', date)}
+                                onChange={(date) => this.handleDateChange('start_date', date)}
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={6} md={2}>
+                    <Grid item className={classes.grid_item} xs={12} md={2}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <DatePicker
                                 margin="normal"
@@ -107,36 +117,44 @@ class AssessmentFilter extends Component {
                                 fullWidth
                                 clearable
                                 minDate={form.start_date ? form.start_date : null}
+                                disableFuture
                                 value={form.end_date}
-                                onChange={(date)=>this.handleDateChange('end_date', date)}
+                                onChange={(date) => this.handleDateChange('end_date', date)}
                             />
                         </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={6} md={2}>
-                        {section_subjects &&
+                    <Grid item className={classes.grid_item} xs={12} md={3}>
+                        <FormControl margin="normal" fullWidth>
+                            <InputLabel htmlFor="search_term">Notification title or body...</InputLabel>
+                            <Input id="search_term" name="search_term"
+                                   onChange={this.handleChange}
+                                   value={form.search_term || ''}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={2} className={classes.grid_item}>
                         <FormControl fullWidth margin="normal">
-                            <InputLabel htmlFor="section_subject_id">Subject</InputLabel>
+                            <InputLabel htmlFor="gender">Type</InputLabel>
                             <Select
-                                value={form.section_subject_id || ''}
+                                value={form.target_type}
                                 onChange={this.handleChange}
                                 inputProps={{
-                                    name: 'section_subject_id',
-                                    id: 'section_subject_id',
+                                    name: 'target_type',
+                                    id: 'target_type',
                                 }}
                             >
                                 <MenuItem value={-1}>
-                                    <em>All</em>
+                                    All
                                 </MenuItem>
-                                {section_subjects &&
-                                section_subjects.map(c =>
-                                    <MenuItem key={c.id} value={c.id}>{c.subject.name}</MenuItem>
-                                )
-                                }
+                                <MenuItem key={TARGET_TYPES.ORGANIZATION}
+                                          value={TARGET_TYPES.ORGANIZATION}>Organization</MenuItem>
+                                <MenuItem key={TARGET_TYPES.STAFF} value={TARGET_TYPES.STAFF}>Staff</MenuItem>
+                                <MenuItem key={TARGET_TYPES.TEACHER} value={TARGET_TYPES.TEACHER}>Teacher</MenuItem>
                             </Select>
                         </FormControl>
-                        }
                     </Grid>
-                    <Grid item className={classes.grid_item} xs={6} md={2}>
+
+                    <Grid item className={classes.grid_item} xs={12} md={3}>
                         <Button
                             variant="contained" color="primary"
                             onClick={this.handleSubmit} className={classes.button}
@@ -150,22 +168,20 @@ class AssessmentFilter extends Component {
     }
 }
 
-AssessmentFilter.propTypes = {
+NotificationFilter.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ academics }) {
+function mapStateToProps({notifications}) {
     return {
-        form: academics.grades.section.assessments.filter_form,
-        section_subjects: academics.grades.section.subjects.items,
+        form: notifications.details.filter_form,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateFilters: Actions.updateFilters,
-        fetchSectionSubjects: SectionSubjectActions.fetchSectionSubjects,
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AssessmentFilter)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(NotificationFilter)));
