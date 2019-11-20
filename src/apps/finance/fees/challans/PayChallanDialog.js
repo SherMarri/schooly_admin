@@ -34,7 +34,7 @@ class PayChallanDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            paid: props.item.total,
+            paid: props.item.total - props.item.paid,
             late_fee: 0,
             discount: 0,
             payment_date: new Date(),
