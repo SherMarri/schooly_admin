@@ -53,6 +53,9 @@ class FeeChallanPrintable extends Component {
                     <br/>
                     <Typography variant="caption">Guardian Name: <strong><u>{item.student.guardian_name}</u></strong></Typography>
                     <br/>
+                    {item.paid_at &&
+                    <Typography variant="caption">Payment Date: <strong><u>{Utils.formatDateLocal(item.paid_at)}</u></strong></Typography>
+                    }
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
