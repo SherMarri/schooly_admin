@@ -73,6 +73,12 @@ class FeeChallanPrintable extends Component {
                                 <td className={classes.td}><b>Total</b></td>
                                 <td className={classes.td}><b>{item.total}</b></td>
                             </tr>
+                            {item.late_fee > 0 &&
+                                <tr>
+                                    <td className={classes.td}><b>Late Fee</b></td>
+                                    <td className={classes.td}><b>{item.late_fee}</b></td>
+                                </tr>
+                            }
                             {item.discount > 0 &&
                                 <tr>
                                     <td className={classes.td}><b>Discount</b></td>

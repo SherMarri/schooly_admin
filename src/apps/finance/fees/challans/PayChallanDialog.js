@@ -33,6 +33,7 @@ class PayChallanDialog extends React.Component {
         super(props);
         this.state = {
             paid: props.item.total,
+            late_fee: 0,
             discount: 0
         }
     }
@@ -53,7 +54,8 @@ class PayChallanDialog extends React.Component {
 
     handleSubmit = () => {
         const data = {
-            paid: this.state.paid,
+            paid: parseFloat(this.state.paid) + parseFloat(this.state.late_fee),
+            late_fee: this.state.late_fee,
             discount: this.state.discount
         };
         this.props.payFeeChallan(this.props.item.id, data);
@@ -69,7 +71,7 @@ class PayChallanDialog extends React.Component {
 
     render() {
         const { classes, item, open, challans } = this.props;
-        const { paid, discount } = this.state;
+        const { paid, discount, late_fee } = this.state;
         return (
             <Dialog open={open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Fee Challan Payment</DialogTitle>
@@ -136,6 +138,16 @@ class PayChallanDialog extends React.Component {
                             type="number"
                             fullWidth
                             value={paid}
+                            InputProps={{ inputProps: { min: 0 } }}
+                            onChange={this.handleValueChange}
+                        />
+                        <TextField
+                            margin="dense"
+                            name="late_fee"
+                            label="Late Fee"
+                            type="number"
+                            fullWidth
+                            value={late_fee}
                             InputProps={{ inputProps: { min: 0 } }}
                             onChange={this.handleValueChange}
                         />
