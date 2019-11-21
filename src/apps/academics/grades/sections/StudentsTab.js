@@ -16,6 +16,7 @@ import {connect} from "react-redux";
 import {DownloadDialog, Loading} from "../../../../core/components";
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 
 
 const styles = theme => ({
@@ -154,9 +155,9 @@ class StudentsTab extends React.Component {
         const {classes} = this.props;
         return (
             <>
-                <Tooltip title="Download">
+                <Tooltip title="Download Result Card">
                     <IconButton aria-label="download" onClick={() => this.handleStudentResultDownload(value.id)}>
-                        <CloudDownloadIcon/>
+                        <AssessmentIcon/>
                     </IconButton>
                 </Tooltip>
             </>
