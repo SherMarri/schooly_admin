@@ -32,8 +32,9 @@ const auth = function (state = initialState, action) {
         }
         case Actions.SET_USER_DATA:
         {
-            localStorage.setItem('user', JSON.stringify(action.payload.user));
-            localStorage.setItem('jwt_token', action.payload.token);
+            localStorage.setItem('user', JSON.stringify(action.payload.user.user));
+            localStorage.setItem('jwt_token', action.payload.user.token);
+            localStorage.setItem('groups', JSON.stringify(action.payload.groups));
             return {
                 ...state,
                 user: action.payload.user
