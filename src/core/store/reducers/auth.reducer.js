@@ -1,7 +1,7 @@
 import * as Actions from '../actions/auth.actions';
 
 const guestUser = {
-    role: 'Guest',
+    roles: ['Guest'],
 }
 function getInitialState() {
     const userStr = localStorage.getItem('user');

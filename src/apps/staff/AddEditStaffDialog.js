@@ -89,7 +89,6 @@ class AddEditStaffDialog extends React.Component {
                 address: item.staff_info.address || '',
                 gender: item.staff_info.gender  || '',
                 contact: item.contact  || '',
-                profile_type: item.profile_type || null,
             };
         }
         else {
@@ -99,7 +98,6 @@ class AddEditStaffDialog extends React.Component {
                 address: '',
                 contact: '',
                 gender: null,
-                profile_type: null,
             };
         }
         this.state = { form };
@@ -256,23 +254,6 @@ class AddEditStaffDialog extends React.Component {
                                         >
                                             <MenuItem key={GENDER_TYPES.MALE} value={GENDER_TYPES.MALE}>Male</MenuItem>
                                             <MenuItem key={GENDER_TYPES.FEMALE} value={GENDER_TYPES.FEMALE}>Female</MenuItem>                                            
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={12} md={6} className={classes.gridItem}>
-                                    <FormControl required fullWidth margin="normal">
-                                        <InputLabel htmlFor="profile_type">Role</InputLabel>
-                                        <Select
-                                            value={form.profile_type}
-                                            onChange={this.handleChange}
-                                            inputProps={{
-                                                name: 'profile_type',
-                                                id: 'profile_type',
-                                            }}
-                                            readOnly={item && !edit}
-                                        >
-                                            <MenuItem key={PROFILE_TYPES.STAFF} value={PROFILE_TYPES.STAFF}>Staff</MenuItem>
-                                            <MenuItem key={PROFILE_TYPES.TEACHER} value={PROFILE_TYPES.TEACHER}>Teacher</MenuItem>                                            
                                         </Select>
                                     </FormControl>
                                 </Grid>

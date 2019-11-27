@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {matchRoutes} from 'react-router-config';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
+import { intersection } from 'lodash';
 import AppContext from '../../AppContext';
 
 class Authorization extends Component {
@@ -39,7 +40,7 @@ class Authorization extends Component {
 
         const matched = matchRoutes(state.routes, pathname)[0];
 
-        const accessGranted = (matched && matched.route.auth && matched.route.auth.length > 0) ? matched.route.auth.includes(user.role) : true;
+        const accessGranted = (matched && matched.route.auth && matched.route.auth.length > 0) ? intersection(matched.route.auth, user.roles).length > 0 : true;
 
         return {
             accessGranted
@@ -59,7 +60,7 @@ class Authorization extends Component {
         User is guest
         Redirect to Login Page
         */
-        if ( user.role === 'Guest' )
+        if ( user.roles.includes('Guest'))
         {
             history.push({
                 pathname: '/login',
