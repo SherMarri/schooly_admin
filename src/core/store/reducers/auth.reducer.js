@@ -1,7 +1,7 @@
 import * as Actions from '../actions/auth.actions';
 
 const guestUser = {
-    role: 'Guest',
+    roles: ['Guest'],
 }
 function getInitialState() {
     const userStr = localStorage.getItem('user');
@@ -32,9 +32,8 @@ const auth = function (state = initialState, action) {
         }
         case Actions.SET_USER_DATA:
         {
-            localStorage.setItem('user', JSON.stringify(action.payload.user.user));
-            localStorage.setItem('jwt_token', action.payload.user.token);
-            localStorage.setItem('groups', JSON.stringify(action.payload.groups));
+            localStorage.setItem('user', JSON.stringify(action.payload.user));
+            localStorage.setItem('jwt_token', action.payload.token);
             return {
                 ...state,
                 user: action.payload.user

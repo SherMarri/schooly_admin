@@ -1,6 +1,5 @@
 import { UrlService } from "../../../../core";
 import { toggleSnackbar, SNACKBAR_SUCCESS, SNACKBAR_FAILURE } from "../../../../core/store/actions/common.actions";
-import {deleteGrade} from "../../../academics/grades/store/actions/grades.actions";
 
 export const ACTION_INIT = '[NOTIFICATIONS] NOTIFICATIONS ACTION INIT';
 export const ACTION_SUCCESS = '[NOTIFICATIONS] NOTIFICATIONS ACTION SUCCESS';
@@ -10,7 +9,7 @@ export const SET_NOTIFICATIONS = '[NOTIFICATIONS] SET NOTIFICATIONS';
 export const SET_NOTIFICATION_DETAILS = '[NOTIFICATIONS] SET NOTIFICATIONS DETAILS';
 export const SET_FILTERS = '[NOTIFICATIONS] SET NOTIFICATIONS FILTERS';
 
-export const CLEAR_TABLE_DATA = '[NOTIFICATIONS] NOTIFICATIONS CLEAR TABLE DATA';
+// export const CLEAR_TABLE_DATA = '[NOTIFICATIONS] NOTIFICATIONS CLEAR TABLE DATA';
 
 
 export function createNotification(data, filter_form) {

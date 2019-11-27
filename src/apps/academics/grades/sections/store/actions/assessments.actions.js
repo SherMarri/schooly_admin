@@ -146,7 +146,6 @@ export function fetchAssessmentDetails(assessment_id) {
 }
 
 export function updateAssessmentDetails({ assessment_id, items }) {
-    debugger;
     return dispatch => {
         UrlService.put(`academics/assessments/${assessment_id}`, { items })
             .then(response => {
