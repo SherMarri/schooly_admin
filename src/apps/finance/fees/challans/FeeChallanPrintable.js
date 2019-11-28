@@ -46,6 +46,8 @@ class FeeChallanPrintable extends Component {
                     <Typography variant="caption">Name: <strong><u>{item.student.fullname}</u></strong></Typography>
                     <br/>
                     <Typography variant="caption">Due Date: <strong><u>{ Utils.formatDateLocal(item.due_date)}</u></strong></Typography>
+                    <br/>
+                    <Typography variant="caption">Class: <strong><u>{item.student.grade} - {item.student.section}</u></strong></Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
                     <br/><br/>
@@ -53,6 +55,9 @@ class FeeChallanPrintable extends Component {
                     <br/>
                     <Typography variant="caption">Guardian Name: <strong><u>{item.student.guardian_name}</u></strong></Typography>
                     <br/>
+                    {item.paid_at &&
+                    <Typography variant="caption">Payment Date: <strong><u>{Utils.formatDateLocal(item.paid_at)}</u></strong></Typography>
+                    }
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
@@ -73,6 +78,12 @@ class FeeChallanPrintable extends Component {
                                 <td className={classes.td}><b>Total</b></td>
                                 <td className={classes.td}><b>{item.total}</b></td>
                             </tr>
+                            {item.late_fee > 0 &&
+                                <tr>
+                                    <td className={classes.td}><b>Late Fee</b></td>
+                                    <td className={classes.td}><b>{item.late_fee}</b></td>
+                                </tr>
+                            }
                             {item.discount > 0 &&
                                 <tr>
                                     <td className={classes.td}><b>Discount</b></td>

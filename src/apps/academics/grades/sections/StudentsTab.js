@@ -16,6 +16,7 @@ import {connect} from "react-redux";
 import {DownloadDialog, Loading} from "../../../../core/components";
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 
 
 const styles = theme => ({
@@ -95,6 +96,10 @@ class StudentsTab extends React.Component {
         this.props.fetchDownloadLink(this.props.match.params.section_id);
     };
 
+    handleStudentResultDownload = (student_id) => {
+        this.props.fetchStudentResultDownloadLink(student_id);
+    };
+
     handleRefresh = () => {
         this.props.fetchSectionStudents(this.props.match.params.section_id);
     };
@@ -119,6 +124,7 @@ class StudentsTab extends React.Component {
                 gr_number: d.profile.gr_number,
                 fullname: d.profile.fullname,
                 average_attendance: '75%',
+                id: d,
             };
         });
     };
@@ -145,8 +151,24 @@ class StudentsTab extends React.Component {
     };
 
 
+    renderActionColumn = (value, table_meta, update_value) => {
+        const {classes} = this.props;
+        return (
+            <>
+                <Tooltip title="Download Result Card">
+                    <IconButton aria-label="download" onClick={() => this.handleStudentResultDownload(value.id)}>
+                        <AssessmentIcon/>
+                    </IconButton>
+                </Tooltip>
+            </>
+        );
+    };
+
+
     render() {
-        const {classes, loading, items, fetching_download_link, download_url} = this.props;
+        const {classes, loading, items,
+            fetching_download_link, download_url} = this.props;
+        console.log(this.props);
         if (loading) return <Loading/>;
         if (!items) return null;
         const columns = [{
@@ -164,7 +186,18 @@ class StudentsTab extends React.Component {
         }, {
             name: 'average_attendance',
             label: "Avg. Attendance",
-        },
+        }, {
+            name: 'id',
+            label: 'Action',
+            options: {
+                customBodyRender: (value, table_data, update_value) =>
+                    this.renderActionColumn(value, table_data, update_value),
+                filter: false,
+                download: false,
+            }
+        }
+
+
         ];
         const options = {
             sort: false,
@@ -226,7 +259,6 @@ class StudentsTab extends React.Component {
                     onClose={this.props.clearDownloadLink}
                 />
                 }
-
             </Grid>
         );
     }
@@ -249,6 +281,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchSectionStudents: Actions.fetchSectionStudents,
         fetchDownloadLink: Actions.fetchDownloadLink,
+        fetchStudentResultDownloadLink: Actions.fetchStudentResultDownloadLink,
         clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }

@@ -1,5 +1,5 @@
 import { UrlService } from "../..";
-import history from "../../history";
+// import history from "../../history";
 import { toggleSnackbar, SNACKBAR_FAILURE, SNACKBAR_INFO, SNACKBAR_SUCCESS } from "./common.actions";
 
 export const LOADING = '[USER] LOADING';
@@ -28,9 +28,6 @@ export function login({username, password}) {
                 message: `Welcome ${response.data.user.fullname}`,
                 variant: SNACKBAR_INFO,
             }));
-            setTimeout(()=>{
-                history.push('/academics/students');
-            }, 100);
         }).catch(error => {
             dispatch(toggleSnackbar({
                 message: 'Invalid credentials. Please try again with valid username and password.',

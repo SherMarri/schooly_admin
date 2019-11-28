@@ -5,7 +5,7 @@ import GradesPage from "./grades/GradesPage";
 import GradeDetailPage from "./grades/GradeDetailPage";
 import SectionsPage from "./grades/sections/SectionsPage";
 import NotificationsPage from "./grades/NotificationsPage";
-
+import ExamsPage from "./grades/sections/ExamsPage";
 
 export const AcademicsConfig = {
     auth: AuthRoles.admin,
@@ -28,6 +28,11 @@ export const AcademicsConfig = {
         {
             path: '/academics/classes/:grade_id',
             component: GradeDetailPage,
+            exact: true,
+        },
+        {
+            path: '/academics/sections/:section_id/exams/:exam_id',
+            component: ExamsPage,
             exact: true,
         },
         {

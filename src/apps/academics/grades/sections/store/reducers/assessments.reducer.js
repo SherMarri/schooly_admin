@@ -30,6 +30,12 @@ const assessments = function (state = initialState, action) {
                 items: {...action.payload},
             };
         }
+        case Actions.SET_EXAM_ASSESSMENTS: {
+            return {
+                ...state,
+                exam_assessments: [...action.payload],
+            };
+        }
         case Actions.FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK: {
             return {
                 ...state,

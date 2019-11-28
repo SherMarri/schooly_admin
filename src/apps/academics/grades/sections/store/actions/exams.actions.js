@@ -97,75 +97,43 @@ export function resetExamsData() {
     };
 }
 
-/*
-export function fetchAssessmentDetails(assessment_id) {
+export function updateExamName(form) {
     return dispatch => {
-        dispatch({
-            type: ACTION_FETCH_ASSESSMENT_DETAILS_INIT
-        });
-        UrlService.get(`academics/assessments/${assessment_id}`)
-            .then(response => {
-                dispatch({
-                    type: SET_SECTION_ASSESSMENT_DETAILS,
-                    payload: response.data
-                });
-                dispatch({
-                    type: ACTION_FETCH_ASSESSMENT_DETAILS_SUCCESS
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: ACTION_FETCH_ASSESSMENT_DETAILS_FAILURE
-                });
-                dispatch(toggleSnackbar({
-                    message: 'Unable to retrieve assessment, please contact Schooli support.',
-                    variant: SNACKBAR_FAILURE
-                }));
-            });
-    }
-}
-*/
-
-/*
-export function updateAssessmentDetails({ assessment_id, items }) {
-    return dispatch => {
-        UrlService.put(`academics/assessments/${assessment_id}`, { items })
+        UrlService.put(`academics/exams/${form.exam_id}`, { name: form.name })
             .then(response => {
                 dispatch(toggleSnackbar({
-                    message: 'Assessment updated successfully.',
+                    message: 'Exam name updated successfully.',
                     variant: SNACKBAR_SUCCESS
                 }));
-                dispatch(fetchSectionAssessments());
+                dispatch(fetchSectionExams());
             })
             .catch(error => {
                 dispatch(toggleSnackbar({
-                    message: 'Unable to update assessment, please contact Schooli support.',
+                    message: 'Unable to update exam name, please contact Schooli support.',
                     variant: SNACKBAR_FAILURE
                 }));
             });
     }
 }
-*/
 
 
-/*
-export function fetchDownloadLink(assessment_id) {
+export function fetchDownloadLink(exam_id) {
     return dispatch => {
         dispatch({
-            type: FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK,
+            type: FETCHING_SECTION_EXAMS_DOWNLOAD_LINK,
             payload: true,
         });
-        UrlService.get(`academics/assessments/${assessment_id}`, {download:true})
+        UrlService.get(`academics/exam-details/${exam_id}`)
             .then(response => {
-                const download_url = `${UrlService.getUrl('users/staff/downloadcsv')}?file_name=${response.data}`;
+                const download_url = `${UrlService.getUrl('download_csv')}?file_name=${response.data}`;
                 dispatch({
-                    type: SET_SECTION_ASSESSMENTS_DOWNLOAD_LINK,
+                    type: SET_SECTION_EXAMS_DOWNLOAD_LINK,
                     payload: download_url
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: FETCHING_SECTION_ASSESSMENTS_DOWNLOAD_LINK,
+                    type: FETCHING_SECTION_EXAMS_DOWNLOAD_LINK,
                     payload: false,
                 });
                 dispatch(toggleSnackbar({
@@ -175,17 +143,14 @@ export function fetchDownloadLink(assessment_id) {
             });
     }
 }
-*/
 
-/*
 export function clearDownloadLink() {
     return dispatch => {
         return dispatch({
-            type: CLEAR_SECTION_ASSESSMENTS_DOWNLOAD_LINK,
+            type: CLEAR_SECTION_EXAMS_DOWNLOAD_LINK,
         });
     }
 }
-*/
 
 export function setFilters(filters) {
     return dispatch => {

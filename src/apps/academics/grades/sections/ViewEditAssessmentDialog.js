@@ -215,7 +215,12 @@ class ViewEditAssessmentDialog extends React.Component {
             assessment_id: assessment_details.id,
         };
         this.handleClose();
-        this.props.updateAssessmentDetails(data);
+        if(this.props.exam_id) {
+            data.exam_id = this.props.exam_id;
+            this.props.updateExamAssessmentDetails(data);
+        }
+        else
+            this.props.updateAssessmentDetails(data);
     };
 
     render() {
@@ -338,6 +343,7 @@ function mapDispatchToProps(dispatch) {
         fetchAssessmentDetails: Actions.fetchAssessmentDetails,
         resetAssessmentDetails: Actions.resetAssessmentDetails,
         updateAssessmentDetails: Actions.updateAssessmentDetails,
+        updateExamAssessmentDetails: Actions.updateExamAssessmentDetails,
     }, dispatch);
 }
 

@@ -12,7 +12,7 @@ import {
 import MUIDataTable from "mui-datatables";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {Loading} from "../../../../core/components";
+import {DownloadDialog, Loading} from "../../../../core/components";
 import Format from "date-fns/format";
 import {Utils} from "../../../../core";
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -24,6 +24,8 @@ import ExamFilter from "./ExamFilter";
 import * as Actions from "./store/actions/exams.actions";
 import AddRegularExamDialog from "./AddRegularExamDialog";
 import AddConsolidatedExamDialog from "./AddConsolidatedExamDialog";
+import history from "../../../../core/history";
+import EditExamNameDialog from "./EditExamNameDialog";
 
 
 
@@ -106,40 +108,30 @@ class ExamsTab extends React.Component {
         this.props.fetchSectionExams(page + 1);
     };
 
-/*
-    handleViewEditExamCloseDialog = () => {
-        this.setState({
-            ...this.state,
-            view_edit_assessment_dialog: false,
-            selected_assessment: null,
-            assessment_dialog_read_only: null,
-        });
-    };
-*/
-
-
     handleViewItem = (value) => {
-        this.setState({
-            ...this.state,
-            view_edit_assessment_dialog: true,
-            selected_assessment: value,
-            assessment_dialog_read_only: true,
-        });
+        const section_id = this.props.match.params.section_id;
+        history.push(`/academics/sections/${section_id}/exams/${value.id}`);
     };
 
-/*
     handleEditItem = (value) => {
         this.setState({
             ...this.state,
-            view_edit_assessment_dialog: true,
-            selected_assessment: value,
-            assessment_dialog_read_only: null,
+            edit_exam_name_dialog: true,
+            selected_exam: value,
         });
     };
-*/
+
+    handleDownload = (exam_id) => {
+        this.props.fetchDownloadLink(exam_id);
+    };
 
 
-
+    handleEditExamNameCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            edit_exam_name_dialog: false,
+        })
+    };
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
         return (
@@ -179,7 +171,7 @@ class ExamsTab extends React.Component {
     };
 
     renderExamTable = () => {
-        const { items, classes } = this.props;
+        const { items, classes, fetching_download_link, download_url } = this.props;
         const { anchor_element } = this.state;
         let {page, count} = items;
         page -= 1;
@@ -275,14 +267,23 @@ class ExamsTab extends React.Component {
                 </AddConsolidatedExamDialog>
 
                 }
-{/*
-                <ViewEditAssessmentDialog
-                    open={this.state.view_edit_assessment_dialog}
-                    onClose={this.handleViewEditAssessmentCloseDialog}
-                    assessment={this.state.selected_assessment}
-                    read_only={this.state.assessment_dialog_read_only}
+                {this.state.edit_exam_name_dialog &&
+                    <EditExamNameDialog
+                        open={this.state.edit_exam_name_dialog}
+                        onClose={this.handleEditExamNameCloseDialog}
+                        exam={this.state.selected_exam}
+                    />
+                }
+
+                {(fetching_download_link || download_url) &&
+                <DownloadDialog
+                    loading={fetching_download_link}
+                    link={download_url}
+                    onClose={this.props.clearDownloadLink}
                 />
-*/}
+                }
+
+
             </div>
 
         )
@@ -319,12 +320,16 @@ function mapStateToProps({academics}) {
     return {
         items: academics.grades.section.exams.items,
         loading: academics.grades.section.exams.loading,
+        fetching_download_link: academics.grades.section.exams.fetching_download_link,
+        download_url: academics.grades.section.exams.download_url,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchSectionExams: Actions.fetchSectionExams,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 

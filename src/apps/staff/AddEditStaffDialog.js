@@ -86,10 +86,10 @@ class AddEditStaffDialog extends React.Component {
                 user: item.id,
                 fullname: item.fullname || '',
                 date_hired: item.staff_info.date_hired || null,
+                profile_type: item.profile_type || null,
                 address: item.staff_info.address || '',
                 gender: item.staff_info.gender  || '',
                 contact: item.contact  || '',
-                profile_type: item.profile_type || null,
             };
         }
         else {
@@ -272,7 +272,8 @@ class AddEditStaffDialog extends React.Component {
                                             readOnly={item && !edit}
                                         >
                                             <MenuItem key={PROFILE_TYPES.STAFF} value={PROFILE_TYPES.STAFF}>Staff</MenuItem>
-                                            <MenuItem key={PROFILE_TYPES.TEACHER} value={PROFILE_TYPES.TEACHER}>Teacher</MenuItem>                                            
+                                            <MenuItem key={PROFILE_TYPES.TEACHER} value={PROFILE_TYPES.TEACHER}>Teacher</MenuItem>
+                                            <MenuItem key={PROFILE_TYPES.ADMIN} value={PROFILE_TYPES.ADMIN}>Admin</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>

@@ -16,6 +16,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FeeChallanPrintable from './FeeChallanPrintable';
 import ReactToPrint from 'react-to-print';
 import Utils from "../../../../core/Utils";
+import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 const styles = theme => ({
     descriptionTable: {
@@ -32,8 +34,10 @@ class PayChallanDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            paid: props.item.total,
-            discount: 0
+            paid: props.item.total - props.item.paid,
+            late_fee: 0,
+            discount: 0,
+            payment_date: new Date(),
         }
     }
 
@@ -53,8 +57,10 @@ class PayChallanDialog extends React.Component {
 
     handleSubmit = () => {
         const data = {
-            paid: this.state.paid,
-            discount: this.state.discount
+            paid: parseFloat(this.state.paid) + parseFloat(this.state.late_fee),
+            late_fee: this.state.late_fee,
+            discount: this.state.discount,
+            payment_date: this.state.payment_date,
         };
         this.props.payFeeChallan(this.props.item.id, data);
     }
@@ -67,9 +73,16 @@ class PayChallanDialog extends React.Component {
         return this.state.paid !== '' && this.state.discount !== '';
     }
 
+    handleDateChange = (date) => {
+        this.setState({
+            ...this.state,
+            payment_date: date,
+        });
+    };
+
     render() {
         const { classes, item, open, challans } = this.props;
-        const { paid, discount } = this.state;
+        const { paid, discount, late_fee, payment_date } = this.state;
         return (
             <Dialog open={open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Fee Challan Payment</DialogTitle>
@@ -128,6 +141,17 @@ class PayChallanDialog extends React.Component {
                             </TableBody>
                         </Table>
                         <br />
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <DatePicker
+                                margin="normal"
+                                name="payment_date"
+                                label="Payment Date"
+                                disableFuture
+                                fullWidth
+                                value={payment_date}
+                                onChange={(date) => this.handleDateChange(date)}
+                            />
+                        </MuiPickersUtilsProvider>
                         <TextField
                             autoFocus
                             margin="dense"
@@ -136,6 +160,16 @@ class PayChallanDialog extends React.Component {
                             type="number"
                             fullWidth
                             value={paid}
+                            InputProps={{ inputProps: { min: 0 } }}
+                            onChange={this.handleValueChange}
+                        />
+                        <TextField
+                            margin="dense"
+                            name="late_fee"
+                            label="Late Fee"
+                            type="number"
+                            fullWidth
+                            value={late_fee}
                             InputProps={{ inputProps: { min: 0 } }}
                             onChange={this.handleValueChange}
                         />

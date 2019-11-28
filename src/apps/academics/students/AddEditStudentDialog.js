@@ -20,7 +20,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { Grid, Select, MenuItem } from '@material-ui/core';
 import * as Actions from './store/students.actions';
-import { fetchGrades } from '../../../core/store/actions/common.actions';
+import { fetchAllGrades } from '../../../core/store/actions/common.actions';
 import { Utils } from '../../../core';
 
 const styles = theme => ({
@@ -120,6 +120,7 @@ class AddEditStudentDialog extends React.Component {
         }
     }
 
+
     handleClose = () => {
         this.props.onClose();
     }
@@ -196,7 +197,12 @@ class AddEditStudentDialog extends React.Component {
 
     render() {
         const { open, classes, grades, item, edit } = this.props;
-        const { form, sections } = this.state;
+        const { form } = this.state;
+        let sections;
+        if (grades)
+        {
+            sections = this.props.grades.find(g => g.id===item.student_info.section.grade_id).sections;
+        }
         return (
             <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
@@ -322,7 +328,7 @@ class AddEditStudentDialog extends React.Component {
                                         >
                                             {grades &&
                                                 grades.map(c =>
-                                                    <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
+                                                    <MenuItem key={c.id} value={c.id}>{c.name} {!c.is_active ? " (Deleted)" : ""}</MenuItem>
                                                 )
                                             }
                                         </Select>
@@ -413,14 +419,14 @@ AddEditStudentDialog.propTypes = {
 function mapStateToProps({ common, academics }) {
     return {
         students: academics.students,
-        grades: common.grades,
+        grades: common.all_grades,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addUpdateStudent: Actions.addUpdateStudent,
-        fetchGrades: fetchGrades
+        fetchGrades: fetchAllGrades
     }, dispatch);
 }
 
