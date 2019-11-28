@@ -16,6 +16,8 @@ import Format from "date-fns/format";
 import {Utils} from "../../../../core";
 import ViewEditAssessmentDialog from "./ViewEditAssessmentDialog";
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import history from "../../../../core/history";
 
 const styles = theme => ({
     root: {
@@ -39,6 +41,15 @@ const styles = theme => ({
         width: '40px',
         height: '40px',
     },
+    actionsDiv: {
+        margin: theme.spacing(1),
+        marginTop: '10px',
+    },
+    leftIcon: {
+        marginLeft: theme.spacing(1),
+        color: 'white',
+        cursor: 'pointer'
+    }
 });
 
 
@@ -161,9 +172,14 @@ class ExamsPage extends React.Component {
         });
     };
 
+    handleBackButton = () => {
+        this.props.history.goBack();
+    };
+
+
 
     renderExamSubjects = () => {
-        const {classes, fetching_download_link, download_url } = this.props;
+        const {classes, fetching_download_link, download_url} = this.props;
         const columns = [{
             name: 'subject',
             label: "Subjects",
@@ -318,8 +334,15 @@ class ExamsPage extends React.Component {
                 <>
                     <Grid item xs={12}>
                         <AppBar position="static">
-                            <Typography className={classes.header}
-                                        variant="h5">Exam</Typography>
+                            <Grid container>
+                                <div className={classes.actionsDiv}>
+                                    <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
+                                </div>
+                                <Grid item xs={12} md={8}>
+                                    <Typography className={classes.header}
+                                                variant="h5">Exam</Typography>
+                                </Grid>
+                            </Grid>
                             <Tabs value={value} onChange={this.handleChange}>
                                 <Tab label="Subjects"/>
                                 <Tab label="Students"/>
