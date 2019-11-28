@@ -5,7 +5,7 @@ import {Grid, IconButton, Tab, Tabs, Tooltip, Typography} from "@material-ui/cor
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
-import {Loading} from "../../../../core/components";
+import {DownloadDialog, Loading} from "../../../../core/components";
 import AppBar from "@material-ui/core/AppBar";
 import * as Actions from './store/actions/assessments.actions';
 import * as StudentActions from './store/actions/students.actions';
@@ -15,6 +15,7 @@ import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 import Format from "date-fns/format";
 import {Utils} from "../../../../core";
 import ViewEditAssessmentDialog from "./ViewEditAssessmentDialog";
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 
 const styles = theme => ({
     root: {
@@ -62,6 +63,11 @@ class ExamsPage extends React.Component {
         });
     };
 
+    handleDownload = (assessment_id) => {
+        this.props.fetchDownloadLink(assessment_id);
+    };
+
+
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
         return (
@@ -80,6 +86,12 @@ class ExamsPage extends React.Component {
                     </IconButton>
                 </Tooltip>
                 }
+                <Tooltip title="Download">
+                    <IconButton aria-label="download" onClick={() => this.handleDownload(value.id)}>
+                        <CloudDownloadIcon/>
+                    </IconButton>
+                </Tooltip>
+
             </>
         );
     };
@@ -151,7 +163,7 @@ class ExamsPage extends React.Component {
 
 
     renderExamSubjects = () => {
-        const {classes} = this.props;
+        const {classes, fetching_download_link, download_url } = this.props;
         const columns = [{
             name: 'subject',
             label: "Subjects",
@@ -220,6 +232,15 @@ class ExamsPage extends React.Component {
                     read_only={this.state.assessment_dialog_read_only}
                     exam_id={this.props.match.params.exam_id | null}
                 />
+
+                {(fetching_download_link || download_url) &&
+                <DownloadDialog
+                    loading={fetching_download_link}
+                    link={download_url}
+                    onClose={this.props.clearDownloadLink}
+                />
+                }
+
 
             </div>
 
@@ -323,13 +344,18 @@ function mapStateToProps({academics}) {
     return {
         exam_assessments: academics.grades.section.assessments.exam_assessments,
         students: academics.grades.section.students.items,
+        fetching_download_link: academics.grades.section.assessments.fetching_download_link,
+        download_url: academics.grades.section.assessments.download_url,
+
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchExamAssessments: Actions.fetchExamAssessments,
-        fetchStudents: StudentActions.fetchSectionStudents
+        fetchStudents: StudentActions.fetchSectionStudents,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
