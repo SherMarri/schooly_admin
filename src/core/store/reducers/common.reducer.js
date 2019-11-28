@@ -33,6 +33,13 @@ const common = function (state = initialState, action) {
                 grades: action.payload
             };
         }
+        case Actions.SET_ALL_GRADES:
+        {
+            return {
+                ...state,
+                all_grades: action.payload
+            };
+        }
         default:
         {
             return state
