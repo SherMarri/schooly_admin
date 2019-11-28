@@ -12,7 +12,7 @@ import {
 import MUIDataTable from "mui-datatables";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {Loading} from "../../../../core/components";
+import {DownloadDialog, Loading} from "../../../../core/components";
 import Format from "date-fns/format";
 import {Utils} from "../../../../core";
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -121,6 +121,11 @@ class ExamsTab extends React.Component {
         });
     };
 
+    handleDownload = (exam_id) => {
+        this.props.fetchDownloadLink(exam_id);
+    };
+
+
     handleEditExamNameCloseDialog = () => {
         this.setState({
             ...this.state,
@@ -166,7 +171,7 @@ class ExamsTab extends React.Component {
     };
 
     renderExamTable = () => {
-        const { items, classes } = this.props;
+        const { items, classes, fetching_download_link, download_url } = this.props;
         const { anchor_element } = this.state;
         let {page, count} = items;
         page -= 1;
@@ -270,6 +275,15 @@ class ExamsTab extends React.Component {
                     />
                 }
 
+                {(fetching_download_link || download_url) &&
+                <DownloadDialog
+                    loading={fetching_download_link}
+                    link={download_url}
+                    onClose={this.props.clearDownloadLink}
+                />
+                }
+
+
             </div>
 
         )
@@ -306,12 +320,16 @@ function mapStateToProps({academics}) {
     return {
         items: academics.grades.section.exams.items,
         loading: academics.grades.section.exams.loading,
+        fetching_download_link: academics.grades.section.exams.fetching_download_link,
+        download_url: academics.grades.section.exams.download_url,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchSectionExams: Actions.fetchSectionExams,
+        fetchDownloadLink: Actions.fetchDownloadLink,
+        clearDownloadLink: Actions.clearDownloadLink,
     }, dispatch);
 }
 
