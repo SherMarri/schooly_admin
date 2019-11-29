@@ -215,7 +215,9 @@ class SummaryTab extends React.Component {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Paper className={classes.paper}><Chart options={pie_options(this.getCategoryWiseYearlyOptions())} /></Paper>
-                    <Paper className={classes.paper}><Chart options={pie_options(this.getCategoryWiseMonthlyOptions())} /></Paper>
+                    {this.props.category_wise_data &&
+                        <Paper className={classes.paper}><Chart options={pie_options(this.getCategoryWiseMonthlyOptions())} /></Paper>
+                    }
                 </Grid>
             </Grid>
         );
