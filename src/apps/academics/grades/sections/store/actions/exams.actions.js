@@ -50,7 +50,7 @@ export function fetchSectionExams(page=1) {
             type: ACTION_INIT
         });
         dispatch(resetExamsData());
-        UrlService.get(`academics/exams/`, form)
+        UrlService.get(`academics/exams`, form)
             .then(response => {
                 dispatch({
                     type: SET_SECTION_EXAMS,
