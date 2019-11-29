@@ -313,7 +313,7 @@ class ViewEditAssessmentDialog extends React.Component {
                                         <Typography variant={"caption"}>Consolidated</Typography>
                                         <br/>
                                         <Typography className={classes.titleContent}
-                                                    variant={"h6"}>{assessment_details.exam ? 'Yes' : 'No'}</Typography>
+                                                    variant={"h6"}>{(assessment_details.exam && assessment_details.exam.consolidated) ? 'Yes' : 'No'}</Typography>
                                     </Grid>
                                 </Grid>
                             </Paper>
