@@ -151,24 +151,6 @@ class AddAttendanceDialog extends React.Component {
                                autoFocus
                         />
                     </FormControl>
-
-{/*
-                    <FormControl required fullWidth margin="normal">
-                        <InputLabel htmlFor="graded">Graded</InputLabel>
-                        <Select
-                            value={form.graded}
-                            onChange={this.handleChange}
-                            inputProps={{
-                                name: 'graded',
-                                id: 'graded',
-                            }}
-                        >
-                            <MenuItem key={0} value={false}>Ungraded</MenuItem>
-                            <MenuItem key={1} value={true}>Graded</MenuItem>
-                        </Select>
-                    </FormControl>
-*/}
-
                 </DialogContent>
                 <DialogActions>
                     <Button
