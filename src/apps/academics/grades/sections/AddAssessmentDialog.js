@@ -148,7 +148,6 @@ class AddAttendanceDialog extends React.Component {
                         <Input id="total_marks" name="total_marks"
                                onChange={this.handleChange}
                                value={form.total_marks || ''}
-                               autoFocus
                         />
                     </FormControl>
 
