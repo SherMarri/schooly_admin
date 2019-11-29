@@ -206,8 +206,7 @@ class ViewEditAssessmentDialog extends React.Component {
                     obtained_marks: null,
                 };
 
-            }
-            else return { ...item,}
+            } else return {...item,}
         });
 
         const data = {
@@ -215,11 +214,10 @@ class ViewEditAssessmentDialog extends React.Component {
             assessment_id: assessment_details.id,
         };
         this.handleClose();
-        if(this.props.exam_id) {
+        if (this.props.exam_id) {
             data.exam_id = this.props.exam_id;
             this.props.updateExamAssessmentDetails(data);
-        }
-        else
+        } else
             this.props.updateAssessmentDetails(data);
     };
 
@@ -255,7 +253,9 @@ class ViewEditAssessmentDialog extends React.Component {
                                             <TableCell>GR#</TableCell>
                                             <TableCell>Full Name</TableCell>
                                             <TableCell>Obtained Marks / {assessment_details.total_marks}</TableCell>
-                                            <TableCell>Comments</TableCell>
+                                            {(!assessment_details.exam || !assessment_details.exam.consolidated) &&
+                                                <TableCell>Comments</TableCell>
+                                            }
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
