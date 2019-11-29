@@ -27,6 +27,7 @@ import Divider from "@material-ui/core/Divider";
 import {Line} from 'react-chartjs-2';
 import ListIcon from '@material-ui/icons/List';
 import Utils from "../../../core/Utils";
+import AddEditSectionDialog from "./AddEditSectionDialog";
 
 const styles = theme => ({
     toolbar: {
@@ -127,8 +128,28 @@ class GradeDetailPage extends React.Component {
         super(props);
         const grade_id = this.props.match.params.grade_id;
         props.fetchGradeDetails(grade_id);
-        props.fetchRecentNotifications({target_id: grade_id, target_type: 2, recent: true})
+        props.fetchRecentNotifications({target_id: grade_id, target_type: 2, recent: true});
+        this.state = {};
     }
+
+    handleEditItem = (item) => {
+        this.setState({
+            open: true,
+            selected_item: item,
+            edit: true
+        });
+    };
+
+    handleCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            selected_item: null,
+            open: false,
+            edit: false,
+        });
+    };
+
+
 
     renderActionColumn = (value, table_meta, update_value) => {
         const {classes} = this.props;
@@ -479,6 +500,15 @@ class GradeDetailPage extends React.Component {
                             {recent_notifications &&
                             this.renderRecentNotifications()
                             }
+                            {this.state.edit &&
+                            <AddEditSectionDialog
+                                open={this.state.open}
+                                item={this.state.selected_item}
+                                onClose={this.handleCloseDialog}
+                                edit={this.state.edit}
+                            />
+                            }
+
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <Card className={classes.cardGraph}>
