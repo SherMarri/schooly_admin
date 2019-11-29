@@ -178,61 +178,79 @@ class GradeDetailPage extends React.Component {
     };
 
     renderRecentNotifications = () => {
-        const { classes, recent_notifications } = this.props;
+        const {classes, recent_notifications} = this.props;
         const data = recent_notifications.data;
-        if (!data.length > 0) return null;
-        return(
+        return (
             <>
                 <Card className={classes.cardTable}>
                     <List className={classes.root}>
                         <ListItem alignItems="flex-start">
                             <div className={classes.titleDiv}>
-                                <Typography variant="h5" className={classes.titleNotifs}>Recent Notifs</Typography>
+                                <Typography variant="h5" className={classes.titleNotifs}>Recent Notifications</Typography>
 
-                                <Button onClick={this.handleViewAllNotifs} variant="contained" color="secondary" className={classes.button}>
-                                    <ListIcon className={classes.leftIcon} />
+                                {data.length <= 0 &&
+                                <Button onClick={this.handleViewAllNotifs} variant="contained" color="secondary"
+                                        className={classes.button}>
+                                    <ListIcon className={classes.leftIcon}/>
+                                    Notifications
+                                </Button>
+                                }
+                                {data.length > 0 &&
+                                <Button onClick={this.handleViewAllNotifs} variant="contained" color="secondary"
+                                        className={classes.button}>
+                                    <ListIcon className={classes.leftIcon}/>
                                     View All
                                 </Button>
+                                }
                             </div>
                         </ListItem>
-                        <Divider component="li" />
-                        {data.map(item=>(
+                        <Divider component="li"/>
+                        {data.length <= 0 &&
+                        <ListItem alignItems="flex-start">
+                            <div className={classes.titleDiv}>
+                                <Typography variant="body1">No recent notifications found</Typography>
+                            </div>
+                        </ListItem>
+
+                        }
+
+                        {data.map(item => (
                             <>
-                            <ListItem alignItems="flex-start">
-                                <ListItemText
-                                    primary={item.title}
-                                    secondary={
-                                        <React.Fragment>
-                                            <Typography
-                                                component="span"
-                                                variant="body1"
-                                                className={classes.inline}
-                                                color="primary"
-                                            >
-                                                {/*{item.creator.fullname ? item.creator.fullname : ''}*/}
-                                            </Typography>
-                                            {item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content}
-                                            <br/>
-                                            <Typography
-                                                component="span"
-                                                variant="body2"
-                                                className={classes.inline}
-                                                color="secondary"
-                                            >
-                                                {Utils.formatDateLocal(item.created_at)}
-                                            </Typography>
-                                        </React.Fragment>
-                                    }
-                                />
-                            </ListItem>
-                                <Divider component="li" />
+                                <ListItem alignItems="flex-start">
+                                    <ListItemText
+                                        primary={item.title}
+                                        secondary={
+                                            <React.Fragment>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body1"
+                                                    className={classes.inline}
+                                                    color="primary"
+                                                >
+                                                    {/*{item.creator.fullname ? item.creator.fullname : ''}*/}
+                                                </Typography>
+                                                {item.content.length > 100 ? (item.content.slice(0, 100) + "...") : item.content}
+                                                <br/>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body2"
+                                                    className={classes.inline}
+                                                    color="secondary"
+                                                >
+                                                    {Utils.formatDateLocal(item.created_at)}
+                                                </Typography>
+                                            </React.Fragment>
+                                        }
+                                    />
+                                </ListItem>
+                                <Divider component="li"/>
                             </>
                         ))}
 
                     </List>
                 </Card>
             </>
-            )
+        )
     }
 
 
@@ -362,7 +380,7 @@ class GradeDetailPage extends React.Component {
                     <Paper className={classes.toolbar}>
                         <Grid container>
                             <div className={classes.actionsDiv}>
-                                    <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
+                                <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
                             </div>
                             <Grid item xs={12} md={8}>
                                 <div className={classes.gradeTitleDiv}>
@@ -459,17 +477,17 @@ class GradeDetailPage extends React.Component {
                                     options={options}/>
                             </Card>
                             {recent_notifications &&
-                                this.renderRecentNotifications()
+                            this.renderRecentNotifications()
                             }
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <Card className={classes.cardGraph}>
-                            <Line
-                                data={this.getAttendanceChartData()}
-                                width={50}
-                                height={337}
-                                options={{ maintainAspectRatio: false }}
-                            />
+                                <Line
+                                    data={this.getAttendanceChartData()}
+                                    width={50}
+                                    height={337}
+                                    options={{maintainAspectRatio: false}}
+                                />
                             </Card>
                         </Grid>
                     </Grid>
