@@ -44,7 +44,6 @@ const styles = theme => ({
     chip: {
         fontSize: '8px',
         marginBottom: '0px',
-        float: 'right',
     }
 });
 
@@ -62,13 +61,6 @@ class NotificationsList extends React.Component {
 
     handlePageChange = (page) => {
         this.props.onPageChange(page);
-    };
-
-    handleNotificationDialogOpen = () => {
-        this.setState({
-            ...this.state,
-            open_add_notification_dialog: true
-        });
     };
 
     handleCloseDialog = () => {

@@ -15,7 +15,6 @@ import ListItem from "@material-ui/core/ListItem";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from '@material-ui/icons/Add';
 import Divider from "@material-ui/core/Divider";
-import TablePagination from "@material-ui/core/TablePagination";
 import AddNotificationDialog from "./AddNotificationDialog";
 
 
