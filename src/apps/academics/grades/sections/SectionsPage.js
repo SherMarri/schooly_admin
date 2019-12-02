@@ -1,5 +1,5 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {useDebugValue} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import {Tabs, Tab, Typography, Paper, Grid} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import SummaryTab from './SummaryTab';
@@ -44,17 +44,33 @@ const styles = theme => ({
     }
 });
 
+const TabTypes = {
+    "Summary" : 0,
+    "Students" : 1,
+    "Attendance": 2,
+    "Subjects": 3,
+    "Assessments": 4,
+    "Exams": 5,
+    "Notifications": 6,
+};
 
 class SectionsPage extends React.Component {
     constructor(props) {
         super(props);
         const section_id = this.props.match.params.section_id;
+        let selected_tab = 0;
+        if (this.props.location.search) {
+            let searchParameters = this.props.location.search.split("=");
+            if(searchParameters[0] === '?tab')
+                selected_tab = TabTypes[searchParameters[1]]
+        }
         props.fetchSectionDetails(section_id);
         this.state = {
-            value: 0,
+            value: selected_tab,
         };
     }
-    handleChange =  (event, newValue) => {
+
+    handleChange = (event, newValue) => {
         this.setState({
             value: newValue
         });
@@ -77,39 +93,40 @@ class SectionsPage extends React.Component {
             );
         }
         if (!item) return null;
-        const { value } = this.state;
+        const {value} = this.state;
         return (
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Grid container>
-                    <div className={classes.actionsDiv}>
-                        <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
-                    </div>
-                    <Grid item xs={12} md={8}>
-                        <div className={classes.sectionTitleDiv}>
-                            <Typography className={classes.header} variant="h5">{item.grade_name + " - " + item.section_name}</Typography>
+            <div className={classes.root}>
+                <AppBar position="static">
+                    <Grid container>
+                        <div className={classes.actionsDiv}>
+                            <ArrowBackIosIcon className={classes.leftIcon} onClick={this.handleBackButton}/>
                         </div>
+                        <Grid item xs={12} md={8}>
+                            <div className={classes.sectionTitleDiv}>
+                                <Typography className={classes.header}
+                                            variant="h5">{item.grade_name + " - " + item.section_name}</Typography>
+                            </div>
+                        </Grid>
                     </Grid>
-                </Grid>
 
-              <Tabs value={value} onChange={this.handleChange}>
-                <Tab label="Summary" />
-                <Tab label="Students" />
-                <Tab label="Attendance" />
-                <Tab label="Subjects" />
-                <Tab label="Assessments" />
-                <Tab label="Exams" />
-                <Tab label="Notifications" />
-              </Tabs>
-            </AppBar>
-            {value === 0 && <SummaryTab/>}
-            {value === 1 && <StudentsTab/>}
-            {value === 2 && <AttendanceTab/>}
-            {value === 3 && <SubjectsTab/>}
-            {value === 4 && <AssessmentsTab/>}
-            {value === 5 && <ExamsTab/>}
-            {value === 6 && <NotificationsTab/>}
-        </div>
+                    <Tabs value={value} onChange={this.handleChange}>
+                        <Tab label="Summary"/>
+                        <Tab label="Students"/>
+                        <Tab label="Attendance"/>
+                        <Tab label="Subjects"/>
+                        <Tab label="Assessments"/>
+                        <Tab label="Exams"/>
+                        <Tab label="Notifications"/>
+                    </Tabs>
+                </AppBar>
+                {value === 0 && <SummaryTab/>}
+                {value === 1 && <StudentsTab/>}
+                {value === 2 && <AttendanceTab/>}
+                {value === 3 && <SubjectsTab/>}
+                {value === 4 && <AssessmentsTab/>}
+                {value === 5 && <ExamsTab/>}
+                {value === 6 && <NotificationsTab/>}
+            </div>
         )
     }
 }
