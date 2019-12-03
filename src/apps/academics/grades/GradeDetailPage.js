@@ -167,12 +167,6 @@ class GradeDetailPage extends React.Component {
                         <EditIcon/>
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Delete">
-                    <IconButton className={classes.icon_button} onClick={() => this.handleDeleteItem(value)}
-                                aria-label="Delete">
-                        <DeleteIcon/>
-                    </IconButton>
-                </Tooltip>
             </>
         );
     }
