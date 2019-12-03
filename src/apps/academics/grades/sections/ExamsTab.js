@@ -110,7 +110,8 @@ class ExamsTab extends React.Component {
 
     handleViewItem = (value) => {
         const section_id = this.props.match.params.section_id;
-        history.push(`/academics/sections/${section_id}/exams/${value.id}`);
+        const grade_id = this.props.match.params.grade_id;
+        history.push(`/academics/classes/${grade_id}/sections/${section_id}/exams/${value.id}`);
     };
 
     handleEditItem = (value) => {

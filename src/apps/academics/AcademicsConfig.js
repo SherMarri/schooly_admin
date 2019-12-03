@@ -31,7 +31,7 @@ export const AcademicsConfig = {
             exact: true,
         },
         {
-            path: '/academics/sections/:section_id/exams/:exam_id',
+            path: '/academics/classes/:grade_id/sections/:section_id/exams/:exam_id',
             component: ExamsPage,
             exact: true,
         },

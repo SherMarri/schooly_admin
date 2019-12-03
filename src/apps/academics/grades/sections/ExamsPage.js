@@ -173,7 +173,9 @@ class ExamsPage extends React.Component {
     };
 
     handleBackButton = () => {
-        this.props.history.goBack();
+        const section_id = this.props.match.params.section_id;
+        const grade_id = this.props.match.params.grade_id;
+        history.push(`/academics/classes/${grade_id}/sections/${section_id}?tab=Exams`);
     };
 
 
