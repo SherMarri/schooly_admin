@@ -201,7 +201,7 @@ class AddEditStudentDialog extends React.Component {
         let sections;
         if (grades)
         {
-            sections = this.props.grades.find(g => g.id===item.student_info.section.grade_id).sections;
+            sections = this.props.grades.find(g => g.id===form.grade_id).sections;
         }
         return (
             <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
@@ -335,7 +335,7 @@ class AddEditStudentDialog extends React.Component {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12} md={6} className={classes.gridItem}>
-                                {sections && 
+                                {sections &&
                                     <FormControl required fullWidth margin="normal">
                                         <InputLabel htmlFor="section_id">Section</InputLabel>
                                         <Select
