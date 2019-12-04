@@ -74,7 +74,7 @@ class GradesTable extends React.Component {
         return items.map((item) => {
             return {
                 ...item,
-                attendance: Math.floor(Math.random() * (100 - 60)) + 60,
+                attendance: item.attendance + '%',
                 value: item,
             };
         });
