@@ -182,6 +182,7 @@ class GradeDetailPage extends React.Component {
             return {
                 ...section,
                 value: section,
+                attendance: section.attendance + '%'
             };
         });
     };
