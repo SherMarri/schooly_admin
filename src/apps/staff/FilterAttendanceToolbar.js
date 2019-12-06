@@ -9,9 +9,10 @@ import * as Actions from './store/actions/attendance.actions';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import { Loading } from '../../core/components';
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import Utils from "../../../../core/Utils";
+import Utils from "../../core/Utils";
 
 
 const styles = theme => ({
@@ -21,21 +22,18 @@ const styles = theme => ({
     button: {
         margin: theme.spacing(2),
         marginTop: theme.spacing(3),
-        float: 'right',
-    },
-    paper: {
+        // float: 'right',
     },
 });
 
-class AttendanceFilter extends Component {
-
+class FilterAttendanceToolbar extends Component {
+    
     constructor(props) {
         super(props);
         this.state = {
             form: {
                 start_date: null,
                 end_date: null,
-                section_id: props.section_id,
             },
         };
         this.handleSubmit();
@@ -43,7 +41,7 @@ class AttendanceFilter extends Component {
 
     handleSubmit = () => {
         const form = {
-            ...this.state.form,
+            ...this.state.form
         };
         this.props.updateFilters(form);
     };
@@ -59,10 +57,15 @@ class AttendanceFilter extends Component {
         });
     };
 
+    componentDidMount() {
+        this.handleSubmit();
+    }
 
     render() {
-        const { classes } = this.props;
+        const { classes, loading } = this.props;
         const { form } = this.state;
+
+        if (loading) return <Loading/>;
 
         return (
             <Paper className={classes.paper}>
@@ -109,13 +112,13 @@ class AttendanceFilter extends Component {
     }
 }
 
-AttendanceFilter.propTypes = {
+FilterAttendanceToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ academics }) {
+function mapStateToProps({ hr}) {
     return {
-        form: academics.grades.section.attendance.filter_form,
+        form: hr.attendance.filter_form,
     };
 }
 
@@ -125,4 +128,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(AttendanceFilter)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterAttendanceToolbar)));
