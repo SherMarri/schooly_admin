@@ -152,6 +152,12 @@ const getMenuItems = () => [
                 icon: <PlaylistAddCheckIcon />,
                 code: 'staff>attendance',
                 link: '/staff/attendance',
+            },
+            {
+                text: 'Roles',
+                icon: <PlaylistAddCheckIcon />,
+                code: 'staff>roles',
+                link: '/staff/roles',
             }
         ]
     },
