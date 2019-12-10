@@ -33,7 +33,8 @@ class AssignRoleDialog extends React.Component {
         const { item } = this.props;
         props.fetchStaff();
         this.state = {
-            selectedItems: []
+            selectedItems: [],
+            dropdown_open: false,
         };
     }
 
@@ -44,7 +45,8 @@ class AssignRoleDialog extends React.Component {
     handleChange = (event, item) => {
         this.setState({
             ...this.state,
-            selectedItems: event.target.value
+            selectedItems: event.target.value,
+            dropdown_open: false,
         })
     };
 
@@ -60,6 +62,20 @@ class AssignRoleDialog extends React.Component {
         return this.state.selectedItems.length > 0;
     };
 
+    handleDropdownOpen = () => {
+        this.setState({
+            ...this.state,
+            dropdown_open: true,
+        })
+    };
+
+    handleDropdownClose = () => {
+        this.setState({
+            ...this.state,
+            dropdown_open: false,
+        })
+    };
+
     render() {
         const { open, classes, item, staff } = this.props;
         return (
@@ -72,10 +88,13 @@ class AssignRoleDialog extends React.Component {
                 <DialogTitle id="form-dialog-title">Role Assignment</DialogTitle>
                 <DialogContent className={classes.dialog_content}>
                     <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="grade_id">Staff</InputLabel>
+                        <InputLabel htmlFor="grade_id">User</InputLabel>
                         <Select
                             multiple
                             onChange={this.handleChange}
+                            onOpen={this.handleDropdownOpen}
+                            onClose={this.handleDropdownClose}
+                            open={this.state.dropdown_open}
                             value={this.state.selectedItems}
                         >
                             {staff &&

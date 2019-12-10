@@ -60,7 +60,11 @@ const styles = theme => ({
     },
     gridItem: {
         padding: theme.spacing(2),
-    }
+    },
+    table_div: {
+        marginTop: theme.spacing(3),
+    },
+
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
