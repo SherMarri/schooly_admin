@@ -9,6 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Utils from "../../core/Utils";
 import AddNotificationDialog from "./AddNotificationDialog";
 import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
+import List from "@material-ui/core/List";
 
 
 const styles = theme => ({
@@ -20,7 +21,6 @@ const styles = theme => ({
         margin: '8px',
     },
     table_div: {
-        marginTop: theme.spacing(2),
     },
     title: {
         float: 'left',
@@ -43,8 +43,7 @@ const styles = theme => ({
     },
     chip: {
         fontSize: '8px',
-        marginBottom: '0px',
-        float: 'right',
+        float: 'left',
     }
 });
 
@@ -100,6 +99,7 @@ class NotificationsList extends React.Component {
                     <ListItem alignItems="flex-start">
                         <ListItemText
                             primary={<><p>{item.title} <Chip label={TARGETS[item.target_type]} color='primary' className={classes.chip}/></p></>}
+                            // primary={item.title}
                             secondary={
                                 <React.Fragment>
                                     <div className={classes.notification}>
@@ -133,7 +133,7 @@ class NotificationsList extends React.Component {
                             }
                         />
                     </ListItem>
-                    <Divider/>
+                    <Divider component="li" style={{ width: '100%' }}/>
                 </React.Fragment>
             )
         });
