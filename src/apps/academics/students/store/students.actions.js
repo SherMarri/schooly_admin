@@ -14,7 +14,8 @@ export const SET_STUDENTS_DOWNLOAD_LINK = '[ACADEMICS] STUDENTS SET DOWNLOAD LIN
 export const CLEAR_STUDENTS_DOWNLOAD_LINK = '[ACADEMICS] STUDENTS CLEAR DOWNLOAD LINK';
 
 export function addUpdateStudent(data, update=false) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const filter_form = getState().academics.students.filter_form;
         dispatch({
             type: ACTION_INIT
         });
@@ -23,6 +24,7 @@ export function addUpdateStudent(data, update=false) {
             dispatch({
                 type: ACTION_SUCCESS,
             });
+            dispatch(fetchDetails(filter_form));
             dispatch(toggleSnackbar({
                 message: `Student ${update ? 'updated' : 'registered'} successfully.`,
                 variant: SNACKBAR_SUCCESS
