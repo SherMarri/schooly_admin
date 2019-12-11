@@ -259,24 +259,26 @@ class AddEditStaffDialog extends React.Component {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={12} md={6} className={classes.gridItem}>
-                                    <FormControl required fullWidth margin="normal">
-                                        <InputLabel htmlFor="profile_type">Role</InputLabel>
-                                        <Select
-                                            value={form.profile_type}
-                                            onChange={this.handleChange}
-                                            inputProps={{
-                                                name: 'profile_type',
-                                                id: 'profile_type',
-                                            }}
-                                            readOnly={item && !edit}
-                                        >
-                                            <MenuItem key={PROFILE_TYPES.STAFF} value={PROFILE_TYPES.STAFF}>Staff</MenuItem>
-                                            <MenuItem key={PROFILE_TYPES.TEACHER} value={PROFILE_TYPES.TEACHER}>Teacher</MenuItem>
-                                            <MenuItem key={PROFILE_TYPES.ADMIN} value={PROFILE_TYPES.ADMIN}>Admin</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                                {!item &&
+                                    <Grid item xs={12} md={6} className={classes.gridItem}>
+                                        <FormControl required fullWidth margin="normal">
+                                            <InputLabel htmlFor="profile_type">Role</InputLabel>
+                                            <Select
+                                                value={form.profile_type}
+                                                onChange={this.handleChange}
+                                                inputProps={{
+                                                    name: 'profile_type',
+                                                    id: 'profile_type',
+                                                }}
+                                                readOnly={item && !edit}
+                                            >
+                                                <MenuItem key={PROFILE_TYPES.STAFF} value={PROFILE_TYPES.STAFF}>Staff</MenuItem>
+                                                <MenuItem key={PROFILE_TYPES.TEACHER} value={PROFILE_TYPES.TEACHER}>Teacher</MenuItem>
+                                                <MenuItem key={PROFILE_TYPES.ADMIN} value={PROFILE_TYPES.ADMIN}>Admin</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                }
                                 <Grid item xs={12} className={classes.gridItem}>
                                     <FormControl margin="normal" required fullWidth>
                                         <InputLabel htmlFor="address">Address</InputLabel>

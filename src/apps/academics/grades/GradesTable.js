@@ -74,7 +74,7 @@ class GradesTable extends React.Component {
         return items.map((item) => {
             return {
                 ...item,
-                attendance: Math.floor(Math.random() * (100 - 60)) + 60,
+                attendance: item.attendance + '%',
                 value: item,
             };
         });
@@ -94,12 +94,6 @@ class GradesTable extends React.Component {
                     <IconButton className={classes.icon_button} onClick={() => this.handleEditItem(value)}
                                 aria-label="Edit">
                         <EditIcon/>
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="Delete">
-                    <IconButton className={classes.icon_button} onClick={() => this.handleDeleteItem(value)}
-                                aria-label="Delete">
-                        <DeleteIcon/>
                     </IconButton>
                 </Tooltip>
             </>

@@ -118,3 +118,24 @@ export function deleteGrade(grade_id) {
         });
     }
 }
+
+export function updateSection(grade_id, section_id, data) {
+    return (dispatch) => {
+        UrlService.patch(`academics/sections/${section_id}`, data)
+            .then(response => {
+                dispatch(fetchGradeDetails(grade_id));
+                dispatch(toggleSnackbar({
+                    message: `Section updated successfully.`,
+                    variant: SNACKBAR_SUCCESS
+                }));
+            })
+            .catch(error => {
+                dispatch(toggleSnackbar({
+                    message: 'Unable to update section, please contact Schooli support.',
+                    variant: SNACKBAR_FAILURE
+                }));
+            });
+    };
+
+}
+

@@ -95,7 +95,7 @@ export function fetchTeachers() {
         dispatch({
             type: ACTION_INIT
         });
-        let filters = {dropdown: true, profile_type: PROFILE_TYPES.TEACHER};
+        let filters = {dropdown: true, group: 'Teacher'};
         UrlService.get('users/staff', filters)
         .then(response => {
             dispatch({

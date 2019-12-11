@@ -8,6 +8,8 @@ import School from '@material-ui/icons/School';
 import People from '@material-ui/icons/People';
 import RecordVoiceOver from '@material-ui/icons/RecordVoiceOver';
 import Library from '@material-ui/icons/LocalLibrary';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import WcIcon from '@material-ui/icons/Wc';
 import StudentsIcon from '../assets/students_icon.png';
 
 const getMenuItems = () => [
@@ -138,7 +140,26 @@ const getMenuItems = () => [
         text: 'Staff',
         icon: <People />,
         code: 'staff',
-        link: '/staff',
+        children: [
+            {
+                text: 'Employees',
+                icon: <WcIcon />,
+                code: 'staff>employees',
+                link: '/staff',
+            },
+            {
+                text: 'Attendance',
+                icon: <PlaylistAddCheckIcon />,
+                code: 'staff>attendance',
+                link: '/staff/attendance',
+            },
+            {
+                text: 'Roles',
+                icon: <PlaylistAddCheckIcon />,
+                code: 'staff>roles',
+                link: '/staff/roles',
+            }
+        ]
     },
 ];
 

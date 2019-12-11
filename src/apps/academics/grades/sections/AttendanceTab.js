@@ -238,13 +238,13 @@ class AttendanceTab extends React.Component {
                 filter: false,
             }
         },
-            {
-                name: 'average',
-                label: "Average Attendance (%)",
-                options: {
-                    filter: false,
-                }
-            },
+                {
+                    name: 'average',
+                    label: "Average Attendance (%)",
+                    options: {
+                        filter: false,
+                    }
+                },
             {
                 name: 'id',
                 label: 'Action',

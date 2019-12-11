@@ -168,6 +168,20 @@ class AddRegularExamDialog extends React.Component {
         });
     };
 
+    handleAssessmentDateChange = (id, date) => {
+        const {items} = this.state;
+        const updated_items = items.map((item) => {
+            if(item.id !== id) return {...item};
+            else return {
+                ...item,
+                date: date,
+            }
+        });
+        this.setState({
+            items: updated_items,
+        });
+    };
+
     handleIncludedStatusChange = (id) => {
         const {items} = this.state;
         const updated_items = items.map((item) => {
@@ -193,6 +207,7 @@ class AddRegularExamDialog extends React.Component {
                 name: item.subject.name,
                 checked: false,
                 total_marks: item.obtained_marks,
+                date: item.date,
             };
         });
         return {
@@ -205,7 +220,7 @@ class AddRegularExamDialog extends React.Component {
         const {items} = this.state;
         let section_subjects = [];
         items.forEach((item) => {
-            if (item.checked) section_subjects.push({id: item.id, total_marks: item.total_marks});
+            if (item.checked) section_subjects.push({id: item.id, total_marks: item.total_marks, date: Utils.formatDate(item.date)});
         });
         return section_subjects;
     };
@@ -252,6 +267,20 @@ class AddRegularExamDialog extends React.Component {
                             />
                         }
                     </TableCell>
+                    <TableCell>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <DatePicker
+                                margin="normal"
+                                label="Date"
+                                fullWidth
+                                required
+                                clearable
+                                value={row.date}
+                                onChange={(date) => this.handleAssessmentDateChange(row.id, date)}
+                                format="dd/MM/yyyy"
+                            />
+                        </MuiPickersUtilsProvider>
+                    </TableCell>
                 </TableRow>
             ));
         return section_subjects;
@@ -268,6 +297,7 @@ class AddRegularExamDialog extends React.Component {
                                 <TableCell>Subjects</TableCell>
                                 <TableCell>Included</TableCell>
                                 <TableCell>Total Marks</TableCell>
+                                <TableCell>Date</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

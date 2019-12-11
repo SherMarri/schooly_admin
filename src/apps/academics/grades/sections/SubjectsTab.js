@@ -114,6 +114,7 @@ class SubjectsTab extends React.Component {
         this.setState({
             ...this.state,
             open_add_edit_section_subject_dialog: false,
+            selected_item: null,
         });
     };
 

@@ -2,23 +2,17 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
-import {withStyles} from '@material-ui/core/styles';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import * as AssessmentActions from './store/actions/assessments.actions';
-import * as SectionSubjectActions from './store/actions/subjects.actions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import Utils from "../../../../core/Utils";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Input from "@material-ui/core/Input";
+import Utils from "../../core/Utils";
+import * as Actions from './store/actions/attendance.actions';
 
 const styles = theme => ({
     dialog_content: {
@@ -35,36 +29,20 @@ class AddAttendanceDialog extends React.Component {
     constructor(props) {
         super(props);
         const form = {
-            name: '',
-            date: null,
-            total_marks: null,
-            section_subject_id: null,
+            date: new Date(),
         };
-        this.state = {form};
-        this.props.fetchSectionSubjects(this.props.section_id);
-
+        this.state = { form };
     }
 
     handleClose = () => {
         this.props.onClose();
-    };
-
-    handleChange = (event) => {
-        let form = {
-            ...this.state.form,
-            [event.target.name]: event.target.value
-        };
-        this.setState({
-            ...this.state,
-            form: form,
-        });
-    };
+    }
 
     handleDateChange = (field_name, date) => {
         let form = {
             ...this.state.form,
             [field_name]: date
-        };
+        }
         this.setState({
             ...this.state,
             form: form,
@@ -79,22 +57,21 @@ class AddAttendanceDialog extends React.Component {
             }
         }
         return true;
-    };
+    }
 
     handleSubmit = (event) => {
         event.preventDefault();
         if (!this.isFormValid()) return;
-        let {form} = this.state;
-        form.section_id = this.props.section_id;
+        let { form } = this.state;
         form.date = Utils.formatDate(form.date);
-        this.props.createAssessment(form);
+        this.props.createAttendance(form, this.props.filter_form);
         this.handleClose();
-    };
+    }
 
 
     render() {
-        const {open, classes, section_subjects} = this.props;
-        const {form} = this.state;
+        const { open, classes, item, edit } = this.props;
+        const { form } = this.state;
         return (
             <Dialog
                 open={open}
@@ -102,35 +79,16 @@ class AddAttendanceDialog extends React.Component {
                 TransitionComponent={Transition}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">Add Assessment</DialogTitle>
+                {!item &&
+                <DialogTitle id="form-dialog-title">Add Attendance</DialogTitle>
+                }
+                {item && !edit &&
+                <DialogTitle id="form-dialog-title">Attendance Details</DialogTitle>
+                }
+                {item && edit &&
+                <DialogTitle id="form-dialog-title">Update Attendance</DialogTitle>
+                }
                 <DialogContent className={classes.dialog_content}>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="name">Title</InputLabel>
-                        <Input id="name" name="name"
-                               onChange={this.handleChange}
-                               value={form.name || ''}
-                               autoFocus
-                        />
-                    </FormControl>
-                    {section_subjects &&
-                        <FormControl fullWidth required margin="normal">
-                            <InputLabel htmlFor="section_subject_id">Subject</InputLabel>
-                            <Select
-                                value={form.section_subject_id || ''}
-                                onChange={this.handleChange}
-                                inputProps={{
-                                    name: 'section_subject_id',
-                                    id: 'section_subject_id',
-                                }}
-                            >
-                                {section_subjects &&
-                                section_subjects.map(c =>
-                                    <MenuItem key={c.id} value={c.id}>{c.subject.name}</MenuItem>
-                                )
-                                }
-                            </Select>
-                        </FormControl>
-                    }
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DatePicker
                             margin="normal"
@@ -138,18 +96,13 @@ class AddAttendanceDialog extends React.Component {
                             fullWidth
                             required
                             clearable
+                            disableFuture
                             value={form.date}
                             onChange={(date) => this.handleDateChange('date', date)}
                             format="dd/MM/yyyy"
+                            disabled={item && !edit}
                         />
                     </MuiPickersUtilsProvider>
-                    <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="total_marks">Total Marks</InputLabel>
-                        <Input id="total_marks" name="total_marks"
-                               onChange={this.handleChange}
-                               value={form.total_marks || ''}
-                        />
-                    </FormControl>
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -160,6 +113,7 @@ class AddAttendanceDialog extends React.Component {
                     >
                         Cancel
                     </Button>
+                    {((item && edit) || (!item)) &&
                     <Button
                         variant="contained"
                         color="primary"
@@ -168,8 +122,9 @@ class AddAttendanceDialog extends React.Component {
                         disabled={!this.isFormValid()}
                         onClick={this.handleSubmit}
                     >
-                        Submit
+                        {item && edit ? 'Update' : 'Submit'}
                     </Button>
+                    }
                 </DialogActions>
             </Dialog>
         );
@@ -180,16 +135,16 @@ AddAttendanceDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({academics}) {
+function mapStateToProps({ academics }) {
     return {
-        section_subjects: academics.grades.section.subjects.items,
+        filter_form: academics.grades.section.attendance.filter_form,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        createAssessment: AssessmentActions.createAssessment,
-        fetchSectionSubjects: SectionSubjectActions.fetchSectionSubjects,
+        createAttendance: Actions.createAttendance,
+        // updateAttendance: Actions.updateAttendance,
     }, dispatch);
 }
 
