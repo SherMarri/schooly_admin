@@ -19,13 +19,6 @@ import AddNotificationDialog from "./AddNotificationDialog";
 
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
-    },
-    header: {
-        margin: '8px',
-    },
     table_div: {
         marginTop: theme.spacing(2),
     },

@@ -39,7 +39,6 @@ class NotificationFilter extends Component {
 
     constructor(props) {
         super(props);
-        const form = props.form;
         this.state = {
             form: {
                 search_term: '',

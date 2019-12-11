@@ -12,27 +12,6 @@ import RemoveRedEye from '@material-ui/icons/RemoveRedEye';
 
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
-    },
-    header: {
-        margin: '8px',
-    },
-    table_div: {
-        marginTop: theme.spacing(2),
-    },
-    title: {
-        float: 'left',
-    },
-    titleDiv: {
-        width: '100%'
-    },
-    fab: {
-        float: 'right',
-        width: '40px',
-        height: '40px',
-    },
     view_button: {
         padding: theme.spacing(0),
         marginLeft: theme.spacing(1),
@@ -91,7 +70,8 @@ class NotificationsList extends React.Component {
                 <React.Fragment>
                     <ListItem alignItems="flex-start">
                         <ListItemText
-                            primary={<><p>{item.title} <Chip label={TARGETS[item.target_type]} color='primary' className={classes.chip}/></p></>}
+                            // primary={<><p>{item.title} <Chip label={TARGETS[item.target_type]} color='primary' className={classes.chip}/></p></>}
+                            primary={item.title}
                             secondary={
                                 <React.Fragment>
                                     <div className={classes.notification}>
