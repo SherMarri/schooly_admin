@@ -210,7 +210,7 @@ class AttendanceTab extends React.Component {
         const items = this.props.section_attendance.data.map(item => {
             return {
                 date: Utils.formatDateLocal(item.date),
-                average: item.average_attendance !== null ? item.average_attendance.toFixed(2) : '',
+                average: item.average_attendance !== null ? item.average_attendance.toFixed(0) + '%' : '',
                 id: item,
             };
         });
