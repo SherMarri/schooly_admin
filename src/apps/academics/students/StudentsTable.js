@@ -92,8 +92,6 @@ class StudentTable extends React.Component {
             selected_item: null,
             open: false,
         });
-        if(this.state.edit)
-            this.handleRefresh();
     }
 
     renderActionColumn = (value, table_meta, update_value) => {
