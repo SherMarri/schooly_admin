@@ -102,7 +102,7 @@ export function fetchChallans(params) {
                 payload: response.data
             });
         }).catch(response=>{
-          // TODO: HANDLE THIS EXCEPTION    
+          // TODO: HANDLE THIS EXCEPTION
           return dispatch({
               type: SET_CHALLANS,
               payload: []

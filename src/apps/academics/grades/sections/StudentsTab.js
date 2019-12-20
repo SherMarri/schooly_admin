@@ -168,7 +168,6 @@ class StudentsTab extends React.Component {
     render() {
         const {classes, loading, items,
             fetching_download_link, download_url} = this.props;
-        console.log(this.props);
         if (loading) return <Loading/>;
         if (!items) return null;
         const columns = [{
