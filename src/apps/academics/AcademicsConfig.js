@@ -6,6 +6,7 @@ import GradeDetailPage from "./grades/GradeDetailPage";
 import SectionsPage from "./grades/sections/SectionsPage";
 import NotificationsPage from "./grades/NotificationsPage";
 import ExamsPage from "./grades/sections/ExamsPage";
+import StudentDetailPage from "./students/StudentDetailPage";
 
 export const AcademicsConfig = {
     auth: AuthRoles.admin,
@@ -13,6 +14,11 @@ export const AcademicsConfig = {
         {
             path: '/academics/students',
             component: StudentsPage,
+            exact: true,
+        },
+        {
+            path: '/academics/students/:student_id',
+            component: StudentDetailPage,
             exact: true,
         },
         {

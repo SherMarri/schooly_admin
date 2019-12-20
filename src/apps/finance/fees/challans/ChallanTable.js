@@ -248,7 +248,7 @@ class ChallanTable extends React.Component {
                 customBodyRender: this.renderActionColumn,
             },
         }
-        ]
+        ];
         let { data, page, count } = challans;
         page -= 1;
         const options = {

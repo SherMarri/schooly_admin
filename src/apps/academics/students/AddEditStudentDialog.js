@@ -166,7 +166,10 @@ class AddEditStudentDialog extends React.Component {
         if (this.props.item && this.props.edit) {
             form.update = true;
         }
-        this.props.addUpdateStudent(form, true);
+        if(this.props.updateOnly)
+            this.props.updateStudent(form);
+        else
+            this.props.addUpdateStudent(form, true);
         this.handleClose();
     }
 
@@ -426,6 +429,7 @@ function mapStateToProps({ common, academics }) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addUpdateStudent: Actions.addUpdateStudent,
+        updateStudent: Actions.updateStudent,
         fetchGrades: fetchAllGrades
     }, dispatch);
 }

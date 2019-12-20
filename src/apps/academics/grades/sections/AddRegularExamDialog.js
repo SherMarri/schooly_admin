@@ -313,6 +313,7 @@ class AddRegularExamDialog extends React.Component {
     render() {
         const {open, classes, item, items, edit} = this.props;
         const {form} = this.state;
+        // TODO: fix section subject default exam date
         return (
             <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
