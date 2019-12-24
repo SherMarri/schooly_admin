@@ -33,7 +33,9 @@ class PrintResultCardDialog extends React.Component {
     constructor(props) {
         super(props);
         const student_id = this.props.match.params.student_id;
+        props.fetchStudentDetails(student_id);
         props.fetchStudentResult(student_id);
+
     }
 
     componentDidMount() {
@@ -49,13 +51,13 @@ class PrintResultCardDialog extends React.Component {
     };
 
     render() {
-        const {open, loading, student_result } = this.props;
+        const {open, loading, student_result, student_details } = this.props;
         if (loading) return <Loading message={"Fetching result card..."} />;
         if (!student_result) return null;
         return (
                 <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
                     <DialogContent>
-                            <ResultCardPrintable student_result={student_result} ref={el => (this.componentRef = el)} onClose={()=>this.props.onClose()} />
+                            <ResultCardPrintable student_result={student_result} student_details={student_details} ref={el => (this.componentRef = el)} onClose={()=>this.props.onClose()} />
                     </DialogContent>
                     <DialogActions>
                         <Button variant="contained" onClick={()=>this.props.onClose()}>
@@ -81,13 +83,15 @@ PrintResultCardDialog.propTypes = {
 function mapStateToProps({user, academics}) {
     return {
         student_result: academics.students.student_result,
+        student_details: academics.students.student_details,
         loading: academics.students.student_result_loading,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchStudentResult: Actions.fetchStudentResult
+        fetchStudentResult: Actions.fetchStudentResult,
+        fetchStudentDetails: Actions.fetchStudentDetails
     }, dispatch);
 }
 

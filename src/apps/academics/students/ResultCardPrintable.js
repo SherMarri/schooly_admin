@@ -81,7 +81,13 @@ const styles = theme => ({
     },
     secondRow: {
         color: 'grey',
-    }
+    },
+    gridLeft: {
+        marginLeft: '7px'
+    },
+    gridRight: {
+        marginLeft: '100px'
+    },
 });
 
 
@@ -106,7 +112,7 @@ class ResultCardPrintable extends React.Component {
     };
 
     render() {
-        const {classes, student_result} = this.props;
+        const {classes, student_result, student_details} = this.props;
         return (
             <>
 {/*
@@ -126,21 +132,17 @@ class ResultCardPrintable extends React.Component {
                     {student_result &&
                     <Grid container className={classes.grid}>
                         <Grid container item xs={12}>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={5} md={5} className={classes.gridLeft}>
                                 <br/><br/>
-                                <Typography variant="caption">Invoice #: <strong>13153</strong></Typography>
+                                <Typography variant="caption">Name: <strong>{student_details.fullname}</strong></Typography>
                                 <br/>
-                                <Typography variant="caption">Name: <strong>Lynn Cole</strong></Typography>
-                                <br/>
-                                <Typography variant="caption">Due Date: <strong>123</strong></Typography>
-                                <br/>
-                                <Typography variant="caption">Class: <strong>5 - A</strong></Typography>
+                                <Typography variant="caption">Guardian Name: <strong>{student_details.student_info.guardian_name}</strong></Typography>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={5} md={5} className={classes.gridRight}>
                                 <br/><br/>
-                                <Typography variant="caption">GR #: <strong>92001</strong></Typography>
+                                <Typography variant="caption">GR #: <strong>{student_details.student_info.gr_number}</strong></Typography>
                                 <br/>
-                                <Typography variant="caption">Guardian Name: <strong>Lakita Muerez</strong></Typography>
+                                <Typography variant="caption">Class: <strong>{student_details.student_info.section.grade_name + " - " + student_details.student_info.section.name}</strong></Typography>
                                 <br/>
                             </Grid>
                         </Grid>
