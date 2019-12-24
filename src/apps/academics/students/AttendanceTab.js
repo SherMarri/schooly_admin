@@ -138,8 +138,7 @@ class AttendanceTab extends React.Component {
 
     getDayClass = (date) => {
         const {attendance, classes} = this.props;
-        const result = attendance.find(a => a.date === Utils.formatDate(date.date));
-        console.log(result);
+        const result = attendance.daily_attendance.find(a => a.date === Utils.formatDate(date.date));
         if(!result)
             return classes.statusNull;
         if(result.status === 1)
@@ -166,8 +165,7 @@ class AttendanceTab extends React.Component {
                     <Calendar
                         className={classes.attendanceCalendar}
                         tileClassName={ (date) => this.getDayClass(date)}
-                        value={[new Date(new Date().getFullYear(), 0, 1), new Date()]}
-                        defaultActiveStartDate={new Date()}
+                        value={[new Date(attendance.session.start_date), new Date(attendance.session.end_date)]}
                     ></Calendar>
                 </Grid>
 

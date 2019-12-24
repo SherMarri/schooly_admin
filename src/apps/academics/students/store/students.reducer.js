@@ -139,9 +139,9 @@ const common = function (state = initialState, action) {
         case Actions.SET_STUDENT_ATTENDANCE: {
             return {
                 ...state,
-                student_attendance: [
+                student_attendance: {
                     ...action.payload
-                ]
+                }
             };
         }
         case Actions.SET_STUDENT_EXAM_DETAILS: {
