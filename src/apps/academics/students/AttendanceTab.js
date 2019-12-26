@@ -42,6 +42,9 @@ const styles = theme => ({
         marginTop: '10px',
         float: 'right',
     },
+    gridCalendar: {
+        margin: theme.spacing(1),
+    },
     button: {
         marginLeft: '10px',
     },
@@ -99,10 +102,16 @@ const styles = theme => ({
     calendarTile: {
         fontSize: '25px',
     },
-    wednesday :{
+    statusAbsent : {
         background: '#ff101f'
+    },
+    statusNull : {
+        background: 'white',
+        color: 'black',
+    },
+    attendanceCalendar : {
+        width: '100%',
     }
-
 });
 
 
@@ -128,15 +137,14 @@ class AttendanceTab extends React.Component {
     };
 
     getDayClass = (date) => {
-        const date1 = date.date;
-        let temp = "2019-10-09";
-        console.log(typeof date1, typeof temp);
-        if (date1 === temp)
-        {
-            console.log("Here");
-            return this.props.classes.wednesday;
-        }
-        return null;
+        const {attendance, classes} = this.props;
+        const result = attendance.daily_attendance.find(a => a.date === Utils.formatDate(date.date));
+        if(!result)
+            return classes.statusNull;
+        if(result.status === 1)
+            return null;
+        if(result.status === 2)
+            return classes.statusAbsent;
     };
 
     render()  {
@@ -153,13 +161,11 @@ class AttendanceTab extends React.Component {
         if (!attendance) return null;
         return (
             <Grid container>
-                <Grid item xs={12}>
+                <Grid item xs={12} className={classes.gridCalendar}>
                     <Calendar
+                        className={classes.attendanceCalendar}
                         tileClassName={ (date) => this.getDayClass(date)}
-                        // onChange={(value, event) => this.handleDateChange(event, value)}
-                        value={[new Date("2019-10-08"), new Date("2019-10-13")]}
-                        // value={this.state.dates}
-                        // value={[this.getMappedData()]}
+                        value={[new Date(attendance.session.start_date), new Date(attendance.session.end_date)]}
                     ></Calendar>
                 </Grid>
 
