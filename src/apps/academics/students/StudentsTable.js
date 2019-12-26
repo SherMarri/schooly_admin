@@ -14,6 +14,8 @@ import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import BlockIcon from '@material-ui/icons/Block';
 import {DownloadDialog, ConfirmDialog} from '../../../core/components';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import history from "../../../core/history";
 
 const styles = theme => ({
     table_div: {
@@ -77,6 +79,10 @@ class StudentTable extends React.Component {
         });
     }
 
+    handleViewStudentDetails = (item) => {
+        history.push(`/academics/students/${item.id}`);
+    };
+
     handleDeactivateItem = (item) => {
         this.setState({
             open_deactivate_dialog: true,
@@ -114,6 +120,11 @@ class StudentTable extends React.Component {
                     <IconButton className={classes.icon_button} onClick={() => this.handleDeactivateItem(value)}
                                 aria-label="Terminate">
                         <BlockIcon/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Student Details">
+                    <IconButton aria-label="student-details" onClick={() => this.handleViewStudentDetails(value)}>
+                        <AssessmentIcon/>
                     </IconButton>
                 </Tooltip>
             </>
