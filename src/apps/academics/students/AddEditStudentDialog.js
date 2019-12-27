@@ -208,7 +208,7 @@ class AddEditStudentDialog extends React.Component {
                 sections = this.props.grades.find(g => g.id===form.grade_id).sections;
             else
             {
-                form.grade_id = this.props.grades.find(g => g.name === "1").id;
+                form.grade_id = this.props.grades[0].id;
                 sections = this.props.grades.find(g => g.id === form.grade_id).sections;
             }
         }
