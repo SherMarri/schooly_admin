@@ -1,16 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import People from '@material-ui/icons/People';
-import Library from '@material-ui/icons/LocalLibrary';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import PortraitIcon from '@material-ui/icons/Portrait';
-
 import {
     Grid,
-    Card,
-    CardContent,
-    Typography,
     Paper,
 } from '@material-ui/core';
 import {bindActionCreators} from "redux";
@@ -20,6 +12,7 @@ import {withRouter} from "react-router-dom";
 import Calendar from 'react-calendar';
 import * as Actions from './store/students.actions';
 import Utils from "../../../core/Utils";
+
 const styles = theme => ({
     toolbar: {
         backgroundColor: theme.palette.primary.main,
@@ -102,14 +95,20 @@ const styles = theme => ({
     calendarTile: {
         fontSize: '25px',
     },
-    statusAbsent : {
-        background: '#ff101f'
+    statusAbsent: {
+        background: '#ab0000'
     },
-    statusNull : {
+    statusPresent: {
+        background: '#1c6504'
+    },
+    statusLeave: {
+        background: '#ff6700'
+    },
+    statusNull: {
         background: 'white',
         color: 'black',
     },
-    attendanceCalendar : {
+    attendanceCalendar: {
         width: '100%',
     }
 });
@@ -126,11 +125,11 @@ class AttendanceTab extends React.Component {
     }
 
     getMappedData = () => {
-      const {attendance} = this.props;
-      const dates = attendance.map(item => {
+        const {attendance} = this.props;
+        const dates = attendance.map(item => {
             return new Date();
         });
-      return dates;
+        return dates;
     };
 
     handleDateChange = (event, value) => {
@@ -139,15 +138,19 @@ class AttendanceTab extends React.Component {
     getDayClass = (date) => {
         const {attendance, classes} = this.props;
         const result = attendance.daily_attendance.find(a => a.date === Utils.formatDate(date.date));
-        if(!result)
+        if (!result)
             return classes.statusNull;
-        if(result.status === 1)
-            return null;
-        if(result.status === 2)
+        if (result && !result.status)
+            return classes.statusNull;
+        if (result.status === 1)
+            return classes.statusPresent;
+        if (result.status === 2)
             return classes.statusAbsent;
+        if (result.status === 3)
+            return classes.statusLeave;
     };
 
-    render()  {
+    render() {
         const {classes, loading, attendance} = this.props;
         if (loading) {
             return (
@@ -164,9 +167,9 @@ class AttendanceTab extends React.Component {
                 <Grid item xs={12} className={classes.gridCalendar}>
                     <Calendar
                         className={classes.attendanceCalendar}
-                        tileClassName={ (date) => this.getDayClass(date)}
+                        tileClassName={(date) => this.getDayClass(date)}
                         value={[new Date(attendance.session.start_date), new Date(attendance.session.end_date)]}
-                    ></Calendar>
+                    />
                 </Grid>
 
             </Grid>

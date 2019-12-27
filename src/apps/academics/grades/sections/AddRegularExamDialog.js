@@ -220,7 +220,13 @@ class AddRegularExamDialog extends React.Component {
         const {items} = this.state;
         let section_subjects = [];
         items.forEach((item) => {
-            if (item.checked) section_subjects.push({id: item.id, total_marks: item.total_marks, date: Utils.formatDate(item.date)});
+            if (item.checked)
+            {
+                if(item.date)
+                    section_subjects.push({id: item.id, total_marks: item.total_marks, date: Utils.formatDate(item.date)});
+                else
+                    section_subjects.push({id: item.id, total_marks: item.total_marks, date: Utils.formatDate(new Date())});
+            }
         });
         return section_subjects;
     };

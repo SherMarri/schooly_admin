@@ -9,6 +9,7 @@ import DetailsTab from "./DetailsTab";
 import AttendanceTab from "./AttendanceTab";
 import ResultsTab from "./ResultsTab";
 import FeesTab from "./FeesTab";
+import history from "../../../core/history";
 
 
 const styles = theme => ({
@@ -53,6 +54,7 @@ class StudentDetailPage extends React.Component {
     };
 
     handleBackButton = () => {
+        history.goBack();
     };
 
     render() {

@@ -133,8 +133,6 @@ class DetailsTab extends React.Component {
             selected_item: null,
             open: false,
         });
-        const student_id = this.props.match.params.student_id;
-        this.props.fetchStudentDetails(student_id);
     };
 
 
@@ -183,21 +181,22 @@ class DetailsTab extends React.Component {
                             </Grid>
                         </Grid>
                         <Grid container className={classes.gridDown}>
-                            <Grid item xs={6} md={4} className={classes.grid_item}>
+                            <Grid item xs={6} md={3} className={classes.grid_item}>
                                 <Typography variant={"caption"}>Guardian Name</Typography>
                                 <br/>
                                 <Typography className={classes.titleContent}
                                             variant={"h6"}>{details.student_info.guardian_name ? details.student_info.guardian_name : "-"}</Typography>
                             </Grid>
-                            <Grid item xs={6} md={4} className={classes.grid_item}>
+                            <Grid item xs={6} md={3} className={classes.grid_item}>
                                 <Typography variant={"caption"}>Contact</Typography>
                                 <br/>
                                 <Typography className={classes.titleContent}
                                             variant={"h6"}>{details.student_info.guardian_contact ? details.student_info.guardian_contact : "-"}</Typography>
                             </Grid>
+                            <Grid item xs={6} md={3} className={classes.grid_item}></Grid>
                         </Grid>
                         <Grid container className={classes.gridDown}>
-                            <Grid item xs={6} md={4} className={classes.grid_item}>
+                            <Grid item xs={6} md={3} className={classes.grid_item}>
                                 <Typography variant={"caption"}>Birthday</Typography>
                                 <br/>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -215,7 +214,7 @@ class DetailsTab extends React.Component {
                                     />
                                 </MuiPickersUtilsProvider>
                             </Grid>
-                            <Grid item xs={6} md={4} className={classes.grid_item}>
+                            <Grid item xs={6} md={3} className={classes.grid_item}>
                                 <Typography variant={"caption"}>Enrollment Date</Typography>
                                 <br/>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -229,6 +228,7 @@ class DetailsTab extends React.Component {
                                     />
                                 </MuiPickersUtilsProvider>
                             </Grid>
+                            <Grid item xs={6} md={3} className={classes.grid_item}></Grid>
                         </Grid>
                         <Grid container className={classes.gridDown}>
                             <Grid item xs={12} md={12} className={classes.grid_item}>

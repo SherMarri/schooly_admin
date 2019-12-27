@@ -70,6 +70,7 @@ export function updateStudent(data) {
                 message: `Student updated successfully.`,
                 variant: SNACKBAR_SUCCESS
             }));
+            dispatch(fetchStudentDetails(data.user));
         })
         .catch(error => {
             dispatch({
