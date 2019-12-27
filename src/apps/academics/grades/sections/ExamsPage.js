@@ -299,6 +299,7 @@ class ExamsPage extends React.Component {
             serverSide: true,
             download: false,
             filter: false,
+            pagination: false,
             toolbar: {
                 viewColumns: "View Columns",
                 filterTable: "Filter Table",

@@ -133,8 +133,6 @@ class DetailsTab extends React.Component {
             selected_item: null,
             open: false,
         });
-        const student_id = this.props.match.params.student_id;
-        this.props.fetchStudentDetails(student_id);
     };
 
 
