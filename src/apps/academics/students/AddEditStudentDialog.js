@@ -204,7 +204,13 @@ class AddEditStudentDialog extends React.Component {
         let sections;
         if (grades)
         {
-            sections = this.props.grades.find(g => g.id===form.grade_id).sections;
+            if(form.grade_id)
+                sections = this.props.grades.find(g => g.id===form.grade_id).sections;
+            else
+            {
+                form.grade_id = this.props.grades.find(g => g.name === "1").id;
+                sections = this.props.grades.find(g => g.id === form.grade_id).sections;
+            }
         }
         return (
             <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
