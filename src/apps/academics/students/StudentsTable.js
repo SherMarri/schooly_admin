@@ -167,13 +167,7 @@ class StudentTable extends React.Component {
         const {details, classes, fetching_download_link, download_url} = this.props;
         const {open_deactivate_dialog, dialog_message} = this.state;
         if (!details) {
-            return (
-                <div className={classes.table_div}>
-                    <Paper className={classes.paper_div}>
-                        <Typography variant="h5">Data not available.</Typography>
-                    </Paper>
-                </div>
-            );
+            return null;
         }
         const columns = [{
             name: 'gr_number',
