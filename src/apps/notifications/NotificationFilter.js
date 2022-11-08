@@ -16,7 +16,6 @@ import {Input, MenuItem, Select} from '@material-ui/core';
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Utils from "../../core/Utils";
-import {NOTIFICATION_TYPES} from '../../core/constants';
 
 
 const styles = theme => ({
@@ -40,7 +39,6 @@ class NotificationFilter extends Component {
 
     constructor(props) {
         super(props);
-        const form = props.form;
         this.state = {
             form: {
                 search_term: '',
@@ -60,7 +58,6 @@ class NotificationFilter extends Component {
         const form = {
             ...this.state.form,
         };
-        console.log(form);
         this.props.updateFilters(form);
     };
 

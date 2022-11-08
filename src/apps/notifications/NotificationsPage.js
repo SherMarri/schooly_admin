@@ -15,18 +15,10 @@ import ListItem from "@material-ui/core/ListItem";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from '@material-ui/icons/Add';
 import Divider from "@material-ui/core/Divider";
-import TablePagination from "@material-ui/core/TablePagination";
 import AddNotificationDialog from "./AddNotificationDialog";
 
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
-    },
-    header: {
-        margin: '8px',
-    },
     table_div: {
         marginTop: theme.spacing(2),
     },
